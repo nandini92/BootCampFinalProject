@@ -30,6 +30,8 @@ const Wrapper = styled.div`
   width: 100vw;
   display: flex;
   justify-content: space-between;
+  position: absolute;
+  z-index: 10;
 `;
 const Home = styled(NavLink)`
   font-size: 48px;

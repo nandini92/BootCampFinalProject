@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{actions : {fetchUserDetails}}}>
+    <UserContext.Provider value={{cred, actions : {fetchUserDetails}}}>
       { cred &&
         <Auth0Provider
         domain={cred.domain}
