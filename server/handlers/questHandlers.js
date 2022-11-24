@@ -48,6 +48,7 @@ const getAllQuests = async(req,res) => {
         if(quests){
             const promises = [];
 
+            // TODO: This can be done in Quest creation. Move when addQuest is complete.
             quests.forEach((quest) => { 
                 const formattedLocation = `${quest.location.split(" ").join("+")}+${quest.city}`
 
