@@ -1,15 +1,16 @@
-import { GoogleMap, Marker } from "@react-google-maps/api";
-import { useMemo } from "react";
-import styled from "styled-components";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { useContext, useMemo, useState } from "react";
 
-const QuestMap = () => {
+import { QuestsContext } from "../contexts/QuestsContext";
+
+const QuestMap = ({cred}) => {
+  const { quests } = useContext(QuestsContext);
   const containerStyle = {
     width: "100%",
     height: "100%",
   };
 
   const center = useMemo(() => ({ lat: 45.5019, lng: -73.5674}), []);
-
   const zoom = 11;
 
   return (
@@ -18,7 +19,9 @@ const QuestMap = () => {
       center={center}
       mapContainerStyle={containerStyle}
     >
-        <Marker position={{ lat: 45.5019, lng: -73.5674}} />
+      {quests &&
+        quests.map((quest) => <MarkerF key={quest._id} position={quest.coordinates} />)
+      }
     </GoogleMap>
   );
 };

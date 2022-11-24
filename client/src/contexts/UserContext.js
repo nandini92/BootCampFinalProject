@@ -17,6 +17,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const fetchUserDetails = () => {
+    // Auth0 method to verify if authentication is successful. If truthy, user details will be returned.
     return isAuthenticated && user;
   }
 
