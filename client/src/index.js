@@ -8,12 +8,12 @@ import { UsersProvider } from "./contexts/UsersContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <UsersProvider>
-      <QuestsProvider>
-        <UserProvider>
+    <UserProvider>
+      <UsersProvider>
+        <QuestsProvider>
           <App />
-        </UserProvider>
-      </QuestsProvider>
-    </UsersProvider>
+        </QuestsProvider>
+      </UsersProvider>
+    </UserProvider>
   </React.StrictMode>
 );
