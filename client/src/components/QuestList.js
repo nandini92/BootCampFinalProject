@@ -32,7 +32,7 @@ const QuestList = ({ quests }) => {
 const Wrapper = styled.div`
   position: absolute;
   z-index: 5;
-  width: 30%;
+  min-width: 30%;
   height: 100%;
   background-color: var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-purple);
@@ -42,11 +42,16 @@ const QuestWrapper = styled.div`
   width: 90%;
   margin: 20px;
   background-color: var(--color-yellow);
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-dark-grey);
   padding: 10px;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.03);
+  }
 `;
 const Desc = styled.div`
   align-self: center;
@@ -62,17 +67,14 @@ const Label = styled.span`
 `;
 const Karma = styled.div`
   border-radius: 50%;
-  background-color: var(--color-purple);
-  box-shadow: 2px 5px 10px var(--color-purple);
+  background-color: var(--color-red);
+  box-shadow: 2px 5px 10px var(--color-dark-grey);
   height: 80px;
   width: 80px;
-  transition: transform 0.3s ease-in-out;
   text-align: center;
   line-height: 80px;
   color: var(--color-grey);
 
-  &:hover {
-    transform: scale(1.1);
-  }
+
 `;
 export default QuestList;
