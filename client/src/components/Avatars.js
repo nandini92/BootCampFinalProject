@@ -1,20 +1,25 @@
-import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+import styled from "styled-components";
 
+// Auth0 imports
+import { useAuth0 } from "@auth0/auth0-react";
+
+// Cloudinary imports
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-
-// Import required actions.
 import { scale } from "@cloudinary/url-gen/actions/resize";
-
-// Import required actions and qualifiers.
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 
-import styled from "styled-components";
 
 const Avatars = ({ startingAvatars, setStartingAvatars }) => {
+  const { actions: {createUser} } = useContext(UserContext);
+  const { user, isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
+
   // Create a Cloudinary instance and set your cloud name.
   const cld = new Cloudinary({
     cloud: {
@@ -53,7 +58,12 @@ const Avatars = ({ startingAvatars, setStartingAvatars }) => {
         ) : (
           startingAvatars.map((avatar, i) => {
             return (
-              <Nav>
+              <Nav onClick={() => {
+                if (isAuthenticated === true) {
+                  createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, profileImg: user.picture, level: 1, karma: 100});
+                  navigate("/");
+                }
+              }} >
                 <Image key={i} cldImg={avatar} />
               </Nav>
             );
@@ -63,7 +73,7 @@ const Avatars = ({ startingAvatars, setStartingAvatars }) => {
   );
 };
 
-const Nav = styled(NavLink)`
+const Nav = styled.div`
   width: 150px;
   height: 150px;
   box-shadow: 0px 0px 10px var(--color-dark-grey);

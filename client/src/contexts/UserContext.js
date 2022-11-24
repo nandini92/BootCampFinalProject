@@ -1,12 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { useAuth0 } from "@auth0/auth0-react";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [cred, setCred] = useState();
-  const { user, isAuthenticated } = useAuth0();
+  const [user, setUser] = useState();
 
   // Retrieves all API credentials from server
   useEffect(() => {
@@ -17,21 +16,71 @@ export const UserProvider = ({ children }) => {
       });
   }, []);
 
-  const fetchUserDetails = () => {
-    // objects returned by useAuth0. If isAuthenticated is truthy, user details will be returned.
-    return isAuthenticated && user;
-  }
+  // Get user details
+  const getUser = (email) => {
+    if (email === null) {
+      setUser();
+      return true;
+    } else {
+      return fetch("/user", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 200) {
+            setUser(data.data);
+            return true;
+          } else if (data.status === 404) {
+            return false;
+          } else {
+            throw new Error(data.message);
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
+  // Create new User
+  const createUser = (user) => {
+    fetch("/new-user", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((data) => {
+        if (data.status === 200) {
+          getUser(user.email);
+        } else {
+          throw new Error(data.message);
+        }
+
+        return true;
+      })
+      .catch((error) => {
+        console.log(error);
+        return false;
+      });
+  };
 
   return (
-    <UserContext.Provider value={{cred, actions : {fetchUserDetails}}}>
-      { cred &&
+    <UserContext.Provider value={{ cred, actions: { createUser, getUser } }}>
+      {cred && (
         <Auth0Provider
-        domain={cred.domain}
-        clientId={cred.clientId}
-        redirectUri={window.location.origin}
-      >
-        {children}
-      </Auth0Provider>}
+          domain={cred.domain}
+          clientId={cred.clientId}
+          redirectUri={window.location.origin}
+        >
+          {children}
+        </Auth0Provider>
+      )}
     </UserContext.Provider>
   );
 };

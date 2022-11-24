@@ -1,12 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { useState } from "react";
 
 import Avatars from "./Avatars";
 
 import styled from "styled-components";
 
 const AvatarSetup = () => {
-  const { user } = useContext(UserContext);
+  
   const [startingAvatars, setStartingAvatars] = useState();
 
   // Render the image in a React component.

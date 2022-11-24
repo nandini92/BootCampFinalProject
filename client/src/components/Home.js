@@ -1,5 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLoadScript } from "@react-google-maps/api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
@@ -10,14 +12,25 @@ import QuestAdmin from "./QuestAdmin";
 import styled from "styled-components";
 
 const Home = () => {
-  const { cred } = useContext(UserContext);
+  const { user, isAuthenticated } = useAuth0();
+  const { cred, actions: {getUser} } = useContext(UserContext);
   const { quests } = useContext(QuestsContext);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: cred.googleMaps,
   });
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState();
 
+  // Get and set User details
+  useEffect(() => {
+    if(isAuthenticated){
+      getUser(user.email)
+      .then(res => 
+        !res && navigate("/avatar"))
+    }
+  }, [isAuthenticated])
+  
+  // Form for creating new Quest
   const formSubmit = (e) => {
     e.preventDefault();
 
