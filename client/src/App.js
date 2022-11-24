@@ -4,6 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import GlobalStyles from "./GlobalStyles";
 import Header from "./components/Header";
 import Home from "./components/Home";
+import AvatarSetup from "./components/AvatarSetup";
 
 const App = () => {
   const { isLoading, error } = useAuth0();
@@ -17,6 +18,7 @@ const App = () => {
         {!error && !isLoading && (
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/avatar" element={<AvatarSetup />} />
           </Routes>
         )}
       </div>

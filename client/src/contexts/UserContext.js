@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
   const [cred, setCred] = useState();
   const { user, isAuthenticated } = useAuth0();
 
+  // Retrieves all API credentials from server
   useEffect(() => {
     fetch("/cred")
       .then((res) => res.json())
@@ -17,7 +18,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const fetchUserDetails = () => {
-    // Auth0 method to verify if authentication is successful. If truthy, user details will be returned.
+    // objects returned by useAuth0. If isAuthenticated is truthy, user details will be returned.
     return isAuthenticated && user;
   }
 
