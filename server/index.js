@@ -3,7 +3,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 require("dotenv").config();
 
-const { getAllUsers } = require("./handlers/userHandlers");
+const { createUser, getUser, getAllUsers } = require("./handlers/userHandlers");
 const { createQuest, getAllQuests } = require("./handlers/questHandlers");
 const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers")
 
@@ -22,6 +22,12 @@ express()
   .get("/cred", function (req, res) {
     res.status(200).json({ domain, clientId, googleMaps, cloudinary });
   })
+
+  // Endpoint to create new User
+  .post("/new-user", createUser)
+
+  // Endpoint to get logged in user details
+  .post("/user", getUser)
 
   // Endpoint to send all users
   .get("/users", getAllUsers)
