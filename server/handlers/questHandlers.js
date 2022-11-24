@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
+const { v4: uuidv4 } = require("uuid");
 const { MONGO_URI, REACT_APP_GOOGLE_MAPS_API } = process.env;
 const request = require('request-promise');
 
@@ -11,14 +12,13 @@ const options = {
 const createQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
-        const quest = {ownerId: req.params.ownerId, ...req.body};
+        const quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body};
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
         const questInserted = await db.collection("quests").insertOne(quest);
-        console.log(questInserted);
 
         questInserted
         ? res.status(201).json({status:201, data:quest, message: "SUCCESS: New Quest created."})
@@ -56,7 +56,6 @@ const getAllQuests = async(req,res) => {
                     request(`https://maps.googleapis.com/maps/api/geocode/json?address=${formattedLocation},+CA&key=${REACT_APP_GOOGLE_MAPS_API}`)
                     .then(res => JSON.parse(res))
                     .then(res => {
-                        console.log(res.results[0].geometry.location);
                         const coordinates=res.results[0].geometry.location;
                         return {...quest, coordinates};
                     })
