@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { useLoadScript } from "@react-google-maps/api";
-import QuestMap from "./QuestMap";
-import styled from "styled-components";
 
 import { UserContext } from "../contexts/UserContext";
+import { QuestsContext } from "../contexts/QuestsContext";
+import QuestMap from "./QuestMap";
+import QuestList from "./QuestList";
+
+import styled from "styled-components";
 
 const Home = () => {
-  const { cred } = useContext( UserContext ) ;
+  const { cred } = useContext(UserContext);
+  const { quests } = useContext(QuestsContext);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: cred.googleMaps,
   });
@@ -17,7 +21,12 @@ const Home = () => {
         <p>Loading</p>
       ) : (
         <Map>
-          <QuestMap cred/>
+          {quests && (
+            <>
+              <QuestList quests={quests}/>
+              <QuestMap quests={quests} />
+            </>
+          )}
         </Map>
       )}
     </>

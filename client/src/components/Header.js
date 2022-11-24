@@ -25,7 +25,7 @@ const Header = () => {
 
 const Wrapper = styled.div`
   margin: 0 0 0 0;
-  background-color: #363b81;
+  background-color: var(--color-purple);
   height: 100px;
   width: 100vw;
   display: flex;
@@ -44,10 +44,10 @@ const SignInOut = styled.div`
 `;
 const AvatarWrapper = styled.div`
   margin-top: 10px;
-  border: 5px solid #fbd743;
+  border: 5px solid var(--color-yellow);
   border-radius: 50%;
-  background-color: #ff1f1f;
-  box-shadow: 2px 5px 10px #363b81;
+  background-color: var(--color-red);
+  box-shadow: 2px 5px 10px var(--color-purple);
   height: 150px;
   width: 150px;
   transition: transform 0.3s ease-in-out;
