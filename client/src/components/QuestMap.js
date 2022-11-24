@@ -1,10 +1,7 @@
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
-import { useContext, useMemo, useState } from "react";
+import {  useMemo } from "react";
 
-import { QuestsContext } from "../contexts/QuestsContext";
-
-const QuestMap = ({cred}) => {
-  const { quests } = useContext(QuestsContext);
+const QuestMap = ({quests}) => {
   const containerStyle = {
     width: "100%",
     height: "100%",

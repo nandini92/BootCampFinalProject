@@ -7,6 +7,7 @@ export default createGlobalStyle`
     --color-red: #ff1f1f;
     --color-blue: #5db9ff;
     --color-purple: #363b81;
+    --color-grey: #ededed;
     --font: "Lato",sans-serif;
   }
   
