@@ -1,6 +1,7 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
-const { MONGO_URI } = process.env;
+const { MONGO_URI, REACT_APP_GOOGLE_MAPS_API } = process.env;
+const request = require('request-promise');
 
 const options = {
     useNewUrlParser: true,
@@ -42,11 +43,30 @@ const getAllQuests = async(req,res) => {
         console.log("database connected!");
 
         const quests = await db.collection("quests").find().toArray();
-        console.log(quests);
+
         
-        quests
-        ? res.status(200).json({status:200, data:quests, message: "SUCCESS: All Data returned."})
-        : res.status(404).json({status:404, data:quests, message: "ERROR: Data not found."});         
+        if(quests){
+            const promises = [];
+
+            quests.forEach((quest) => { 
+                const formattedLocation = `${quest.location.split(" ").join("+")}+${quest.city}`
+
+                promises.push(
+                    request(`https://maps.googleapis.com/maps/api/geocode/json?address=${formattedLocation},+CA&key=${REACT_APP_GOOGLE_MAPS_API}`)
+                    .then(res => JSON.parse(res))
+                    .then(res => {
+                        console.log(res.results[0].geometry.location);
+                        const coordinates=res.results[0].geometry.location;
+                        return {...quest, coordinates};
+                    })
+                );
+            })
+
+            Promise.all(promises)
+            .then((data) => res.status(201).json({status:201, data, message: "SUCCESS: New Quest created."}))
+        } else {
+            res.status(404).json({status:404, data:quests, message: "ERROR: Data not found."});       
+        }
     }catch(err){
         console.log(err);
         res.status(500).json({status:500, data:null, message: `ERROR: Internal server error.`});  

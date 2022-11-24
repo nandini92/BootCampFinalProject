@@ -17,7 +17,7 @@ const Home = () => {
         <p>Loading</p>
       ) : (
         <Map>
-          <QuestMap />
+          <QuestMap cred/>
         </Map>
       )}
     </>
