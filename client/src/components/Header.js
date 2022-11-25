@@ -1,19 +1,22 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { UserContext } from "../contexts/UserContext";
+
+import { AdvancedImage } from "@cloudinary/react";
 
 import LoginButton from "../assets/LoginButton";
 import LogoutButton from "../assets/LogoutButton";
 
 const Header = () => {
+  const { userAvatar } = useContext(UserContext);
+
   return (
     <Wrapper>
       <Home to={"/"}>Quest</Home>
       <AvatarWrapper className="front">
         <Shine></Shine>
-        <Pokemon
-          src="https://img.pokemondb.net/sprites/black-white/anim/normal/bulbasaur.gif"
-          alt="Bulbasaur"
-        />
+        {userAvatar && <Pokemon cldImg={userAvatar} />}
       </AvatarWrapper>
       <SignInOut>
         <LoginButton />
@@ -60,7 +63,7 @@ const AvatarWrapper = styled.div`
   }
 `;
 const Shine = styled.div`
-  position: relative;
+  /* position: relative;
   top: 30px;
   left: 100px;
   z-index: 100;
@@ -68,12 +71,12 @@ const Shine = styled.div`
   height: 10px;
   width: 10px;
   border-radius: 50%;
-  box-shadow: 0px 0px 12px 10px white;
+  box-shadow: 0px 0px 10px 10px white; */
 `;
-const Pokemon = styled.img`
+const Pokemon = styled(AdvancedImage)`
   position: relative;
   top: 15px;
-  left: 35px;
+  left: 30px;
   height: 90px;
   width: 90px;
 `;

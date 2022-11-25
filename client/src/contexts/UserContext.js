@@ -1,11 +1,23 @@
 import { createContext, useEffect, useState } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
 
+// Cloudinary imports
+import { Cloudinary } from "@cloudinary/url-gen";
+
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [cred, setCred] = useState();
   const [user, setUser] = useState();
+  const [userAvatar, setUserAvatar] = useState();
+
+  // Create a Cloudinary instance for avatar setup
+  const cld = new Cloudinary({
+    // TO DO: Replace with cred
+    cloud: {
+      cloudName: "daeu4xdvz",
+    },
+  });
 
   // Retrieves all API credentials from server
   useEffect(() => {
@@ -15,6 +27,12 @@ export const UserProvider = ({ children }) => {
         setCred(data);
       });
   }, []);
+
+  // Get all cloudinary public Ids for avatars
+  useEffect(() => {
+    user && 
+    setUserAvatar(cld.image(user.avatar));
+  }, [user]);
 
   // Get user details
   const getUser = (email) => {
@@ -71,7 +89,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ cred, actions: { createUser, getUser } }}>
+    <UserContext.Provider value={{ cred, user, userAvatar, actions: { createUser, getUser } }}>
       {cred && (
         <Auth0Provider
           domain={cred.domain}
