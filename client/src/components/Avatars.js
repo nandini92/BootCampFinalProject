@@ -18,6 +18,7 @@ const Avatars = ({ startingAvatars, setStartingAvatars }) => {
 
   // Create a Cloudinary instance and set your cloud name.
   const cld = new Cloudinary({
+    // TO DO: Replace with cred
     cloud: {
       cloudName: "daeu4xdvz",
     },
