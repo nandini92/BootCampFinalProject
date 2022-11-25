@@ -2,58 +2,39 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoadScript } from "@react-google-maps/api";
 import { useAuth0 } from "@auth0/auth0-react";
+import { FiPlus, FiArrowLeft } from "react-icons/fi";
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 import QuestMap from "./QuestMap";
 import QuestList from "./QuestList";
-import SingleQuest from "./SingleQuest";
 import QuestAdmin from "./QuestAdmin";
+import SingleQuest from "./SingleQuest";
 
 import styled from "styled-components";
 
 const Home = () => {
-  const { user, isAuthenticated } = useAuth0();
-  const { cred, actions: {getUser} } = useContext(UserContext);
+  const { cred, actions: { getUser } } = useContext(UserContext);
   const { quests } = useContext(QuestsContext);
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: cred.googleMaps,
-  });
+  const [selectedQuest, setSelectedQuest] = useState();
+  const [newQuest, setNewQuest] = useState(false);
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState();
-  const [selectedQuest, setSelectedQuest] = useState();
+  // Authenticate user 
+  const { user, isAuthenticated } = useAuth0();
 
+  // Create google enabled search box for address selection 
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: cred.googleMaps,
+    libraries: ['places']
+  });
 
   // Get and set User details
   useEffect(() => {
-    if(isAuthenticated){
-      getUser(user.email)
-      .then(res => 
-        !res && navigate("/avatar"))
+    if (isAuthenticated) {
+      getUser(user.email).then((res) => !res && navigate("/avatar"));
     }
-  }, [isAuthenticated])
-  
-  // Form for creating new Quest
-  const formSubmit = (e) => {
-    e.preventDefault();
-
-    fetch(`/new-quest/092cd559-2108-4328-aefe-3607d0759727`, {
-        method: "POST",
-        headers: {
-            "Accept" : "application/json",
-            "Content-Type" : "application/json",
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(res => res.json())
-    .then((data) => {
-        if(data.status === 500){
-            throw new Error(data.message);
-        }
-    })
-    .catch(error => window.alert(error));
-  }
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -61,18 +42,23 @@ const Home = () => {
         <p>Loading</p>
       ) : (
         <Map>
-          {quests && (
-            <>
-            <>{
-              selectedQuest
-              ? <SingleQuest selectedQuest={selectedQuest}/>
-              : <QuestList quests={quests}/>
-            }
-              {/* <QuestAdmin formData={formData} setFormData={setFormData} formSubmit={formSubmit}/> */}
-            </>
-              <QuestMap quests={quests} selectedQuest={selectedQuest} setSelectedQuest={setSelectedQuest}/>
-            </>
-          )}
+            <Wrapper>
+              { 
+              newQuest === true
+                ?<Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
+                :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
+              }
+              {newQuest === true  && !selectedQuest
+              && <QuestAdmin setSelectedQuest={setSelectedQuest}/>}
+              {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
+              {newQuest === false && !selectedQuest && <QuestList quests={quests} />}
+            </Wrapper>
+            <QuestMap
+            quests={quests}
+            selectedQuest={selectedQuest}
+            setSelectedQuest={setSelectedQuest}
+            setNewQuest={setNewQuest}
+          />
         </Map>
       )}
     </>
@@ -84,5 +70,37 @@ const Map = styled.div`
   top: 100px;
   height: 89vh;
   width: 100vw;
+`;
+const Add = styled(FiPlus)`
+  border-radius: 5px;
+  padding: 5px;
+  margin:20px;
+  background-color: var(--color-yellow);
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: var(--color-dark-grey);
+    color: var(--color-yellow);
+  }
+`
+const Back = styled(FiArrowLeft)`
+  border-radius: 5px;
+  padding: 5px;
+  margin:20px;
+  background-color: var(--color-red);
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: var(--color-dark-grey);
+    color: var(--color-red);
+  }
+`
+const Wrapper = styled.div`
+  position: absolute;
+  z-index: 5;
+  min-width: 30%;
+  height: 100%;
+  background-color: var(--color-grey);
+  box-shadow: 0px 0px 10px var(--color-purple);
 `;
 export default Home;

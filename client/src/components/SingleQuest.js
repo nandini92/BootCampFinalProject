@@ -39,7 +39,7 @@ const SingleQuest = ({ selectedQuest }) => {
   }, [owner]);
 
   return (
-    <Wrapper>
+    <>
       {!quest ? (
         <h1>Loading</h1>
       ) : (
@@ -61,21 +61,13 @@ const SingleQuest = ({ selectedQuest }) => {
           </p>
         </QuestWrapper>
       )}
-    </Wrapper>
+    </>
   );
 };
 
-const Wrapper = styled.div`
-  position: absolute;
-  z-index: 5;
-  min-width: 30%;
-  height: 100%;
-  background-color: var(--color-grey);
-  box-shadow: 0px 0px 10px var(--color-purple);
-  border-radius: 15px;
-`;
 const QuestWrapper = styled.div`
   width: 90%;
+  height: 80%;
   margin: 20px;
   background-color: var(--color-yellow);
   box-shadow: 0px 0px 10px var(--color-dark-grey);
