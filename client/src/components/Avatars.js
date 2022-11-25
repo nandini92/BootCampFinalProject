@@ -9,10 +9,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 // Cloudinary imports
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { scale } from "@cloudinary/url-gen/actions/resize";
-import {thumbnail} from "@cloudinary/url-gen/actions/resize";
-import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
-import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 
 
 const Avatars = ({ startingAvatars, setStartingAvatars }) => {
@@ -38,8 +34,6 @@ const Avatars = ({ startingAvatars, setStartingAvatars }) => {
             const avatarGif = cld.image(avatar.public_id);
 
             return avatarGif
-            .resize(scale().width(100))
-            .resize(thumbnail().height(100).gravity(focusOn(FocusOn.face())))
           });
 
           setStartingAvatars(tempArray);
