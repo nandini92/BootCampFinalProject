@@ -1,7 +1,7 @@
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import {  useMemo } from "react";
 
-const QuestMap = ({quests}) => {
+const QuestMap = ({quests, selectedQuest, setSelectedQuest}) => {
   const containerStyle = {
     width: "100%",
     height: "100%",
@@ -15,9 +15,10 @@ const QuestMap = ({quests}) => {
       zoom={zoom}
       center={center}
       mapContainerStyle={containerStyle}
+      onClick={() => setSelectedQuest()}
     >
       {quests &&
-        quests.map((quest) => <MarkerF key={quest._id} position={quest.coordinates} />)
+        quests.map((quest) => <MarkerF key={quest._id} position={quest.coordinates} onClick={() => setSelectedQuest(quest._id)} />)
       }
     </GoogleMap>
   );
