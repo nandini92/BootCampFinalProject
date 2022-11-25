@@ -1,7 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
-
-// Cloudinary imports
 import { Cloudinary } from "@cloudinary/url-gen";
 
 export const UserContext = createContext();

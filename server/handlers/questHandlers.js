@@ -9,6 +9,8 @@ const options = {
     useUnifiedTopology: true,
 };
 
+// Handler to create new Quest
+// TO DO: Data  validation prior to inserting
 const createQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
@@ -32,7 +34,34 @@ const createQuest = async(req,res) => {
     }
 }
 
+// Handler to get quest details based on quest id provided
+const getQuest = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
 
+    try{
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+
+        const quest = await db.collection("quests").findOne({_id: req.params.id})
+        console.log(quest);
+
+        quest
+        ? res.status(201).json({status:201, data: quest, message: "SUCCESS: Quest details retrieved."})
+        : res.status(404).json({status:404,  message: "ERROR: Data not found."});     
+
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, data:null, message: `ERROR: Internal server error.`});  
+    } finally {
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+
+// Handler to get all quest details from database
+// TO DO: Rework to limit response size
 const getAllQuests = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
@@ -76,4 +105,4 @@ const getAllQuests = async(req,res) => {
     }
 }
 
-module.exports = {createQuest, getAllQuests};
+module.exports = {createQuest, getQuest, getAllQuests};

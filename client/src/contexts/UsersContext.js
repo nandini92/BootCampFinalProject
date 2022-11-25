@@ -15,8 +15,24 @@ export const UsersProvider = ({ children }) => {
       });
   }, []);
 
+  // Get otherUser details
+  const getOtherUser = (id) => {
+      return fetch(`/user/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 200) {
+            return data.data;
+          } else {
+            throw new Error(data.message);
+          }
+        })
+        .catch((error) => console.log(error));
+  }
+
+
+
   return (
-    <UsersContext.Provider value={{users}}>
+    <UsersContext.Provider value={{users, actions:{getOtherUser}}}>
         {children}
     </UsersContext.Provider>
   );

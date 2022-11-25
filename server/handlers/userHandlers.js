@@ -57,6 +57,30 @@ const getUser = async(req,res) => {
     }
 }
 
+// Handler to return user details based on id
+const getUserById = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
+
+    try{
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+
+        const user = await db.collection("users").findOne({_id: req.params.id});
+        
+        user
+        ? res.status(200).json({status:200, data:user, message: "SUCCESS: User details returned."})
+        : res.status(404).json({status:404, data:user, message: "ERROR: User not found"});         
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, data:null, message: `ERROR: Internal server error.`});  
+    } finally {
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+
 // Handler to return all user details
 const getAllUsers = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
@@ -81,4 +105,4 @@ const getAllUsers = async(req,res) => {
     }
 }
 
-module.exports = { createUser, getUser, getAllUsers };
+module.exports = { createUser, getUser, getUserById, getAllUsers };

@@ -7,6 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 import QuestMap from "./QuestMap";
 import QuestList from "./QuestList";
+import SingleQuest from "./SingleQuest";
 import QuestAdmin from "./QuestAdmin";
 
 import styled from "styled-components";
@@ -19,7 +20,10 @@ const Home = () => {
     googleMapsApiKey: cred.googleMaps,
   });
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState();
+  const [selectedQuest, setSelectedQuest] = useState();
+
 
   // Get and set User details
   useEffect(() => {
@@ -59,9 +63,14 @@ const Home = () => {
         <Map>
           {quests && (
             <>
-              {/* <QuestList quests={quests}/> */}
-              <QuestAdmin formData={formData} setFormData={setFormData} formSubmit={formSubmit}/>
-              <QuestMap quests={quests} />
+            <>{
+              selectedQuest
+              ? <SingleQuest selectedQuest={selectedQuest}/>
+              : <QuestList quests={quests}/>
+            }
+              {/* <QuestAdmin formData={formData} setFormData={setFormData} formSubmit={formSubmit}/> */}
+            </>
+              <QuestMap quests={quests} selectedQuest={selectedQuest} setSelectedQuest={setSelectedQuest}/>
             </>
           )}
         </Map>
@@ -76,5 +85,4 @@ const Map = styled.div`
   height: 89vh;
   width: 100vw;
 `;
-
 export default Home;
