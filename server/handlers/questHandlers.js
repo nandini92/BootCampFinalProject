@@ -44,8 +44,7 @@ const getQuest = async(req,res) => {
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const quest = await db.collection("quests").findOne({_id: req.params.id})
-        console.log(quest);
+        const quest = await db.collection("quests").findOne({_id: req.params.id});
 
         quest
         ? res.status(201).json({status:201, data: quest, message: "SUCCESS: Quest details retrieved."})
@@ -73,32 +72,9 @@ const getAllQuests = async(req,res) => {
 
         const quests = await db.collection("quests").find().toArray();
 
-        
-        if(quests){
-            const promises = [];
-
-            // TODO: This can be done in Quest creation. Move when addQuest is complete.
-            quests.forEach((quest) => { 
-                const formattedLocation = `${quest.location.split(" ").join("+")}+${quest.city}`
-
-                promises.push(
-                    request(`https://maps.googleapis.com/maps/api/geocode/json?address=${formattedLocation},+CA&key=${REACT_APP_GOOGLE_MAPS_API}`)
-                    .then(res => JSON.parse(res))
-                    .then(res => {
-                        const coordinates=res.results[0].geometry.location;
-                        return {...quest, coordinates};
-                    })
-                );
-            })
-
-            Promise.all(promises)
-            .then((data) => res.status(201).json({status:201, data, message: "SUCCESS: New Quest created."}))
-        } else {
-            res.status(404).json({status:404, data:quests, message: "ERROR: Data not found."});       
-        }
-    }catch(err){
-        console.log(err);
-        res.status(500).json({status:500, data:null, message: `ERROR: Internal server error.`});  
+        quests
+        ? res.status(201).json({status:201, data:quests, message: "SUCCESS: New Quest created."})
+        : res.status(404).json({status:404, data:quests, message: "ERROR: Data not found."});    
     } finally {
         client.close();
         console.log("database disconnected!")
