@@ -1,38 +1,57 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import styled from "styled-components";
 
-import { useLoadScript, Autocomplete } from "@react-google-maps/api";
+import { Autocomplete } from "@react-google-maps/api";
 
-const QuestAdmin = () => {
-  const { user } = useContext(UserContext);
+const QuestAdmin = ({ setQuestList, questList }) => {
+  const { user, cred } = useContext(UserContext);
   const [formData, setFormData] = useState();
+  const location = useRef();
+  const coordinates = useRef();
 
   // Form for creating new Quest
   const formSubmit = (e) => {
     e.preventDefault();
+    const encodedAddress = encodeURI(location.current.value);
 
-    if(!user._id){
-      throw new Error("ERROR: User ID is not set. Unable to retrieve account details.")
-    } else {
-      fetch(`/new-quest/${user._id}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${cred.googleMaps}`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        coordinates.current = res.results[0].geometry.location;
+        console.log(coordinates.current);
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === 500) {
-            throw new Error(data.message);
-          }
-        })
-        .catch((error) => window.alert(error));
-    }
+      .then((res) => {
+        // Run fetch only ones coordinates are set
+        if (!user._id) {
+          throw new Error(
+            "ERROR: User ID is not set. Unable to retrieve account details."
+          );
+        } else {
+          fetch(`/new-quest/${user._id}`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...formData, location: coordinates.current }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.status === 500) {
+                throw new Error(data.message);
+              } else {
+                setQuestList([...questList, data.data]);
+              }
+            })
+            .catch((error) => window.alert(error));
+        }
+      });
   };
 
+  // Store form values for all regular inputs
   const handleChange = (key, value) => {
     setFormData({
       ...formData,
@@ -57,8 +76,13 @@ const QuestAdmin = () => {
           id="description"
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
-        <Autocomplete>
-          <Input type="text" placeholder="Address" id="location" />
+        <Autocomplete >
+          <Input
+            type="text"
+            placeholder="Address"
+            id="location"
+            ref={location}
+          />
         </Autocomplete>
         <Input
           type="text"
@@ -84,22 +108,16 @@ const QuestAdmin = () => {
   );
 };
 
-const Wrapper = styled.div`
-background-color: var(--color-yellow);
-  position: absolute;
-  top: 50px;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 const QuestForm = styled.form`
   display: flex;
   flex-direction: column;
   border-radius: 15px;
   padding: 0px 20px 20px 20px;
   font-family: var(--font);
+  background-color: var(--color-yellow);
+  box-shadow: 0px 0px 10px var(--color-dark-grey);
+  width: 90%;
+  margin: 20px;
 `;
 const Title = styled.p`
   font-size: 22px;
@@ -129,6 +147,7 @@ const Button = styled.button`
   &:hover {
     background-color: var(--color-yellow);
     color: var(--color-dark-grey);
+    border: 2px solid var(--color-dark-grey);
   }
 `;
 export default QuestAdmin;

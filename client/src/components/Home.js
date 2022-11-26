@@ -18,6 +18,7 @@ const Home = () => {
   const { quests } = useContext(QuestsContext);
   const [selectedQuest, setSelectedQuest] = useState();
   const [newQuest, setNewQuest] = useState(false);
+  const [questList, setQuestList] = useState();
   const navigate = useNavigate();
 
   // Authenticate user 
@@ -28,6 +29,11 @@ const Home = () => {
     googleMapsApiKey: cred.googleMaps,
     libraries: ['places']
   });
+
+  // useEffect to set Quest List
+  useEffect(()=> {
+    setQuestList(quests);
+  }, [quests])
 
   // Get and set User details
   useEffect(() => {
@@ -48,14 +54,16 @@ const Home = () => {
                 ?<Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
                 :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
               }
+              {
+                selectedQuest && <Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
+              }
               {newQuest === true  && !selectedQuest
-              && <QuestAdmin setSelectedQuest={setSelectedQuest}/>}
+              && <QuestAdmin setQuestList={setQuestList} questList={questList}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
-              {newQuest === false && !selectedQuest && <QuestList quests={quests} />}
+              {newQuest === false && !selectedQuest && <QuestList questList={questList} setSelectedQuest={setSelectedQuest} />}
             </Wrapper>
             <QuestMap
-            quests={quests}
-            selectedQuest={selectedQuest}
+            questList={questList}
             setSelectedQuest={setSelectedQuest}
             setNewQuest={setNewQuest}
           />

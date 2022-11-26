@@ -1,14 +1,15 @@
 import styled from "styled-components";
 
-const QuestList = ({ quests }) => {
+// TO DO: 
+const QuestList = ({ questList, setSelectedQuest}) => {
   return (
     <>
-      {!quests ? (
+      {!questList ? (
         <h1>Loading</h1>
       ) : (
-        quests.map((quest) => {
+        questList.map((quest) => {
           return (
-            <QuestWrapper key={quest._id}>
+            <QuestWrapper key={quest._id} onClick={() => setSelectedQuest(quest._id)}>
               <Desc>
                 <Title>{quest.title}</Title>
                 <p>
