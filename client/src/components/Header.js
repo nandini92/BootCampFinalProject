@@ -40,7 +40,7 @@ const Wrapper = styled.div`
 const Home = styled(NavLink)`
   font-size: 48px;
   text-decoration: none;
-  color: white;
+  color: var(--color-grey);
   align-self: center;
   padding-left: 20px;
 `;

@@ -13,9 +13,6 @@ const QuestList = ({ questList, setSelectedQuest}) => {
               <Desc>
                 <Title>{quest.title}</Title>
                 <p>
-                  <Label>Date/Time:</Label> {quest.schedule}
-                </p>
-                <p>
                   <Label>Slots available:</Label> {quest.participants}
                 </p>
               </Desc>

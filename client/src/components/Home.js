@@ -19,6 +19,7 @@ const Home = () => {
   const [selectedQuest, setSelectedQuest] = useState();
   const [newQuest, setNewQuest] = useState(false);
   const [questList, setQuestList] = useState();
+  const [newMarker, setNewMarker] = useState();
   const navigate = useNavigate();
 
   // Authenticate user 
@@ -51,14 +52,14 @@ const Home = () => {
             <Wrapper>
               { 
               newQuest === true
-                ?<Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
+                ?<Back onClick={() => {setNewQuest(false); setSelectedQuest(); setNewMarker()}}/>
                 :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
               }
               {
                 selectedQuest && <Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
               }
-              {newQuest === true  && !selectedQuest
-              && <QuestAdmin setQuestList={setQuestList} questList={questList}/>}
+              {newQuest === true  && !selectedQuest && user
+              && <QuestAdmin setQuestList={setQuestList} questList={questList}  newMarker={newMarker}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
               {newQuest === false && !selectedQuest && <QuestList questList={questList} setSelectedQuest={setSelectedQuest} />}
             </Wrapper>
@@ -66,6 +67,8 @@ const Home = () => {
             questList={questList}
             setSelectedQuest={setSelectedQuest}
             setNewQuest={setNewQuest}
+            setNewMarker={setNewMarker}
+            newMarker={newMarker}
           />
         </Map>
       )}

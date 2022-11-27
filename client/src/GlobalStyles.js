@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import { FiPlus } from "react-icons";
 
 
 export default createGlobalStyle`
@@ -10,7 +9,7 @@ export default createGlobalStyle`
     --color-purple: #363b81;
     --color-grey: #F8F9FA;
     --color-dark-grey: #595F65;
-    --font: "Lato",sans-serif;
+    --font: "Poppins",sans-serif;
   }
   
   /* http://meyerweb.com/eric/tools/css/reset/
@@ -58,15 +57,25 @@ export default createGlobalStyle`
       content: none;
   }
 
-  h1,
+h1,
 h2,
 h3,
-label,
-button {
+label {
   color: #fff;
   font-family: var(--font);
   font-size: 32px;
   text-align: center;
+}
+button {
+  color: #fff;
+  font-family: var(--font);
+  font-size: 22px;
+  padding: 5px 10px;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--color-purple);
+  color: var(--color-grey);
 }
 p,
 a,

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Autocomplete } from "@react-google-maps/api";
 
-const QuestAdmin = ({ setQuestList, questList }) => {
+const QuestAdmin = ({ setQuestList, questList, newMarker }) => {
   const { user, cred } = useContext(UserContext);
   const [formData, setFormData] = useState();
   const location = useRef();
@@ -13,6 +13,9 @@ const QuestAdmin = ({ setQuestList, questList }) => {
   // Form for creating new Quest
   const formSubmit = (e) => {
     e.preventDefault();
+    
+    // CASE 1: User selected create new quest from side bar
+    if(!newMarker){
     const encodedAddress = encodeURI(location.current.value);
 
     fetch(
@@ -49,6 +52,26 @@ const QuestAdmin = ({ setQuestList, questList }) => {
             .catch((error) => window.alert(error));
         }
       });
+    // CASE 2: User dropped a pin on map to create Quest
+    } else {
+      fetch(`/new-quest/${user._id}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData, location: newMarker }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 500) {
+            throw new Error(data.message);
+          } else {
+            setQuestList([...questList, data.data]);
+          }
+        })
+        .catch((error) => window.alert(error));
+    }
   };
 
   // Store form values for all regular inputs
@@ -76,6 +99,7 @@ const QuestAdmin = ({ setQuestList, questList }) => {
           id="description"
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
+        {!newMarker &&
         <Autocomplete >
           <Input
             type="text"
@@ -83,13 +107,8 @@ const QuestAdmin = ({ setQuestList, questList }) => {
             id="location"
             ref={location}
           />
-        </Autocomplete>
-        <Input
-          type="text"
-          placeholder="Date/Time"
-          id="schedule"
-          onChange={(e) => handleChange(e.target.id, e.target.value)}
-        />
+        </Autocomplete> 
+        }
         <Input
           type="number"
           placeholder="How many people do you need on this quest?"
