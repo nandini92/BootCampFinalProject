@@ -16,7 +16,7 @@ const Header = () => {
     <Wrapper>
       <Home to={"/"}>Quest</Home>
       {userAvatar
-      ? <AvatarWrapper className="front">
+      ? <AvatarWrapper to={"/my-profile"}>
         <Pokemon cldImg={userAvatar} />
       </AvatarWrapper>
       : <Pokeball>
@@ -53,7 +53,7 @@ const SignInOut = styled.div`
   align-self: center;
   padding-right: 20px;
 `;
-const AvatarWrapper = styled.div`
+const AvatarWrapper = styled(NavLink)`
   margin-top: 24px;
   border: 5px solid var(--color-grey);
   border-radius: 50%;
@@ -66,17 +66,6 @@ const AvatarWrapper = styled.div`
   &:hover {
     transform: scale(1.1);
   }
-`;
-const Shine = styled.div`
-  position: relative;
-  top: 30px;
-  left: 100px;
-  z-index: 100;
-  background-color: white;
-  height: 10px;
-  width: 10px;
-  border-radius: 50%;
-  box-shadow: 0px 0px 10px 10px white;
 `;
 const Pokemon = styled(AdvancedImage)`
   position: relative;

@@ -8,7 +8,7 @@ import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 import QuestMap from "./QuestMap";
 import QuestList from "./QuestList";
-import QuestAdmin from "./QuestAdmin";
+import NewQuest from "./NewQuest";
 import SingleQuest from "./SingleQuest";
 
 import styled from "styled-components";
@@ -62,7 +62,7 @@ const Home = () => {
               </Options>
               <Pages>
               {newQuest === true  && !selectedQuest && user
-              && <QuestAdmin setQuestList={setQuestList} questList={questList}  newMarker={newMarker}/>}
+              && <NewQuest setQuestList={setQuestList} questList={questList}  newMarker={newMarker}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
               {newQuest === false && !selectedQuest && <QuestList questList={questList} setSelectedQuest={setSelectedQuest} />}
               </Pages>
