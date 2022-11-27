@@ -50,18 +50,22 @@ const Home = () => {
       ) : (
         <Map>
             <Wrapper>
+              <Options>
+              {
+                selectedQuest && <Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
+              }
               { 
               newQuest === true
                 ?<Back onClick={() => {setNewQuest(false); setSelectedQuest(); setNewMarker()}}/>
                 :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
               }
-              {
-                selectedQuest && <Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
-              }
+              </Options>
+              <Pages>
               {newQuest === true  && !selectedQuest && user
               && <QuestAdmin setQuestList={setQuestList} questList={questList}  newMarker={newMarker}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
               {newQuest === false && !selectedQuest && <QuestList questList={questList} setSelectedQuest={setSelectedQuest} />}
+              </Pages>
             </Wrapper>
             <QuestMap
             questList={questList}
@@ -82,16 +86,21 @@ const Map = styled.div`
   height: 89vh;
   width: 100vw;
 `;
+const Options = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--color-dark-grey);
+`
 const Add = styled(FiPlus)`
   border-radius: 5px;
   padding: 5px;
   margin:20px;
   background-color: var(--color-yellow);
+  transition: transform 0.3s ease-in-out;
 
   &:hover {
-    transform: scale(1.1);
-    background-color: var(--color-dark-grey);
-    color: var(--color-yellow);
+    transform: scale(1.2);
   }
 `
 const Back = styled(FiArrowLeft)`
@@ -99,11 +108,10 @@ const Back = styled(FiArrowLeft)`
   padding: 5px;
   margin:20px;
   background-color: var(--color-red);
+  transition: transform 0.3s ease-in-out;
 
   &:hover {
-    transform: scale(1.1);
-    background-color: var(--color-dark-grey);
-    color: var(--color-red);
+    transform: scale(1.2);
   }
 `
 const Wrapper = styled.div`
@@ -114,4 +122,10 @@ const Wrapper = styled.div`
   background-color: var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-purple);
 `;
+const Pages = styled.div`
+  max-height: 92%;
+  overflow: hidden;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+`
 export default Home;

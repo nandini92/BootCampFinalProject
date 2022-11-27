@@ -7,6 +7,7 @@ const getAllFirstGenPokemon = (req, res) => {
     cloudinary.api.resources_by_tag("1st_gen", {max_results: 64})
     .then((results) => {
       return results.resources.map(result => {
+        console.log(result);
             return {public_id: result.public_id, asset_id: result.asset_id};
         });
       })

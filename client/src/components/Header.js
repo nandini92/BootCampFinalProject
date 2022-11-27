@@ -7,6 +7,7 @@ import { AdvancedImage } from "@cloudinary/react";
 
 import LoginButton from "../assets/LoginButton";
 import LogoutButton from "../assets/LogoutButton";
+import pokeball from "../assets/images/pokeball.svg";
 
 const Header = () => {
   const { userAvatar } = useContext(UserContext);
@@ -14,10 +15,14 @@ const Header = () => {
   return (
     <Wrapper>
       <Home to={"/"}>Quest</Home>
-      <AvatarWrapper className="front">
-        <Shine></Shine>
-        {userAvatar && <Pokemon cldImg={userAvatar} />}
+      {userAvatar
+      ? <AvatarWrapper className="front">
+        <Pokemon cldImg={userAvatar} />
       </AvatarWrapper>
+      : <Pokeball>
+        <Image src={pokeball} alt="pokeball"/>
+        </Pokeball>
+      }
       <SignInOut>
         <LoginButton />
         <LogoutButton />
@@ -49,7 +54,7 @@ const SignInOut = styled.div`
   padding-right: 20px;
 `;
 const AvatarWrapper = styled.div`
-  margin-top: 10px;
+  margin-top: 24px;
   border: 5px solid var(--color-grey);
   border-radius: 50%;
   background-color: var(--color-red);
@@ -63,7 +68,7 @@ const AvatarWrapper = styled.div`
   }
 `;
 const Shine = styled.div`
-  /* position: relative;
+  position: relative;
   top: 30px;
   left: 100px;
   z-index: 100;
@@ -71,14 +76,37 @@ const Shine = styled.div`
   height: 10px;
   width: 10px;
   border-radius: 50%;
-  box-shadow: 0px 0px 10px 10px white; */
+  box-shadow: 0px 0px 10px 10px white;
 `;
 const Pokemon = styled(AdvancedImage)`
   position: relative;
-  top: 15px;
-  left: 30px;
+  top: 17px;
+  left: 26px;
   height: 90px;
   width: 90px;
 `;
+const Pokeball = styled.div`
+  position: relative;
+  right: 25px;
+  margin-top: 24px;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 2px 5px 10px var(--color-purple);
+  height: 150px;
+  width: 150px;
+  transition: transform 0.3s ease-in-out;
 
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const Image = styled.img`
+  height: 157px;
+  width: 157px;
+  position: relative;
+  top: -2px;
+  left: -4px;
+  z-index: 100;
+`;
 export default Header;
