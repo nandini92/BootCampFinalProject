@@ -39,7 +39,7 @@ const QuestAdmin = ({ setQuestList, questList, newMarker }) => {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...formData, location: coordinates.current }),
+            body: JSON.stringify({ ...formData, location: coordinates.current, type: user.avatarType }),
           })
             .then((res) => res.json())
             .then((data) => {

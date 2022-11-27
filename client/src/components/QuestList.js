@@ -16,9 +16,7 @@ const QuestList = ({ questList, setSelectedQuest}) => {
                   <Label>Slots available:</Label> {quest.participants}
                 </p>
               </Desc>
-              <p>
-                <Karma>{quest.karma}</Karma>
-              </p>
+              <Karma><p>{quest.karma}</p></Karma>
             </QuestWrapper>
           );
         })
@@ -30,8 +28,8 @@ const QuestList = ({ questList, setSelectedQuest}) => {
 const QuestWrapper = styled.div`
   width: 90%;
   margin: 20px;
-  background-color: var(--color-yellow);
-  box-shadow: 0px 0px 10px var(--color-dark-grey);
+  background-color: var(--color-grey);
+  box-shadow: 0px 0px 10px var(--color-purple);
   padding: 10px;
   border-radius: 15px;
   display: flex;
@@ -55,9 +53,9 @@ const Label = styled.span`
   font-weight: bold;
 `;
 const Karma = styled.div`
-  border-radius: 50%;
-  background-color: var(--color-red);
-  box-shadow: 2px 5px 10px var(--color-dark-grey);
+  border-radius: 15px;
+  background-color: var(--color-blue);
+  box-shadow: 2px 5px 10px var(--color-purple);
   height: 80px;
   width: 80px;
   text-align: center;
