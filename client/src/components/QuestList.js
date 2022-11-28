@@ -7,7 +7,8 @@ const QuestList = ({ quests, setSelectedQuest}) => {
       {!quests ? (
         <h1>Loading</h1>
       ) : (
-        quests.map((quest) => {
+        quests.filter((item) => !item.completed)
+        .map((quest) => {
           return (
             <QuestWrapper key={quest._id} onClick={() => setSelectedQuest(quest._id)}>
               <Desc>

@@ -8,12 +8,14 @@ const options = {
     useUnifiedTopology: true,
 };
 
+const date = Date.now();
+
 // Handler to create new Quest
 // TO DO: Data  validation prior to inserting
 const createQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
-        const quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body};
+        const quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
@@ -45,7 +47,7 @@ const addQuestParticipant = async(req,res) => {
         console.log("database connected!");
 
         // TO DO: Reduce participant slots on quest
-        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {participants: participants}, $push: {participantIds:  participant }});
+        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {participants: participants,  updatedAt: date}, $push: {participantIds:  participant }});
 
         questUpdated
         ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: Quest has been updated."})
@@ -86,7 +88,6 @@ const deleteQuest = async(req,res) => {
 const completeQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
-        const date = Date.now();
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
@@ -94,6 +95,8 @@ const completeQuest = async(req,res) => {
 
         const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, {$set: {completed: true, completedAt: date}});
         console.log(req.params.id, questUpdated);
+
+        // TO DO: Add quest task complete to user data
 
         questUpdated
         ? res.status(201).json({status:200, data:questUpdated, message: "SUCCESS: Quest deleted succesfully."})
@@ -137,16 +140,26 @@ const getUsersQuests = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
+        const user = req.params.id;
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const quests = await db.collection("quests").find({ownerId: req.params.id}).toArray();
+        const questsOwned = await db.collection("quests").find({ownerId: user}).toArray();
+        
+        const questsOn = await db.collection("quests").find({ participantIds: [user]}).toArray();
 
-        quests
-        ? res.status(201).json({status:201, data:quests, message: "SUCCESS: User's Quests returned."})
-        : res.status(404).json({status:404, data:quests, message: "ERROR: Data not found."});    
+        switch(true){
+            case (questsOwned !== null && questsOn !== null):
+                return res.status(201).json({status:201, data: {questsOwned, questsOn}, message: "SUCCESS: All users quests returned."})
+            case (questsOwned !== null):
+                return res.status(201).json({status:201, data: {questsOwned}, message: "SUCCESS: User's owned Quests returned."})
+            case (questsOn !== null):
+                return res.status(201).json({status:201, data: {questsOn}, message: "SUCCESS: User's owned Quests returned."})
+            default:
+                return res.status(404).json({status:404, data: null, message: "ERROR: Data not found."})
+        }   
     } finally {
         client.close();
         console.log("database disconnected!")

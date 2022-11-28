@@ -41,8 +41,49 @@ export const QuestsProvider = ({ children }) => {
       });
   }
 
+  
+  // Function to delete quest 
+  const deleteQuest = (id) => {
+    fetch(`/quest/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          setQuestUpdate(id);
+        } else {
+          throw new Error(data.message);
+        }
+      })
+    .catch((error) => window.alert(error));
+  }
+
+    // Function to complete quest 
+    const completeQuest = (id) => {
+      fetch(`/completed-quest/${id}`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 200) {
+            setQuestUpdate(id);
+          } else {
+            throw new Error(data.message);
+          }
+        })
+      .catch((error) => window.alert(error));
+    }
+
   return (
-    <QuestsContext.Provider value={{quests, actions:{setQuests, addQuestParticipants}}}>
+    <QuestsContext.Provider value={{quests, actions:{setQuests, addQuestParticipants, completeQuest, deleteQuest}}}>
         {children}
     </QuestsContext.Provider>
   );
