@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
@@ -93,10 +93,10 @@ const MyQuests = styled.div`
   display: flex;
   flex-direction: column;
   width: 35%;
+  max-height: 30vh;
   justify-content: space-between;
   border-radius: 15px;
   box-shadow: 2px 5px 10px var(--color-purple);
-  max-height: 50%;
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;

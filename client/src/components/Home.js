@@ -31,6 +31,7 @@ const Home = () => {
   });
 
   // Get and set User details
+  // TO DO: User details are getting loaded twice after user setup. To fix this we need to move new user authentication to user context which will take some rework of user variable (since "user" is also used by auth0).
   useEffect(() => {
     if (isAuthenticated) {
       getUser(user.email).then((res) => !res && navigate("/avatar"));

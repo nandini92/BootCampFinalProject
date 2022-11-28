@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FiXCircle } from "react-icons/fi";
+import { FiXCircle, FiCheckCircle } from "react-icons/fi";
 
 // TO DO: REFRESH QUEST LIST ON DELETE
 const QuestAdmin = ({quests}) => {
@@ -22,6 +22,25 @@ const QuestAdmin = ({quests}) => {
     .catch((error) => window.alert(error));
   }
 
+    // Function to complete quest 
+    const completeQuest = (id) => {
+      fetch(`/completed-quest/${id}`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 200) {
+            
+          } else {
+            throw new Error(data.message);
+          }
+        })
+      .catch((error) => window.alert(error));
+    }
 
   return (
     <>
@@ -38,7 +57,10 @@ const QuestAdmin = ({quests}) => {
                 </p>
               </Desc>
               <Karma><p>{quest.karma}</p></Karma>
-              <Delete onClick={() => deleteQuest(quest._id)}/>
+              {!quest.participantIds
+                ?<Delete onClick={() => deleteQuest(quest._id)}/>
+                :<Complete onClick={() => completeQuest(quest._id)}/>
+              }
             </QuestWrapper>
           );
         })
@@ -50,7 +72,7 @@ const QuestAdmin = ({quests}) => {
 const QuestWrapper = styled.div`
   width: 90%;
   margin: 20px;
-  background-color: var(--color-grey);
+  background-color: var(--color-yellow);
   box-shadow: 0px 0px 10px var(--color-purple);
   padding: 10px;
   border-radius: 15px;
@@ -89,6 +111,17 @@ const Delete = styled(FiXCircle)`
   padding: 5px;
   margin:20px;
   background-color: var(--color-red);
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+const Complete = styled(FiCheckCircle)`
+  border-radius: 5px;
+  padding: 5px;
+  margin:20px;
+  background-color: var(--color-green);
   transition: transform 0.3s ease-in-out;
 
   &:hover {

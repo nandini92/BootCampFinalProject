@@ -4,7 +4,7 @@ const morgan = require("morgan");
 require("dotenv").config();
 
 const { createUser, getUser, getUserById, getAllUsers } = require("./handlers/userHandlers");
-const { createQuest, addQuestParticipant, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
+const { createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
 const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers")
 
 const PORT = 8000;
@@ -40,6 +40,9 @@ express()
   
   // Endpoint to create new quest
   .patch("/quest/:id", addQuestParticipant)
+
+  // Endpoint to delete quest
+  .patch("/completed-quest/:id", completeQuest)
 
   // Endpoint to delete quest
   .delete("/quest/:id", deleteQuest)

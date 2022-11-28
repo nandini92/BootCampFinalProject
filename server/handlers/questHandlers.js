@@ -59,7 +59,7 @@ const addQuestParticipant = async(req,res) => {
     }
 }
  
-// Handler to create delete Quest
+// Handler to create delete Quest (only if no participants)
 const deleteQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
@@ -69,11 +69,35 @@ const deleteQuest = async(req,res) => {
         console.log("database connected!");
 
         const questDeleted = await db.collection("quests").deleteOne({_id: req.params.id});
-        console.log(req.params.id, questDeleted);
 
         questDeleted
         ? res.status(201).json({status:200, message: "SUCCESS: Quest deleted succesfully."})
         : res.status(500).json({status:500,  message: "ERROR: Internal server error."});   
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, message: `ERROR: Internal server error.`});
+    } finally {
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+
+// Handler to create complete Quest
+const completeQuest = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    try{
+        const date = Date.now();
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+
+        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, {$set: {completed: true, completedAt: date}});
+        console.log(req.params.id, questUpdated);
+
+        questUpdated
+        ? res.status(201).json({status:200, data:questUpdated, message: "SUCCESS: Quest deleted succesfully."})
+        : res.status(500).json({status:500, data:questUpdated, message: "ERROR: Internal server error."});   
     }catch(err){
         console.log(err);
         res.status(500).json({status:500, message: `ERROR: Internal server error.`});
@@ -151,4 +175,4 @@ const getAllQuests = async(req,res) => {
     }
 }
 
-module.exports = {createQuest, addQuestParticipant, deleteQuest, getQuest, getUsersQuests, getAllQuests};
+module.exports = {createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests};
