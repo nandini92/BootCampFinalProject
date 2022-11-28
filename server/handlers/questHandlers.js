@@ -37,16 +37,18 @@ const createQuest = async(req,res) => {
 const addQuestParticipant = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
+        const participant = req.body.participant;
+        const participants = req.body.participants;
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
         // TO DO: Reduce participant slots on quest
-        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $push: {participantIds :{ participants: req.body.participant }}});
+        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {participants: participants}, $push: {participantIds:  participant }});
 
         questUpdated
-        ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: New Quest created."})
+        ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: Quest has been updated."})
         : res.status(500).json({status:500, data:null, message: "ERROR: Internal server error."});   
     }catch(err){
         console.log(err);

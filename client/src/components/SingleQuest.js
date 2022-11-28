@@ -1,19 +1,20 @@
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
 import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 
+import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
+import { QuestsContext } from "../contexts/QuestsContext";
 
 const SingleQuest = ({ selectedQuest }) => {
   const { cld, user } = useContext(UserContext);
+  const { users,actions: { getOtherUser }} = useContext(UsersContext);
+  const { actions:{addQuestParticipants}} =useContext(QuestsContext);
+
   const [quest, setQuest] = useState();
   const [owner, setOwner] = useState();
-  const [participants, setParticipants] = useState();
   const [ownerAvatar, setOwnerAvatar] = useState();
-  const {
-    actions: { getOtherUser },
-  } = useContext(UsersContext);
+  const [success, setSuccess] = useState();
 
   // Fetch quest details from database
   useEffect(() => {
@@ -21,39 +22,14 @@ const SingleQuest = ({ selectedQuest }) => {
       .then((res) => res.json())
       .then((data) => {
         setQuest(data.data);
-        setParticipants(data.data.participants);
         getOtherUser(data.data.ownerId).then((res) => setOwner(res));
       });
-  }, [selectedQuest]);
+  }, [selectedQuest, success]);
 
   // Set quest owner's avatar
   useEffect(() => {
     owner && setOwnerAvatar(cld.image(owner.avatar));
   }, [owner]);
-
-  // Add user to quest 
-  const addQuestParticipants = (id) => {
-    fetch(`/quest/${selectedQuest}`, {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ participant: user._id }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 200) {
-          setParticipants(participants => participants - 1 );
-          return true;
-        } else if (data.status === 404) {
-          return false;
-        } else {
-          throw new Error(data.message);
-        }
-      })
-      .catch((error) => console.log(error));
-  }
 
   return (
     <>
@@ -69,13 +45,30 @@ const SingleQuest = ({ selectedQuest }) => {
             <p>
               <Label>Description:</Label> {quest.description}
             </p>
-            <p>
-              <Label>Slots available:</Label> {quest.participants}
+            {quest.participants !== 0 &&
+            <p><Label>Slots available:</Label> {quest.participants}</p>
+            }
+            {quest?.participantIds &&
+            <p><Label>Heroes on this quest</Label>
+            {quest.participantIds && quest.participantIds.map((id) => {
+              const userInfo = users.filter(otherUser => {
+                return otherUser._id === id && otherUser;
+              })
+              return ( <p key={id}>{userInfo[0].handler}</p>)
+            })}
             </p>
+            }
           </Desc>
           <Bottom>
               <Karma>{quest.karma}</Karma>
-              <Button onClick={() => {addQuestParticipants(quest._id)}}>Sign Me Up!</Button>
+              {quest.participants > 0 && 
+              <Button 
+              onClick={() => {
+                setSuccess(addQuestParticipants(selectedQuest, user._id, (quest.participants - 1)));
+                }}
+                >Sign Me Up!
+                </Button>
+              }
           </Bottom>
         </QuestWrapper>
       )}
