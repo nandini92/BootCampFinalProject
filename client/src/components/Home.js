@@ -15,10 +15,9 @@ import styled from "styled-components";
 
 const Home = () => {
   const { cred, actions: { getUser } } = useContext(UserContext);
-  const { quests } = useContext(QuestsContext);
+  const { quests, actions:{ setQuests } } = useContext(QuestsContext);
   const [selectedQuest, setSelectedQuest] = useState();
   const [newQuest, setNewQuest] = useState(false);
-  const [questList, setQuestList] = useState();
   const [newMarker, setNewMarker] = useState();
   const navigate = useNavigate();
 
@@ -30,11 +29,6 @@ const Home = () => {
     googleMapsApiKey: cred.googleMaps,
     libraries: ['places']
   });
-
-  // useEffect to set Quest List
-  useEffect(()=> {
-    setQuestList(quests);
-  }, [quests])
 
   // Get and set User details
   useEffect(() => {
@@ -62,13 +56,13 @@ const Home = () => {
               </Options>
               <Pages>
               {newQuest === true  && !selectedQuest && user
-              && <NewQuest setQuestList={setQuestList} questList={questList}  newMarker={newMarker}/>}
+              && <NewQuest setQuests={setQuests} quests={quests}  newMarker={newMarker}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
-              {newQuest === false && !selectedQuest && <QuestList questList={questList} setSelectedQuest={setSelectedQuest} />}
+              {newQuest === false && !selectedQuest && <QuestList quests={quests} setSelectedQuest={setSelectedQuest} />}
               </Pages>
             </Wrapper>
             <QuestMap
-            questList={questList}
+            quests={quests}
             setSelectedQuest={setSelectedQuest}
             setNewQuest={setNewQuest}
             setNewMarker={setNewMarker}

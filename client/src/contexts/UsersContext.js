@@ -1,8 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { UserContext } from "./UserContext";
 
 export const UsersContext = createContext();
 
 export const UsersProvider = ({ children }) => {
+  const { cld } = useContext(UserContext);
   const [users, setUsers] = useState();
 
   // TODO: How to pull data set based on location. Not scalable if user zooms out.
@@ -29,10 +31,29 @@ export const UsersProvider = ({ children }) => {
         .catch((error) => console.log(error));
   }
 
+  // Get all cloudinary public Ids for avatars
+  const getUsersAvatar = (user) => {
+      return cld.image(user.avatar);
+  }
+
+
+      // Get all users active quests
+  const getUsersQuests = (id) => {
+      fetch(`/quests/${id}`)
+      .then(res => res.json())
+      .then((data) => {
+        if(data.status === 201){
+          return data.data;
+        }
+        else {
+          throw new Error(data.message);
+        }})
+      .catch((error) => console.log(error));
+  } 
 
 
   return (
-    <UsersContext.Provider value={{users, actions:{getOtherUser}}}>
+    <UsersContext.Provider value={{users, actions:{getOtherUser, getUsersAvatar, getUsersQuests}}}>
         {children}
     </UsersContext.Provider>
   );

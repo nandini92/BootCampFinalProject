@@ -27,11 +27,13 @@ export const UserProvider = ({ children }) => {
       });
   }, []);
 
-  // Get all cloudinary public Ids for avatars
+
   useEffect(() => {
     if (user) {
+      // Get all cloudinary public Ids for avatars
       setUserAvatar(cld.image(user.avatar));
 
+      // Get all users active quests
       fetch(`/quests/${user._id}`)
       .then(res => res.json())
       .then((data) => {
@@ -43,7 +45,6 @@ export const UserProvider = ({ children }) => {
         }})
       .catch((error) => console.log(error));
     } 
-    
   }, [user]);
 
   // Get user details
@@ -101,7 +102,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ cred, user, userQuests, userAvatar, actions: { createUser, getUser } }}>
+    <UserContext.Provider value={{ cred, user, userQuests, userAvatar, cld, actions: { createUser, getUser } }}>
       {cred && (
         <Auth0Provider
           domain={cred.domain}

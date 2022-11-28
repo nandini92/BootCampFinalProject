@@ -33,8 +33,31 @@ const createQuest = async(req,res) => {
     }
 }
 
+// Handler to add participant to quest
+const addQuestParticipant = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    try{
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+
+        // TO DO: Reduce participant slots on quest
+        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $push: {participantIds :{ participants: req.body.participant }}});
+
+        questUpdated
+        ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: New Quest created."})
+        : res.status(500).json({status:500, data:null, message: "ERROR: Internal server error."});   
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, data:null, message: `ERROR: Internal server error.`});
+    } finally {
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+ 
 // Handler to create delete Quest
-// TO DO: Data  validation prior to inserting
 const deleteQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
@@ -126,4 +149,4 @@ const getAllQuests = async(req,res) => {
     }
 }
 
-module.exports = {createQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests};
+module.exports = {createQuest, addQuestParticipant, deleteQuest, getQuest, getUsersQuests, getAllQuests};

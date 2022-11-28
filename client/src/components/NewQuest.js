@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Autocomplete } from "@react-google-maps/api";
 
-const NewQuest = ({ setQuestList, questList, newMarker }) => {
+const NewQuest = ({ setQuests, quests, newMarker }) => {
   const { user, cred } = useContext(UserContext);
   const [formData, setFormData] = useState();
   const location = useRef();
@@ -46,7 +46,7 @@ const NewQuest = ({ setQuestList, questList, newMarker }) => {
               if (data.status === 500) {
                 throw new Error(data.message);
               } else {
-                setQuestList([...questList, data.data]);
+                setQuests([...quests, data.data]);
               }
             })
             .catch((error) => window.alert(error));
@@ -67,7 +67,7 @@ const NewQuest = ({ setQuestList, questList, newMarker }) => {
           if (data.status === 500) {
             throw new Error(data.message);
           } else {
-            setQuestList([...questList, data.data]);
+            setQuests([...quests, data.data]);
           }
         })
         .catch((error) => window.alert(error));
@@ -82,7 +82,6 @@ const NewQuest = ({ setQuestList, questList, newMarker }) => {
     });
   };
 
-  //TO DO: Find more interesting background image
   return (
     <>
       <QuestForm onSubmit={(e) => formSubmit(e)}>
