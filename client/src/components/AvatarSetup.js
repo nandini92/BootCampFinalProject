@@ -13,6 +13,9 @@ import { Cloudinary } from "@cloudinary/url-gen";
 const AvatarSetup = () => {
   const { actions: {createUser} } = useContext(UserContext);
   const { user, isAuthenticated } = useAuth0();
+
+  // TO DO: Error banner to retry in case of failure
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
   
   const [startingAvatars, setStartingAvatars] = useState();
@@ -60,8 +63,8 @@ const AvatarSetup = () => {
                 if (isAuthenticated === true) {
                   const type= avatar.publicID.split("/")[2].split("_")[1]; 
                   
-                  createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 100});
-                  navigate("/");
+                  const success = createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 100});
+                  success ? navigate("/") : setError(true);
                 }
               }} >
                 <Image key={i} cldImg={avatar} />

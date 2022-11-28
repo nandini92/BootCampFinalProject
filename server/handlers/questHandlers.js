@@ -8,12 +8,14 @@ const options = {
     useUnifiedTopology: true,
 };
 
+const date = Date.now();
+
 // Handler to create new Quest
 // TO DO: Data  validation prior to inserting
 const createQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
-        const quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body};
+        const quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
@@ -37,16 +39,18 @@ const createQuest = async(req,res) => {
 const addQuestParticipant = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
+        const participant = req.body.participant;
+        const participants = req.body.participants;
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
         // TO DO: Reduce participant slots on quest
-        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $push: {participantIds :{ participants: req.body.participant }}});
+        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {participants: participants,  updatedAt: date}, $push: {participantIds:  participant }});
 
         questUpdated
-        ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: New Quest created."})
+        ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: Quest has been updated."})
         : res.status(500).json({status:500, data:null, message: "ERROR: Internal server error."});   
     }catch(err){
         console.log(err);
@@ -57,7 +61,7 @@ const addQuestParticipant = async(req,res) => {
     }
 }
  
-// Handler to create delete Quest
+// Handler to create delete Quest (only if no participants)
 const deleteQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
@@ -67,11 +71,36 @@ const deleteQuest = async(req,res) => {
         console.log("database connected!");
 
         const questDeleted = await db.collection("quests").deleteOne({_id: req.params.id});
-        console.log(req.params.id, questDeleted);
 
         questDeleted
         ? res.status(201).json({status:200, message: "SUCCESS: Quest deleted succesfully."})
         : res.status(500).json({status:500,  message: "ERROR: Internal server error."});   
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, message: `ERROR: Internal server error.`});
+    } finally {
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+
+// Handler to create complete Quest
+const completeQuest = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    try{
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+
+        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, {$set: {completed: true, completedAt: date}});
+        console.log(req.params.id, questUpdated);
+
+        // TO DO: Add quest task complete to user data
+
+        questUpdated
+        ? res.status(201).json({status:200, data:questUpdated, message: "SUCCESS: Quest deleted succesfully."})
+        : res.status(500).json({status:500, data:questUpdated, message: "ERROR: Internal server error."});   
     }catch(err){
         console.log(err);
         res.status(500).json({status:500, message: `ERROR: Internal server error.`});
@@ -111,16 +140,26 @@ const getUsersQuests = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
+        const user = req.params.id;
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const quests = await db.collection("quests").find({ownerId: req.params.id}).toArray();
+        const questsOwned = await db.collection("quests").find({ownerId: user}).toArray();
+        
+        const questsOn = await db.collection("quests").find({ participantIds: [user]}).toArray();
 
-        quests
-        ? res.status(201).json({status:201, data:quests, message: "SUCCESS: User's Quests returned."})
-        : res.status(404).json({status:404, data:quests, message: "ERROR: Data not found."});    
+        switch(true){
+            case (questsOwned !== null && questsOn !== null):
+                return res.status(201).json({status:201, data: {questsOwned, questsOn}, message: "SUCCESS: All users quests returned."})
+            case (questsOwned !== null):
+                return res.status(201).json({status:201, data: {questsOwned}, message: "SUCCESS: User's owned Quests returned."})
+            case (questsOn !== null):
+                return res.status(201).json({status:201, data: {questsOn}, message: "SUCCESS: User's owned Quests returned."})
+            default:
+                return res.status(404).json({status:404, data: null, message: "ERROR: Data not found."})
+        }   
     } finally {
         client.close();
         console.log("database disconnected!")
@@ -149,4 +188,4 @@ const getAllQuests = async(req,res) => {
     }
 }
 
-module.exports = {createQuest, addQuestParticipant, deleteQuest, getQuest, getUsersQuests, getAllQuests};
+module.exports = {createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests};

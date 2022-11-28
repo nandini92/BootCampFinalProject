@@ -8,6 +8,8 @@ const options = {
     useUnifiedTopology: true,
 };
 
+const date = Date.now();
+
 // Handler to create a new user upon Auth0 signup
 const createUser = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
@@ -18,7 +20,7 @@ const createUser = async(req,res) => {
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const newUser = await db.collection("users").insertOne({...req.body, _id: uuidv4()});
+        const newUser = await db.collection("users").insertOne({...req.body, _id: uuidv4(), createdAt: date});
         console.log(newUser);
 
         newUser

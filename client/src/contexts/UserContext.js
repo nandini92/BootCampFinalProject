@@ -27,27 +27,7 @@ export const UserProvider = ({ children }) => {
       });
   }, []);
 
-
-  useEffect(() => {
-    if (user) {
-      // Get all cloudinary public Ids for avatars
-      setUserAvatar(cld.image(user.avatar));
-
-      // Get all users active quests
-      fetch(`/quests/${user._id}`)
-      .then(res => res.json())
-      .then((data) => {
-        if(data.status === 201){
-          setUserQuests(data.data);
-        }
-        else {
-          throw new Error(data.message);
-        }})
-      .catch((error) => console.log(error));
-    } 
-  }, [user]);
-
-  // Get user details
+  // Set user details
   const getUser = (email) => {
     if (email === null) {
       setUser();
@@ -76,9 +56,29 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Use Effect to set quest and avatar attributes
+  useEffect(() => {
+    if (user) {
+      // Get all cloudinary public Ids for avatars
+      setUserAvatar(cld.image(user.avatar));
+
+      // Get all users active quests
+      fetch(`/quests/${user._id}`)
+      .then(res => res.json())
+      .then((data) => {
+        if(data.status === 201){
+          setUserQuests(data.data);
+        }
+        else {
+          throw new Error(data.message);
+        }})
+      .catch((error) => console.log(error));
+    } 
+  }, [user]);
+
   // Create new User
   const createUser = (user) => {
-    fetch("/new-user", {
+    return fetch("/new-user", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -89,11 +89,10 @@ export const UserProvider = ({ children }) => {
       .then((data) => {
         if (data.status === 200) {
           getUser(user.email);
+          return true;
         } else {
           throw new Error(data.message);
         }
-
-        return true;
       })
       .catch((error) => {
         console.log(error);

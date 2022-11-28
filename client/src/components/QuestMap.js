@@ -34,7 +34,8 @@ const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarke
       }}
     >
       {quests &&
-        quests.map((quest) => 
+        quests.filter((item) => !item.completed)
+        .map((quest) => 
         <MarkerF key={quest._id} 
           position={quest.location} 
           onClick={() =>{ setNewQuest(false); setSelectedQuest(quest._id) }}
