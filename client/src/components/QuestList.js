@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
 // TO DO: 
-const QuestList = ({ questList, setSelectedQuest}) => {
+const QuestList = ({ quests, setSelectedQuest}) => {
   return (
     <>
-      {!questList ? (
+      {!quests ? (
         <h1>Loading</h1>
       ) : (
-        questList.map((quest) => {
+        quests.map((quest) => {
           return (
             <QuestWrapper key={quest._id} onClick={() => setSelectedQuest(quest._id)}>
               <Desc>
@@ -28,7 +28,7 @@ const QuestList = ({ questList, setSelectedQuest}) => {
 const QuestWrapper = styled.div`
   width: 90%;
   margin: 20px;
-  background-color: var(--color-grey);
+  background-color: var(--color-yellow);
   box-shadow: 0px 0px 10px var(--color-purple);
   padding: 10px;
   border-radius: 15px;
@@ -47,10 +47,10 @@ const Title = styled.p`
   font-size: 16px;
   font-weight: bold;
   font-family: var(--font);
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 `;
 const Label = styled.span`
-  font-weight: bold;
+  font-weight: 500;
 `;
 const Karma = styled.div`
   border-radius: 15px;

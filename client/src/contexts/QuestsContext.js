@@ -16,7 +16,7 @@ export const QuestsProvider = ({ children }) => {
   }, []);
 
   return (
-    <QuestsContext.Provider value={{quests}}>
+    <QuestsContext.Provider value={{quests, actions:{setQuests}}}>
         {children}
     </QuestsContext.Provider>
   );

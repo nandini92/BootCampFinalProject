@@ -7,6 +7,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [cred, setCred] = useState();
   const [user, setUser] = useState();
+  const [userQuests, setUserQuests] = useState();
   const [userAvatar, setUserAvatar] = useState();
 
   // Create a Cloudinary instance for avatar setup
@@ -26,10 +27,24 @@ export const UserProvider = ({ children }) => {
       });
   }, []);
 
-  // Get all cloudinary public Ids for avatars
+
   useEffect(() => {
-    user && 
-    setUserAvatar(cld.image(user.avatar));
+    if (user) {
+      // Get all cloudinary public Ids for avatars
+      setUserAvatar(cld.image(user.avatar));
+
+      // Get all users active quests
+      fetch(`/quests/${user._id}`)
+      .then(res => res.json())
+      .then((data) => {
+        if(data.status === 201){
+          setUserQuests(data.data);
+        }
+        else {
+          throw new Error(data.message);
+        }})
+      .catch((error) => console.log(error));
+    } 
   }, [user]);
 
   // Get user details
@@ -87,7 +102,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ cred, user, userAvatar, actions: { createUser, getUser } }}>
+    <UserContext.Provider value={{ cred, user, userQuests, userAvatar, cld, actions: { createUser, getUser } }}>
       {cred && (
         <Auth0Provider
           domain={cred.domain}

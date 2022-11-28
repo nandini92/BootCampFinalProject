@@ -3,7 +3,7 @@ import {  useMemo, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import MapsStyles from "../assets/MapStyles"
 
-const QuestMap = ({questList, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
+const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
   const { user } = useContext(UserContext);
   const containerStyle = {
     width: "100%",
@@ -33,8 +33,8 @@ const QuestMap = ({questList, setSelectedQuest, setNewQuest, setNewMarker, newMa
         setNewQuest(true);
       }}
     >
-      {questList &&
-        questList.map((quest) => 
+      {quests &&
+        quests.map((quest) => 
         <MarkerF key={quest._id} 
           position={quest.location} 
           onClick={() =>{ setNewQuest(false); setSelectedQuest(quest._id) }}
