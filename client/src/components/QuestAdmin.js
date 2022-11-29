@@ -8,7 +8,7 @@ import { QuestsContext } from "../contexts/QuestsContext";
 
 // TO DO: REFRESH QUEST LIST ON DELETE
 const QuestAdmin = ({ quests }) => {
-  const { user } = useContext(UserContext);
+  const { loggedIn } = useContext(UserContext);
   const { users } = useContext(UsersContext);
   const {
     actions: { completeQuest, deleteQuest },
@@ -50,7 +50,7 @@ const QuestAdmin = ({ quests }) => {
                 <Karma>
                   <p>{quest.karma}</p>
                 </Karma>
-                {user._id == quest.ownerId && (
+                {loggedIn._id == quest.ownerId && (
                   <>
                     {!quest.participantIds ? (
                       <Delete onClick={() => deleteQuest(quest._id)} />

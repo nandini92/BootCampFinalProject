@@ -12,7 +12,7 @@ import UserRatings from "./UserRatings";
 
 const MyProfile = () => {
   // TO FIX: When navigating directly to profile. User context is undefined. Why?
-  const { user, userQuests, userAvatar } = useContext(UserContext);
+  const { loggedIn, userQuests, userAvatar } = useContext(UserContext);
   const [ratings, setRatings] = useState();
 
   // Set theme for ThemeProvider. This will be used for circular progress color palette
@@ -24,11 +24,11 @@ const MyProfile = () => {
     },
   });
 
-  if (user && userAvatar) {
+  if (loggedIn && userAvatar) {
     return (
       <>
         <Wrapper>
-          <Title>Hi {user.handler} !</Title>
+          <Title>Hi {loggedIn.handler} !</Title>
           <Body>
             <UserDetails>
               <Info>
@@ -36,7 +36,7 @@ const MyProfile = () => {
                 <AvatarWrapper className="front">
                   <Pokemon cldImg={userAvatar} />
                   <ThemeProvider theme={theme}>
-                    <LevelProgress variant="determinate" value={user.taskPoints} size="180px" color="primary" />
+                    <LevelProgress variant="determinate" value={loggedIn.taskPoints} size="180px" color="primary" />
                   </ThemeProvider>
                 </AvatarWrapper>
               )}
@@ -44,7 +44,7 @@ const MyProfile = () => {
                     .split("/")[2]
                     .split("_")[0]
                     .toUpperCase()}{" "}</p>
-              <p>LEVEL {user.level} : KARMA {user.karma}</p>
+              <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
               </Info>
               <Info>
                 <UserRatings category="charisma" ratings={ratings} setRatings={null}/>
@@ -55,6 +55,9 @@ const MyProfile = () => {
               </Info>
               </UserDetails>
             <Panels>
+            {/* TO DO: Display notfication if no quests found */}
+            {userQuests && 
+            <>
             {userQuests.questsOwned && 
               <Panel>
                 <SubTitle>Quests I own:</SubTitle>
@@ -71,6 +74,8 @@ const MyProfile = () => {
                 </MyQuests>
               </Panel>
             )}
+            </>
+            }
             </Panels>
           </Body>
         </Wrapper>

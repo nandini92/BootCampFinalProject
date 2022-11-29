@@ -4,7 +4,7 @@ import { UserContext } from "../contexts/UserContext";
 import MapsStyles from "../assets/MapStyles"
 
 const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
-  const { user } = useContext(UserContext);
+  const { loggedIn } = useContext(UserContext);
   const containerStyle = {
     width: "100%",
     height: "100%",
@@ -51,7 +51,7 @@ const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarke
         newMarker &&
         <MarkerF key="newMarker" position={newMarker} 
           icon={{
-            url: `/assets/${user.avatarType}.png`,
+            url: `/assets/${loggedIn.avatarType}.png`,
             origin: new window.google.maps.Point(0,0),
             anchor: new window.google.maps.Point(15,15)
           }}

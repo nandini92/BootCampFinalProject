@@ -6,6 +6,7 @@ import { FiPlus, FiArrowLeft } from "react-icons/fi";
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
+import { AuthContext } from "../contexts/AuthContext";
 import QuestMap from "./QuestMap";
 import QuestList from "./QuestList";
 import NewQuest from "./NewQuest";
@@ -14,7 +15,8 @@ import SingleQuest from "./SingleQuest";
 import styled from "styled-components";
 
 const Home = () => {
-  const { cred, actions: { getUser } } = useContext(UserContext);
+  const { cred } = useContext(AuthContext);
+  const { newUser, loggedIn } = useContext(UserContext);
   const { quests, actions:{ setQuests } } = useContext(QuestsContext);
 
   const [selectedQuest, setSelectedQuest] = useState();
@@ -23,9 +25,6 @@ const Home = () => {
   
   const navigate = useNavigate();
 
-  // Authenticate user 
-  const { user, isAuthenticated } = useAuth0();
-
   // Create google enabled search box for address selection 
   const [ libraries ] = useState(['places']);
   const { isLoaded } = useLoadScript({
@@ -33,13 +32,12 @@ const Home = () => {
     libraries
   });
 
-  // Get and set User details
-  // TO DO: User details are getting loaded twice after user setup. To fix this we need to move new user authentication to user context which will take some rework of user variable (since "user" is also used by auth0).
+  // Redirect to Avatar setup page in case new user
   useEffect(() => {
-    if (isAuthenticated) {
-      getUser(user.email).then((res) => !res && navigate("/avatar"));
+    if (newUser) {
+      navigate("/avatar");
     }
-  }, [isAuthenticated]);
+  }, [newUser]);
 
   return (
     <>
@@ -59,7 +57,7 @@ const Home = () => {
         </Options>
             <Wrapper>
               <Pages>
-              {newQuest === true  && !selectedQuest && user
+              {newQuest === true  && !selectedQuest && loggedIn
               && <NewQuest setQuests={setQuests} quests={quests}  newMarker={newMarker}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
               {newQuest === false && !selectedQuest && <QuestList quests={quests} setSelectedQuest={setSelectedQuest} />}
