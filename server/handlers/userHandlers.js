@@ -35,6 +35,32 @@ const createUser = async(req,res) => {
     }
 }
 
+// Handler to create a new user upon Auth0 signup
+const addUserRatings = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
+
+    try{
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+        console.log(req.params.id, req.body.ratings);
+
+        const ratings = await db.collection("users").updateOne({_id: req.params.id}, {$set: {ratings: {...req.body.ratings},  updatedAt: date}});
+        console.log(ratings);
+
+        ratings
+        ? res.status(200).json({status:200, data: ratings, message: "SUCCESS: Ratings have been added."})
+        : res.status(400).json({status:400, data: ratings, message: "ERROR: Failed to add ratings."});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, data: null, message: `ERROR: Internal server error.`});
+    }finally{
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+
 // Handler to return user details
 const getUser = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
@@ -107,4 +133,4 @@ const getAllUsers = async(req,res) => {
     }
 }
 
-module.exports = { createUser, getUser, getUserById, getAllUsers };
+module.exports = { createUser, addUserRatings, getUser, getUserById, getAllUsers };
