@@ -33,8 +33,8 @@ const Header = () => {
 
 const Wrapper = styled.div`
   margin: 0 0 0 0;
-  background-color: var(--color-blue);
-  box-shadow: inset 0px 0px 10px var(--color-purple);
+  background-color: var(--color-purple);
+  box-shadow: 0px 0px 5px 2px var(--color-dark-grey);
   height: 100px;
   width: 100vw;
   display: flex;
@@ -44,6 +44,7 @@ const Wrapper = styled.div`
 `;
 const Home = styled(NavLink)`
   font-size: 48px;
+  font-weight: 300;
   text-decoration: none;
   color: var(--color-grey);
   align-self: center;
@@ -55,10 +56,9 @@ const SignInOut = styled.div`
 `;
 const AvatarWrapper = styled(NavLink)`
   margin-top: 24px;
-  border: 5px solid var(--color-grey);
   border-radius: 50%;
-  background-color: var(--color-red);
-  box-shadow: 2px 5px 10px var(--color-purple);
+  background-color: var(--color-grey);
+  box-shadow: 2px 5px 10px var(--color-dark-grey);
   height: 150px;
   width: 150px;
   transition: transform 0.3s ease-in-out;

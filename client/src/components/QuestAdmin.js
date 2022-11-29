@@ -24,7 +24,7 @@ const QuestAdmin = ({ quests }) => {
           .map((quest) => {
             return (
               <QuestWrapper key={quest._id}>
-                <Desc>
+                <div>
                   <Title>{quest.title}</Title>
                   <p>
                     <Label>Description:</Label> {quest.description}
@@ -35,18 +35,18 @@ const QuestAdmin = ({ quests }) => {
                     </p>
                   )}
                   {quest?.participantIds && (
-                    <p>
-                      <Label>Heroes on this quest</Label>
+                    <>
                       {quest.participantIds &&
                         quest.participantIds.map((id) => {
                           const userInfo = users.filter((otherUser) => {
                             return otherUser._id === id && otherUser;
                           });
-                          return <p key={id}>{userInfo[0].handler}</p>;
+                          return <Hero key={id}>{userInfo[0].handler}</Hero>;
                         })}
-                    </p>
+                    </>
                   )}
-                </Desc>
+                </div>
+                <End>
                 <Karma>
                   <p>{quest.karma}</p>
                 </Karma>
@@ -59,6 +59,7 @@ const QuestAdmin = ({ quests }) => {
                     )}
                   </>
                 )}
+                </End>
               </QuestWrapper>
             );
           })
@@ -72,7 +73,7 @@ const QuestWrapper = styled.div`
   margin: 20px;
   background-color: var(--color-yellow);
   box-shadow: 0px 0px 10px var(--color-purple);
-  padding: 10px;
+  padding: 15px;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
@@ -86,18 +87,21 @@ const QuestWrapper = styled.div`
     margin: 5px 0px;
   }
 `;
-const Desc = styled.div`
-  align-self: center;
-`;
 const Title = styled.p`
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   font-family: var(--font);
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 `;
 const Label = styled.span`
   font-weight: 500;
 `;
+const Hero = styled.button`
+  font-size: 18px;
+`
+const End = styled.div`
+  display: flex;
+`
 const Karma = styled.div`
   border-radius: 15px;
   background-color: var(--color-blue);
@@ -109,6 +113,7 @@ const Karma = styled.div`
   color: var(--color-grey);
 `;
 const Delete = styled(FiXCircle)`
+  justify-self: flex-start;
   border-radius: 5px;
   padding: 5px;
   margin: 20px;
@@ -120,9 +125,10 @@ const Delete = styled(FiXCircle)`
   }
 `;
 const Complete = styled(FiCheckCircle)`
+  justify-self: flex-start;
   border-radius: 5px;
   padding: 5px;
-  margin: 20px;
+  margin-left: 15px;
   background-color: var(--color-green);
   transition: transform 0.3s ease-in-out;
 

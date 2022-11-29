@@ -132,8 +132,6 @@ const QuestForm = styled.form`
   border-radius: 15px;
   padding: 0px 20px 20px 20px;
   font-family: var(--font);
-  background-color: var(--color-yellow);
-  box-shadow: 0px 0px 10px var(--color-dark-grey);
   width: 90%;
   margin: 20px;
 `;
@@ -160,12 +158,10 @@ const Button = styled.button`
   color: var(--color-yellow);
   border: none;
   border-radius: 10px;
-  background-color: var(--color-dark-grey);
+  background-color: var(--color-purple);
 
   &:hover {
-    background-color: var(--color-yellow);
-    color: var(--color-dark-grey);
-    border: 2px solid var(--color-dark-grey);
+    cursor: pointer;
   }
 `;
 export default NewQuest;

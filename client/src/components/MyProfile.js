@@ -1,13 +1,17 @@
 import { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
+
+import { UserContext } from "../contexts/UserContext";
+
 import QuestAdmin from "./QuestAdmin";
 import QuestList from "./QuestList";
+import UserRatings from "./UserRatings";
 
 const MyProfile = () => {
   // TO FIX: When navigating directly to profile. User context is undefined. Why?
   const { user, userQuests, userAvatar } = useContext(UserContext);
+  const [ratings, setRatings] = useState();
 
   if (user && userAvatar) {
     return (
@@ -22,7 +26,6 @@ const MyProfile = () => {
                 </AvatarWrapper>
               )}
               <Info>
-                <p>
                   Your{" "}
                   {userAvatar.publicID
                     .split("/")[2]
@@ -30,12 +33,6 @@ const MyProfile = () => {
                     .toUpperCase()}{" "}
                   is at level {user.level}. You are 33 tasks away from the next
                   level!
-                </p>
-                <p>Charisma: </p>
-                <p>Intelligence: </p>
-                <p>Wisdom: </p>
-                <p>Dexterity: </p>
-                <p>Strength: </p>
               </Info>
             </UserDetails>
             <Panels>
@@ -86,7 +83,7 @@ const Title = styled.h2`
 const SubTitle = styled.p`
   font-size: 26px;
   color: var(--color-dark-grey);
-  margin: 50px 0px;
+  margin:40px 0px 30px 0px;
   text-align: left;
 `;
 const UserDetails = styled.div`
@@ -96,14 +93,14 @@ const UserDetails = styled.div`
   justify-content: space-between;
   border-radius: 15px;
   background-color: var(--color-grey);
-  box-shadow: 2px 5px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-purple);
 `;
 const AvatarWrapper = styled.div`
   margin: 30px;
   border: 5px solid var(--color-grey);
   border-radius: 50%;
-  background-color: var(--color-red);
-  box-shadow: 2px 5px 10px var(--color-purple);
+  background-color: var(--color-frey);
+  box-shadow: 0px 0px 10px var(--color-purple);
   height: 180px;
   width: 180px;
 `;
@@ -136,7 +133,7 @@ const MyQuests = styled.div`
   max-height: 30vh;
   justify-content: space-between;
   border-radius: 15px;
-  box-shadow: 2px 5px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-purple);
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;

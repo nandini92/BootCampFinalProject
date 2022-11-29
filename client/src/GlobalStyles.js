@@ -3,11 +3,11 @@ import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
   :root {
-    --color-yellow: #FDD85D;
+    --color-yellow: #ffcb05;
     --color-red: #F14B3D;
-    --color-blue: #3276CC;
+    --color-blue: #3d7dca;
     --color-green: #60D394;
-    --color-purple: #363b81;
+    --color-purple: #003a70;
     --color-grey: #F8F9FA;
     --color-dark-grey: #595F65;
     --font: "Poppins",sans-serif;

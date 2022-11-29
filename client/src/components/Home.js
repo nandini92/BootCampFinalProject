@@ -47,17 +47,17 @@ const Home = () => {
         <p>Loading</p>
       ) : (
         <Map>
+        <Options>
+        {
+          selectedQuest && <Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
+        }
+        { 
+        newQuest === true
+          ?<Back onClick={() => {setNewQuest(false); setSelectedQuest(); setNewMarker()}}/>
+          :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
+        }
+        </Options>
             <Wrapper>
-              <Options>
-              {
-                selectedQuest && <Back onClick={() => {setNewQuest(false); setSelectedQuest()}}/>
-              }
-              { 
-              newQuest === true
-                ?<Back onClick={() => {setNewQuest(false); setSelectedQuest(); setNewMarker()}}/>
-                :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
-              }
-              </Options>
               <Pages>
               {newQuest === true  && !selectedQuest && user
               && <NewQuest setQuests={setQuests} quests={quests}  newMarker={newMarker}/>}
@@ -85,13 +85,15 @@ const Map = styled.div`
   width: 100vw;
 `;
 const Options = styled.div`
+  position: absolute;
+  z-index: 10;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: var(--color-dark-grey);
 `
 const Add = styled(FiPlus)`
   border-radius: 5px;
+  border: 2px solid var(--color-dark-grey);
   padding: 5px;
   margin:20px;
   background-color: var(--color-yellow);
@@ -103,6 +105,7 @@ const Add = styled(FiPlus)`
 `
 const Back = styled(FiArrowLeft)`
   border-radius: 5px;
+  border: 2px solid var(--color-dark-grey);
   padding: 5px;
   margin:20px;
   background-color: var(--color-red);
@@ -115,8 +118,12 @@ const Back = styled(FiArrowLeft)`
 const Wrapper = styled.div`
   position: absolute;
   z-index: 5;
+  top: 70px;
+  left: 20px;
   min-width: 30%;
-  height: 100%;
+  max-height: 80%;
+  padding: 20px;
+  border-radius: 15px;
   background-color: var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-purple);
 `;
