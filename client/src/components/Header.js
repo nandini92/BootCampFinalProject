@@ -42,6 +42,10 @@ const Wrapper = styled.div`
   position: absolute;
   z-index: 10;
 `;
+const Logo = styled.img`
+  height: 150px;
+  width: 250px;
+`;
 const Home = styled(NavLink)`
   font-size: 48px;
   font-weight: 300;

@@ -42,7 +42,7 @@ const createQuest = async(req,res) => {
         const questInserted = await db.collection("quests").insertOne({...quest, karma});
 
         questInserted
-        ? res.status(201).json({status:201, data:quest, message: "SUCCESS: New Quest created."})
+        ? res.status(201).json({status:201, data:{...quest, karma}, message: "SUCCESS: New Quest created."})
         : res.status(400).json({status:400, message: "ERROR: Unable to create quest."}); 
 
     }catch(err){
