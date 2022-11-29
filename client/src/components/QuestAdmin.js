@@ -2,13 +2,17 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { FiXCircle, FiCheckCircle } from "react-icons/fi";
 
+import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
-import  { QuestsContext } from "../contexts/QuestsContext";
+import { QuestsContext } from "../contexts/QuestsContext";
 
 // TO DO: REFRESH QUEST LIST ON DELETE
-const QuestAdmin = ({quests}) => {
+const QuestAdmin = ({ quests }) => {
+  const { user } = useContext(UserContext);
   const { users } = useContext(UsersContext);
-  const { actions:{completeQuest, deleteQuest} } = useContext(QuestsContext);
+  const {
+    actions: { completeQuest, deleteQuest },
+  } = useContext(QuestsContext);
 
   return (
     <>
@@ -16,37 +20,48 @@ const QuestAdmin = ({quests}) => {
         <h1>Loading</h1>
       ) : (
         quests
-        .filter((item) => !item.completed)
-        .map((quest) => {
-          return (
-            <QuestWrapper key={quest._id}>
-              <Desc>
-                <Title>{quest.title}</Title>
-            <p>
-              <Label>Description:</Label> {quest.description}
-            </p>
-            {quest.participants !== 0 &&
-            <p><Label>Slots available:</Label> {quest.participants}</p>
-            }
-            {quest?.participantIds &&
-            <p><Label>Heroes on this quest</Label>
-            {quest.participantIds && quest.participantIds.map((id) => {
-              const userInfo = users.filter(otherUser => {
-                return otherUser._id === id && otherUser;
-              })
-              return ( <p key={id}>{userInfo[0].handler}</p>)
-            })}
-            </p>
-            }
-              </Desc>
-              <Karma><p>{quest.karma}</p></Karma>
-              {!quest.participantIds
-                ?<Delete onClick={() => deleteQuest(quest._id)}/>
-                :<Complete onClick={() => completeQuest(quest._id)}/>
-              }
-            </QuestWrapper>
-          );
-        })
+          .filter((item) => !item.completed)
+          .map((quest) => {
+            return (
+              <QuestWrapper key={quest._id}>
+                <Desc>
+                  <Title>{quest.title}</Title>
+                  <p>
+                    <Label>Description:</Label> {quest.description}
+                  </p>
+                  {quest.participants !== 0 && (
+                    <p>
+                      <Label>Slots available:</Label> {quest.participants}
+                    </p>
+                  )}
+                  {quest?.participantIds && (
+                    <p>
+                      <Label>Heroes on this quest</Label>
+                      {quest.participantIds &&
+                        quest.participantIds.map((id) => {
+                          const userInfo = users.filter((otherUser) => {
+                            return otherUser._id === id && otherUser;
+                          });
+                          return <p key={id}>{userInfo[0].handler}</p>;
+                        })}
+                    </p>
+                  )}
+                </Desc>
+                <Karma>
+                  <p>{quest.karma}</p>
+                </Karma>
+                {user._id == quest.ownerId && (
+                  <>
+                    {!quest.participantIds ? (
+                      <Delete onClick={() => deleteQuest(quest._id)} />
+                    ) : (
+                      <Complete onClick={() => completeQuest(quest._id)} />
+                    )}
+                  </>
+                )}
+              </QuestWrapper>
+            );
+          })
       )}
     </>
   );
@@ -96,7 +111,7 @@ const Karma = styled.div`
 const Delete = styled(FiXCircle)`
   border-radius: 5px;
   padding: 5px;
-  margin:20px;
+  margin: 20px;
   background-color: var(--color-red);
   transition: transform 0.3s ease-in-out;
 
@@ -107,12 +122,12 @@ const Delete = styled(FiXCircle)`
 const Complete = styled(FiCheckCircle)`
   border-radius: 5px;
   padding: 5px;
-  margin:20px;
+  margin: 20px;
   background-color: var(--color-green);
   transition: transform 0.3s ease-in-out;
 
   &:hover {
     transform: scale(1.2);
   }
-`
+`;
 export default QuestAdmin;

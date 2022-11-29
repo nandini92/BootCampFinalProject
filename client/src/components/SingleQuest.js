@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 
@@ -37,7 +38,7 @@ const SingleQuest = ({ selectedQuest }) => {
         <h1>Loading</h1>
       ) : (
         <QuestWrapper key={quest._id}>
-          <AvatarWrapper className="front">
+          <AvatarWrapper to={`/profile/${quest.ownerId}`}>
             {ownerAvatar && <Pokemon cldImg={ownerAvatar} />}
           </AvatarWrapper>
           <Desc>
@@ -88,7 +89,7 @@ const QuestWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const AvatarWrapper = styled.div`
+const AvatarWrapper = styled(NavLink)`
   align-self: center;
   margin: 20px 0px;
   border: 5px solid var(--color-grey);

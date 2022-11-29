@@ -5,6 +5,7 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import MyProfile from "./components/MyProfile";
+import Profile from "./components/Profile";
 import AvatarSetup from "./components/AvatarSetup";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/my-profile" element={<MyProfile />} />
+            <Route path="/profile/:id" element={<Profile />} />
             <Route path="/avatar" element={<AvatarSetup />} />
           </Routes>
           </>

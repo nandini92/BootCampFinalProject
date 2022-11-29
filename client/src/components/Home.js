@@ -16,18 +16,21 @@ import styled from "styled-components";
 const Home = () => {
   const { cred, actions: { getUser } } = useContext(UserContext);
   const { quests, actions:{ setQuests } } = useContext(QuestsContext);
+
   const [selectedQuest, setSelectedQuest] = useState();
   const [newQuest, setNewQuest] = useState(false);
   const [newMarker, setNewMarker] = useState();
+  
   const navigate = useNavigate();
 
   // Authenticate user 
   const { user, isAuthenticated } = useAuth0();
 
   // Create google enabled search box for address selection 
+  const [ libraries ] = useState(['places']);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: cred.googleMaps,
-    libraries: ['places']
+    libraries
   });
 
   // Get and set User details

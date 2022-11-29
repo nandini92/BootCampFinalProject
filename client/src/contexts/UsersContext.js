@@ -31,15 +31,16 @@ export const UsersProvider = ({ children }) => {
         .catch((error) => console.log(error));
   }
 
+  
   // Get all cloudinary public Ids for avatars
   const getUsersAvatar = (user) => {
       return cld.image(user.avatar);
   }
 
 
-      // Get all users active quests
+  // Get all users active quests
   const getUsersQuests = (id) => {
-      fetch(`/quests/${id}`)
+      return fetch(`/quests/${id}`)
       .then(res => res.json())
       .then((data) => {
         if(data.status === 201){
