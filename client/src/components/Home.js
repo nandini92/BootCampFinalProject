@@ -128,7 +128,8 @@ const Wrapper = styled.div`
   box-shadow: 0px 0px 10px var(--color-purple);
 `;
 const Pages = styled.div`
-  max-height: 92%;
+  position: relative;
+  max-height: 65vh;
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;

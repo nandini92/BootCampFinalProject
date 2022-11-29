@@ -63,7 +63,7 @@ const AvatarSetup = () => {
                 if (isAuthenticated === true) {
                   const type= avatar.publicID.split("/")[2].split("_")[1]; 
                   
-                  const success = createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 100});
+                  const success = createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 500});
                   success ? navigate("/") : setError(true);
                 }
               }} >

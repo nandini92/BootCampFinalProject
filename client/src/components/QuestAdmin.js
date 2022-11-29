@@ -116,7 +116,7 @@ const Delete = styled(FiXCircle)`
   justify-self: flex-start;
   border-radius: 5px;
   padding: 5px;
-  margin: 20px;
+  margin-left: 15px;
   background-color: var(--color-red);
   transition: transform 0.3s ease-in-out;
 

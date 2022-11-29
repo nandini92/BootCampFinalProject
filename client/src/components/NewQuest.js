@@ -114,10 +114,11 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
           id="participants"
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
+        {/* TO DO: place limit from 1 to 5  */}
         <Input
           type="number"
-          placeholder="Karma Points"
-          id="karma"
+          placeholder="Difficulty"
+          id="difficulty"
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         <Button>Create Your Quest!</Button>
