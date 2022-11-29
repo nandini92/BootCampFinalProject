@@ -9,6 +9,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [userQuests, setUserQuests] = useState();
   const [userAvatar, setUserAvatar] = useState();
+  const [userUpdate, setUserUpdate] = useState();
 
   // Create a Cloudinary instance for avatar setup
   const cld = new Cloudinary({
@@ -101,7 +102,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ cred, user, userQuests, userAvatar, cld, actions: { createUser, getUser } }}>
+    <UserContext.Provider value={{ cred, user, userQuests, userAvatar, cld, actions: { createUser, getUser, setUserUpdate } }}>
       {cred && (
         <Auth0Provider
           domain={cred.domain}

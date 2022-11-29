@@ -1,8 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { UserContext } from "./UserContext";
 
 export const QuestsContext = createContext();
 
 export const QuestsProvider = ({ children }) => {
+  const {actions:{setUserUpdate}} = useContext(UserContext);
   const [quests, setQuests] = useState();
   const [questUpdate, setQuestUpdate] = useState();
 
@@ -55,6 +57,7 @@ export const QuestsProvider = ({ children }) => {
       .then((data) => {
         if (data.status === 200) {
           setQuestUpdate(id);
+          setUserUpdate(id)
         } else {
           throw new Error(data.message);
         }
@@ -75,6 +78,7 @@ export const QuestsProvider = ({ children }) => {
         .then((data) => {
           if (data.status === 200) {
             setQuestUpdate(id);
+            setUserUpdate(id)
           } else {
             throw new Error(data.message);
           }

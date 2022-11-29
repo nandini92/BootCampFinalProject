@@ -27,11 +27,11 @@ const QuestList = ({ quests, setSelectedQuest}) => {
 };
 
 const QuestWrapper = styled.div`
-  width: 90%;
+  width: 94%;
   margin: 20px;
   background-color: var(--color-yellow);
   box-shadow: 0px 0px 10px var(--color-purple);
-  padding: 10px;
+  padding: 15px;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
@@ -46,7 +46,7 @@ const Desc = styled.div`
 `;
 const Title = styled.p`
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   font-family: var(--font);
   margin-bottom: 15px;
 `;

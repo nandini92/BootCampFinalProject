@@ -82,8 +82,7 @@ const QuestWrapper = styled.div`
   height: 100%;
   margin: 20px;
   font-family: var(--font);
-  background-color: var(--color-yellow);
-  box-shadow: 0px 0px 10px var(--color-dark-grey);
+  color: var(--color-dark-grey);
   padding: 10px;
   border-radius: 15px;
   display: flex;
@@ -92,13 +91,10 @@ const QuestWrapper = styled.div`
 const AvatarWrapper = styled(NavLink)`
   align-self: center;
   margin: 20px 0px;
-  border: 5px solid var(--color-grey);
   border-radius: 50%;
-  background-color: var(--color-red);
-  box-shadow: 2px 5px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-purple);
   height: 150px;
   width: 150px;
-  transition: transform 0.3s ease-in-out;
 `;
 const Pokemon = styled(AdvancedImage)`
   position: relative;
@@ -115,8 +111,9 @@ const Desc = styled.div`
   }
 `;
 const Title = styled.p`
-  font-size: 16px;
-  font-weight: bold;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
   margin: 20px 0px 15px 0px;
 `;
 const Label = styled.span`
@@ -143,5 +140,9 @@ const Button = styled.button`
   height: 50px;
   align-self: center;
   margin: 0px 15px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 export default SingleQuest;
