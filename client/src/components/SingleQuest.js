@@ -8,7 +8,7 @@ import { UsersContext } from "../contexts/UsersContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 
 const SingleQuest = ({ selectedQuest }) => {
-  const { cld, user } = useContext(UserContext);
+  const { cld, loggedIn } = useContext(UserContext);
   const { users,actions: { getOtherUser }} = useContext(UsersContext);
   const { actions:{addQuestParticipants}} =useContext(QuestsContext);
 
@@ -65,7 +65,7 @@ const SingleQuest = ({ selectedQuest }) => {
               {quest.participants > 0 && 
               <Button 
               onClick={() => {
-                setSuccess(addQuestParticipants(selectedQuest, user._id, (quest.participants - 1)));
+                setSuccess(addQuestParticipants(selectedQuest, loggedIn._id, (quest.participants - 1)));
                 }}
                 >Sign Me Up!
                 </Button>

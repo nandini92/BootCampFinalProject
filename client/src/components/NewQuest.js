@@ -1,11 +1,13 @@
 import { useState, useContext, useRef } from "react";
 import { UserContext } from "../contexts/UserContext";
+import { AuthContext } from "../contexts/AuthContext";
 import styled from "styled-components";
 
 import { Autocomplete } from "@react-google-maps/api";
 
 const NewQuest = ({ setQuests, quests, newMarker }) => {
-  const { user, cred } = useContext(UserContext);
+  const { cred } = useContext(AuthContext);
+  const { loggedIn, userUpdate, actions: {setUserUpdate} } = useContext(UserContext);
   const [formData, setFormData] = useState();
   const location = useRef();
   const coordinates = useRef();
@@ -28,18 +30,18 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
       })
       .then((res) => {
         // Run fetch only ones coordinates are set
-        if (!user._id) {
+        if (!loggedIn._id) {
           throw new Error(
             "ERROR: User ID is not set. Unable to retrieve account details."
           );
         } else {
-          fetch(`/new-quest/${user._id}`, {
+          fetch(`/new-quest/${loggedIn._id}`, {
             method: "POST",
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...formData, location: coordinates.current, type: user.avatarType }),
+            body: JSON.stringify({ ...formData, location: coordinates.current, type: loggedIn.avatarType }),
           })
             .then((res) => res.json())
             .then((data) => {
@@ -47,6 +49,7 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
                 throw new Error(data.message);
               } else {
                 setQuests([...quests, data.data]);
+                setUserUpdate(data.data._id);
               }
             })
             .catch((error) => window.alert(error));
@@ -54,7 +57,7 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
       });
     // CASE 2: User dropped a pin on map to create Quest
     } else {
-      fetch(`/new-quest/${user._id}`, {
+      fetch(`/new-quest/${loggedIn._id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -68,6 +71,7 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
             throw new Error(data.message);
           } else {
             setQuests([...quests, data.data]);
+            setUserUpdate(data.data._id);
           }
         })
         .catch((error) => window.alert(error));

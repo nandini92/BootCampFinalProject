@@ -1,15 +1,18 @@
 import { createContext, useEffect, useState } from "react";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [cred, setCred] = useState();
-  const [user, setUser] = useState();
+  const [newUser, setNewUser] = useState(false);
+  const [loggedIn, setLoggedIn] = useState();
   const [userQuests, setUserQuests] = useState();
   const [userAvatar, setUserAvatar] = useState();
   const [userUpdate, setUserUpdate] = useState();
+
+  // Authenticate user 
+  const { user, isAuthenticated } = useAuth0();
 
   // Create a Cloudinary instance for avatar setup
   const cld = new Cloudinary({
@@ -19,52 +22,38 @@ export const UserProvider = ({ children }) => {
     },
   });
 
-  // Retrieves all API credentials from server
   useEffect(() => {
-    fetch("/cred")
-      .then((res) => res.json())
-      .then((data) => {
-        setCred(data);
-      });
-  }, []);
-
-  // Set user details
-  const getUser = (email) => {
-    if (email === null) {
-      setUser();
-      return true;
-    } else {
-      return fetch("/user", {
+    if (isAuthenticated) { 
+      fetch("/user", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify({ email: user.email }),
       })
-        .then((res) => res.json())
-        .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
           if (data.status === 200) {
-            setUser(data.data);
-            return true;
+            setLoggedIn(data.data);
           } else if (data.status === 404) {
-            return false;
+            setNewUser(true);
           } else {
             throw new Error(data.message);
           }
         })
-        .catch((error) => console.log(error));
+      .catch((error) => console.log(error));
     }
-  };
+  }, [isAuthenticated, newUser, userUpdate])
 
   // Use Effect to set quest and avatar attributes
   useEffect(() => {
-    if (user) {
+    if (loggedIn) {
       // Get all cloudinary public Ids for avatars
-      setUserAvatar(cld.image(user.avatar));
+      setUserAvatar(cld.image(loggedIn.avatar));
 
       // Get all users active quests
-      fetch(`/quests/${user._id}`)
+      fetch(`/quests/${loggedIn._id}`)
       .then(res => res.json())
       .then((data) => {
         if(data.status === 201){
@@ -75,7 +64,7 @@ export const UserProvider = ({ children }) => {
         }})
       .catch((error) => console.log(error));
     } 
-  }, [user]);
+  }, [loggedIn, userUpdate]);
 
   // Create new User
   const createUser = (user) => {
@@ -89,7 +78,7 @@ export const UserProvider = ({ children }) => {
     })
       .then((data) => {
         if (data.status === 200) {
-          getUser(user.email);
+          setNewUser(false);
           return true;
         } else {
           throw new Error(data.message);
@@ -102,16 +91,8 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ cred, user, userQuests, userAvatar, cld, actions: { createUser, getUser, setUserUpdate } }}>
-      {cred && (
-        <Auth0Provider
-          domain={cred.domain}
-          clientId={cred.clientId}
-          redirectUri={window.location.origin}
-        >
-          {children}
-        </Auth0Provider>
-      )}
+    <UserContext.Provider value={{ newUser, loggedIn, userQuests, userAvatar, cld, userUpdate, actions: { createUser, setNewUser, setUserUpdate } }}>
+      {children}
     </UserContext.Provider>
   );
 };
