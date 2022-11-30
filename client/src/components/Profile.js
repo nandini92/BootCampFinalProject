@@ -73,11 +73,11 @@ const Profile = () => {
               <p>LEVEL {user.level}</p>
                 </Info>
               <Feedback onSubmit={(e) => handleSubmit(e)}>
-                <UserRatings category="charisma" ratings={ratings} setRatings={setRatings}/>
-                <UserRatings category="intelligence" ratings={ratings} setRatings={setRatings}/>
-                <UserRatings category="wisdom" ratings={ratings} setRatings={setRatings}/>
-                <UserRatings category="dexterity" ratings={ratings} setRatings={setRatings}/>
-                <UserRatings category="strength" ratings={ratings} setRatings={setRatings}/>
+                <UserRatings category="charisma" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings.charisma}/>
+                <UserRatings category="intelligence" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings.intelligence}/>
+                <UserRatings category="wisdom" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings.wisdom}/>
+                <UserRatings category="dexterity" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings.dexterity}/>
+                <UserRatings category="strength" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings.strength}/>
                 <SubmitDiv><Button type="submit">Submit</Button></SubmitDiv>
               </Feedback>
             </UserDetails>

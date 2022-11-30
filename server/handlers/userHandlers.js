@@ -35,7 +35,8 @@ const createUser = async(req,res) => {
     }
 }
 
-// Handler to create a new user upon Auth0 signup
+// Store ratings from other users
+// TO DO: Calculate average score between previous score and new score
 const addUserRatings = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 

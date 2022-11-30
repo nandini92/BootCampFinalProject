@@ -12,9 +12,7 @@ import QuestList from "./QuestList";
 import UserRatings from "./UserRatings";
 
 const MyProfile = () => {
-  // TO FIX: When navigating directly to profile. User context is undefined. Why?
   const { loggedIn, userQuests, userAvatar } = useContext(UserContext);
-  const [ratings, setRatings] = useState();
   const navigate = useNavigate();
 
   // Set theme for ThemeProvider. This will be used for circular progress color palette
@@ -48,13 +46,12 @@ const MyProfile = () => {
                     .toUpperCase()}{" "}</p>
               <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
               </Info>
-              {/* TO DO: Display ratings only */}
               <Info>
-                <UserRatings category="charisma" ratings={ratings} setRatings={null}/>
-                <UserRatings category="intelligence" ratings={ratings} setRatings={null}/>
-                <UserRatings category="wisdom" ratings={ratings} setRatings={null}/>
-                <UserRatings category="dexterity" ratings={ratings} setRatings={null}/>
-                <UserRatings category="strength" ratings={ratings} setRatings={null}/>
+                <UserRatings category="charisma" ratings={null} currentRatings={loggedIn.ratings.charisma}/>
+                <UserRatings category="intelligence" ratings={null} currentRatings={loggedIn.ratings.intelligence}/>
+                <UserRatings category="wisdom" ratings={null} currentRatings={loggedIn.ratings.wisdom}/>
+                <UserRatings category="dexterity" ratings={null} currentRatings={loggedIn.ratings.dexterity}/>
+                <UserRatings category="strength" ratings={null} currentRatings={loggedIn.ratings.strength}/>
               </Info>
               </UserDetails>
             <Panels>
@@ -94,14 +91,14 @@ const MyProfile = () => {
 
 // FONTS
 const Title = styled.h2`
-  font-size: 27px;
+  font-size: 26px;
   font-weight: 500;
   color: var(--color-dark-grey);
   margin-bottom: 15px;
 `;
 const SubTitle = styled.p`
   text-align: center;
-  font-size: 26px;
+  font-size: 24px;
   color: var(--color-dark-grey);
 `;
 
@@ -137,7 +134,7 @@ const Info = styled.div`
   flex-direction: column;
   justify-content: center;
   color: var(--color-dark-grey);
-  font-size: 22px;
+  font-size: 20px;
   margin: 20px;
 
   p {
@@ -163,11 +160,11 @@ justify-content: space-between;
 `
 const Panel = styled.div`
   width: 100%;
-  margin:50px;
+  margin:35px;
 `
 const MyQuests = styled.div`
   width: 100%;
-  max-height: 16vh;
+  max-height: 25vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

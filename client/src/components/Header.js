@@ -81,11 +81,6 @@ const Pokeball = styled.div`
   box-shadow: 2px 5px 10px var(--color-purple);
   height: 150px;
   width: 150px;
-  transition: transform 0.3s ease-in-out;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 const Image = styled.img`

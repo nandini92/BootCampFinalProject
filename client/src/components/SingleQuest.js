@@ -70,7 +70,6 @@ const SingleQuest = ({ selectedQuest }) => {
               </Heroes>
             )}
           </Desc>
-          {/* TO DO: Remove sign up button onces user is added*/}
           <Bottom>
             <Karma>{quest.karma}</Karma>
             {quest.participants > 0 &&

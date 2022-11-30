@@ -15,7 +15,7 @@ import { AuthContext } from "../contexts/AuthContext";
 const AvatarSetup = () => {
   const { cred } = useContext(AuthContext);
   const { actions: {createUser} } = useContext(UserContext);
-  const { user, isAuthenticated } = useAuth0();
+  const { user } = useAuth0();
   const [startingAvatars, setStartingAvatars] = useState();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -68,13 +68,11 @@ const AvatarSetup = () => {
           startingAvatars.map((avatar, i) => {
             return (
               <Nav key={avatar.publicID} onClick={() => {
-                if (isAuthenticated === true) {
                   const type= avatar.publicID.split("/")[2].split("_")[1]; 
                   
                   createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 500})
                   .then(res => setSuccess(res))
                   .catch(err => setError(true));
-                }
               }} >
                 <Image key={i} cldImg={avatar} />
                 <Name>{avatar.publicID.split("/")[2].split("_")[0].toUpperCase()} </Name>

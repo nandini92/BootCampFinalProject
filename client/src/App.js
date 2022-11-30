@@ -11,7 +11,7 @@ import Error from "./components/Error";
 import Loading from "./components/Loading";
 
 const App = () => {
-  const { isLoading, error } = useAuth0();
+  const { isLoading, error, isAuthenticated } = useAuth0();
   return (
     <BrowserRouter>
       <GlobalStyles />
@@ -20,16 +20,18 @@ const App = () => {
         {!error && isLoading && <Loading />}
         {!error && !isLoading && (
           <>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {/* TO DO: The following pages should not be accessible to non-logged in user */}
-            <Route path="/my-profile" element={<MyProfile />} />
-            <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/avatar" element={<AvatarSetup />} />
-            {/* TO DO: ERROR PAGE */}
-            <Route path="/error" element={<Error />} />
-          </Routes>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {isAuthenticated && (
+                <>
+                  <Route path="/my-profile" element={<MyProfile />} />
+                  <Route path="/profile/:id" element={<Profile />} />
+                  <Route path="/avatar" element={<AvatarSetup />} />
+                </>
+              )}
+              <Route path="*" element={<Error />} />
+            </Routes>
           </>
         )}
       </div>

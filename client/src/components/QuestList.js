@@ -42,6 +42,7 @@ const QuestWrapper = styled.div`
 `;
 const Desc = styled.div`
   align-self: center;
+  font-size: 14px;
 `;
 const Title = styled.p`
   font-size: 16px;
@@ -58,6 +59,7 @@ const Karma = styled.div`
   box-shadow: 2px 5px 10px var(--color-purple);
   height: 80px;
   width: 80px;
+  font-size: 14px;
   text-align: center;
   line-height: 80px;
   color: var(--color-grey);
