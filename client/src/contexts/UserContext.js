@@ -1,10 +1,13 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Cloudinary } from "@cloudinary/url-gen";
+
+import { AuthContext } from "./AuthContext";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const { cred } = useContext(AuthContext);
   const [newUser, setNewUser] = useState(false);
   const [loggedIn, setLoggedIn] = useState();
   const [userQuests, setUserQuests] = useState();
@@ -16,14 +19,12 @@ export const UserProvider = ({ children }) => {
 
   // Create a Cloudinary instance for avatar setup
   const cld = new Cloudinary({
-    // TO DO: Replace with cred
     cloud: {
-      cloudName: "daeu4xdvz",
+      cloudName: cred.cloudName,
     },
   });
 
   useEffect(() => {
-    console.log(isAuthenticated);
     if (isAuthenticated === true) { 
       fetch("/user", {
         method: "POST",
@@ -81,6 +82,7 @@ export const UserProvider = ({ children }) => {
       .then((data) => {
         if (data.status === 200) {
           setNewUser(false);
+          console.log(data.status);
           return true;
         } else {
           throw new Error(data.message);

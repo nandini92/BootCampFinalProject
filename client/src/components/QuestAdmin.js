@@ -6,7 +6,6 @@ import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 
-// TO DO: REFRESH QUEST LIST ON DELETE
 const QuestAdmin = ({ quests }) => {
   const { loggedIn } = useContext(UserContext);
   const { users } = useContext(UsersContext);
@@ -34,6 +33,7 @@ const QuestAdmin = ({ quests }) => {
                       <Label>Slots available:</Label> {quest.participants}
                     </p>
                   )}
+                  {/* TO DO: Fix design of participants listed */}
                   {quest?.participantIds && (
                     <>
                       {quest.participantIds &&

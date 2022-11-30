@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
 import { CircularProgress } from '@mui/material';
@@ -14,6 +15,7 @@ const MyProfile = () => {
   // TO FIX: When navigating directly to profile. User context is undefined. Why?
   const { loggedIn, userQuests, userAvatar } = useContext(UserContext);
   const [ratings, setRatings] = useState();
+  const navigate = useNavigate();
 
   // Set theme for ThemeProvider. This will be used for circular progress color palette
   const theme = createTheme({
@@ -28,12 +30,12 @@ const MyProfile = () => {
     return (
       <>
         <Wrapper>
-          <Title>Hi {loggedIn.handler} !</Title>
           <Body>
             <UserDetails>
               <Info>
+              <Title>{loggedIn.handler}</Title>
               {userAvatar && (
-                <AvatarWrapper className="front">
+                <AvatarWrapper>
                   <Pokemon cldImg={userAvatar} />
                   <ThemeProvider theme={theme}>
                     <LevelProgress variant="determinate" value={loggedIn.taskPoints} size="180px" color="primary" />
@@ -46,6 +48,7 @@ const MyProfile = () => {
                     .toUpperCase()}{" "}</p>
               <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
               </Info>
+              {/* TO DO: Display ratings only */}
               <Info>
                 <UserRatings category="charisma" ratings={ratings} setRatings={null}/>
                 <UserRatings category="intelligence" ratings={ratings} setRatings={null}/>
@@ -55,25 +58,30 @@ const MyProfile = () => {
               </Info>
               </UserDetails>
             <Panels>
-            {/* TO DO: Display notfication if no quests found */}
             {userQuests && 
             <>
-            {userQuests.questsOwned && 
               <Panel>
-                <SubTitle>Quests I own:</SubTitle>
-                <MyQuests>
+              <SubTitle>My Quests</SubTitle>
+              {userQuests.questsOwned.length === 0
+              ?<MissingQuest>
+                <Button onClick={() => navigate("/")}>CLICK TO CREATE A QUEST!</Button>
+              </MissingQuest>
+              :<MyQuests>
                   <QuestAdmin quests={userQuests.questsOwned} />
                 </MyQuests>
+              }
               </Panel>
-            }
-            {userQuests.questsOn && (
               <Panel>
-              <SubTitle>Quests I'm on:</SubTitle>
-                <MyQuests>
-                  <QuestList quests={userQuests.questsOn} setSelectedQuest={null} />
-                </MyQuests>
+              <SubTitle>Quests I'm on</SubTitle>
+              {userQuests.questsOn.length === 0
+              ?<MissingQuest>
+                <Button onClick={() => navigate("/")}>CLICK TO JOIN A QUEST!</Button>
+              </MissingQuest>
+              :<MyQuests>
+                <QuestList quests={userQuests.questsOn} setSelectedQuest={null} />
+              </MyQuests>
+              }
               </Panel>
-            )}
             </>
             }
             </Panels>
@@ -84,6 +92,20 @@ const MyProfile = () => {
   }
 };
 
+// FONTS
+const Title = styled.h2`
+  font-size: 27px;
+  font-weight: 500;
+  color: var(--color-dark-grey);
+  margin-bottom: 15px;
+`;
+const SubTitle = styled.p`
+  text-align: center;
+  font-size: 26px;
+  color: var(--color-dark-grey);
+`;
+
+// DIVS
 const Wrapper = styled.div`
   position: absolute;
   top: 200px;
@@ -95,70 +117,53 @@ const Wrapper = styled.div`
 `;
 const Body = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   width: 90%;
 `;
-const Title = styled.h2`
-  font-size: 30px;
-  color: var(--color-dark-grey);
-  margin: 30px 0px 40px 0px;
-`;
-const SubTitle = styled.p`
-  font-size: 26px;
-  color: var(--color-dark-grey);
-  margin-bottom: 25px;
-  text-align: left;
+const UserDetails = styled.div`
+  align-self: center;
+  display: flex;
+  width: 50%;
+  min-width: 650px;
+  height: 50%;
+  justify-content: space-evenly;
+  border-radius: 15px;
+  background: linear-gradient(120deg, white, var(--color-blue));
+  box-shadow: 2px 5px 10px var(--color-purple);
 `;
 const Info = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   color: var(--color-dark-grey);
   font-size: 22px;
-  margin: 25px;
+  margin: 20px;
+
   p {
     text-align: center;
     margin: 3px;
   }
 `;
-const UserDetails = styled.div`
-display: flex;
-width: 45%;
-height: 50%;
-justify-content: space-evenly;
-border-radius: 15px;
-background-color: var(--color-grey);
-box-shadow: 2px 5px 10px var(--color-purple);
-`;
 const AvatarWrapper = styled.div`
   align-self: center;
   margin: 20px 0px;
   border-radius: 50%;
-  background-color: var(--color-frey);
+  background-color: var(--color-grey);
+  border: 5px solid var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-purple);
   height: 180px;
   width: 180px;
 `;
-const LevelProgress = styled(CircularProgress)`
-  position: relative;
-  bottom: 125px;
-  left: 0px;
-`
-const Pokemon = styled(AdvancedImage)`
-  position: relative;
-  top: 17px;
-  left: 25px;
-  height: 120px;
-  width: 120px;
-`;
 const Panels = styled.div`
-width: 50%;
-height: 50vh;
+width: 100%;
+height: 50%;
 display: flex;
-flex-direction: column;
 justify-content: space-between;
 `
 const Panel = styled.div`
-width: 90%;
+  width: 100%;
+  margin:50px;
 `
 const MyQuests = styled.div`
   width: 100%;
@@ -167,10 +172,45 @@ const MyQuests = styled.div`
   flex-direction: column;
   justify-content: space-between;
   border-radius: 15px;
+  margin: 20px;
   box-shadow: 0px 0px 10px var(--color-purple);
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
 `;
+const MissingQuest = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px var(--color-purple);
+  margin: 20px;
+`;
 
+// IMAGES
+const Pokemon = styled(AdvancedImage)`
+  position: relative;
+  top: 17px;
+  left: 25px;
+  height: 120px;
+  width: 120px;
+`;
+
+// MISC
+const LevelProgress = styled(CircularProgress)`
+  position: relative;
+  bottom: 129px;
+  right: 5px;
+`
+const Button = styled.button`
+  border-radius: 15px;
+  height: 100px;
+  width: 90%;
+  align-self: center;
+  margin: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`
 export default MyProfile;

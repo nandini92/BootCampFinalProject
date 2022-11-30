@@ -57,23 +57,22 @@ const Profile = () => {
     return (
       <>
         <Wrapper>
-            <Title>You are viewing {user.handler}'s profile !</Title>
           <Body>
             <UserDetails>
+            <Info>
+            <Title>{user.handler}</Title>
               {avatar && (
-                <AvatarWrapper className="front">
+                <AvatarWrapper>
                   <Pokemon cldImg={avatar} />
                 </AvatarWrapper>
               )}
-              <Feedback onSubmit={(e) => handleSubmit(e)}>
-                <Info>
-                  {" "}
-                  {avatar.publicID
+              <p>{avatar.publicID
                     .split("/")[2]
                     .split("_")[0]
-                    .toUpperCase()}{" "}
-                  is at level {user.level}
+                    .toUpperCase()}{" "}</p>
+              <p>LEVEL {user.level}</p>
                 </Info>
+              <Feedback onSubmit={(e) => handleSubmit(e)}>
                 <UserRatings category="charisma" ratings={ratings} setRatings={setRatings}/>
                 <UserRatings category="intelligence" ratings={ratings} setRatings={setRatings}/>
                 <UserRatings category="wisdom" ratings={ratings} setRatings={setRatings}/>
@@ -85,7 +84,7 @@ const Profile = () => {
             <Panels>
             {quests.questsOwned && 
               <Panel>
-                <SubTitle>Quests {user.handler} owns:</SubTitle>
+                <SubTitle>Quests {user.handler} owns</SubTitle>
                 <MyQuests>
                   <QuestAdmin quests={quests.questsOwned} />
                 </MyQuests>
@@ -93,7 +92,7 @@ const Profile = () => {
             }
             {quests.questsOn && (
               <Panel>
-              <SubTitle>Quests {user.handler} is on:</SubTitle>
+              <SubTitle>Quests {user.handler} is on</SubTitle>
                 <MyQuests>
                   <QuestList quests={quests.questsOn} setSelectedQuest={null} />
                 </MyQuests>
@@ -107,93 +106,131 @@ const Profile = () => {
   }
 };
 
-const Wrapper = styled.div`
-  position: absolute;
-  top: 200px;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const Body = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 90%;
-`;
+// FONTS
 const Title = styled.h2`
-  font-size: 30px;
-  color: var(--color-dark-grey);
-  margin: 30px 0px 40px 0px;
+font-size: 27px;
+font-weight: 500;
+color: var(--color-dark-grey);
+margin-bottom: 15px;
 `;
 const SubTitle = styled.p`
-  font-size: 26px;
-  color: var(--color-dark-grey);
-  margin-bottom: 25px;
-  text-align: left;
+text-align: center;
+font-size: 26px;
+color: var(--color-dark-grey);
+`;
+
+// DIVS
+const Wrapper = styled.div`
+position: absolute;
+top: 200px;
+width: 100vw;
+display: flex;
+flex-direction: column;
+align-items: center;
+font-family: var(--font);
+`;
+const Body = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+width: 90%;
+`;
+const UserDetails = styled.div`
+  align-self: center;
+  display: flex;
+  width: 50%;
+  min-width: 650px;
+  height: 50%;
+  justify-content: space-evenly;
+  border-radius: 15px;
+  background: linear-gradient(120deg, white, var(--color-blue));
+  box-shadow: 2px 5px 10px var(--color-purple);
 `;
 const Info = styled.p`
-  margin-bottom: 40px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--color-dark-grey);
+  font-size: 22px;
+  margin: 20px;
+
+  p {
+    text-align: center;
+    margin: 3px;
+  }
 `
+const AvatarWrapper = styled.div`
+  align-self: center;
+  margin: 20px 0px;
+  border-radius: 50%;
+  background-color: var(--color-grey);
+  border: 5px solid var(--color-grey);
+  box-shadow: 0px 0px 10px var(--color-purple);
+  height: 180px;
+  width: 180px;
+`;
+const Feedback = styled.form`
+display: flex;
+flex-direction: column;
+justify-content: center;
+color: var(--color-dark-grey);
+font-size: 22px;
+margin: 20px;
+
+p {
+  text-align: center;
+  margin: 3px;
+}
+`;
 const SubmitDiv = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
 `;
-const Button = styled.button`
-  margin: 15px 0px;
-`
-const UserDetails = styled.div`
-  display: flex;
-  width: 45%;
-  justify-content: space-between;
-  border-radius: 15px;
-  background-color: var(--color-grey);
-  box-shadow: 2px 5px 10px var(--color-purple);
-`;
-const AvatarWrapper = styled.div`
-  margin: 100px 30px;
-  border: 5px solid var(--color-grey);
-  border-radius: 50%;
-  background-color: var(--color-red);
-  box-shadow: 2px 5px 10px var(--color-purple);
-  height: 180px;
-  width: 180px;
-`;
-const Pokemon = styled(AdvancedImage)`
-  position: relative;
-  top: 17px;
-  left: 25px;
-  height: 120px;
-  width: 120px;
-`;
-const Feedback = styled.form`
-  width: 50%;
-  color: var(--color-dark-grey);
-  font-size: 22px;
-  margin: 35px 35px 35px 0px;
-`;
 const Panels = styled.div`
-  width: 50%;
+  width: 100%;
+  height: 50%;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
 `;
 const Panel = styled.div`
-  width: 90%;
-`
-const MyQuests = styled.div`
   width: 100%;
+  margin: 50px;
+`;
+const MyQuests = styled.div`
+width: 100%;
+max-height: 16vh;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+border-radius: 15px;
+margin: 20px;
+box-shadow: 0px 0px 10px var(--color-purple);
+overflow: hidden;
+overflow-y: scroll;
+scroll-behavior: smooth;
+`;
+const MissingQuest = styled.div`
   display: flex;
   flex-direction: column;
-  max-height: 30vh;
-  justify-content: space-between;
+  justify-content: center;
   border-radius: 15px;
-  box-shadow: 2px 5px 10px var(--color-purple);
-  overflow: hidden;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
+  box-shadow: 0px 0px 10px var(--color-purple);
+  margin: 20px;
 `;
 
+// IMAGES
+const Pokemon = styled(AdvancedImage)`
+position: relative;
+top: 17px;
+left: 25px;
+height: 120px;
+width: 120px;
+`;
+
+// MISC
+const Button = styled.button`
+  margin: 15px 0px;
+`
 export default Profile;
 

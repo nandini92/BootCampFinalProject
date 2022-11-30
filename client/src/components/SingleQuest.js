@@ -9,13 +9,18 @@ import { QuestsContext } from "../contexts/QuestsContext";
 
 const SingleQuest = ({ selectedQuest }) => {
   const { cld, loggedIn } = useContext(UserContext);
-  const { users,actions: { getOtherUser }} = useContext(UsersContext);
-  const { actions:{addQuestParticipants}} =useContext(QuestsContext);
+  const {
+    users,
+    actions: { getOtherUser },
+  } = useContext(UsersContext);
+  const {
+    actions: { addQuestParticipants },
+  } = useContext(QuestsContext);
 
   const [quest, setQuest] = useState();
   const [owner, setOwner] = useState();
   const [ownerAvatar, setOwnerAvatar] = useState();
-  const [success, setSuccess] = useState();
+  const [success, setSuccess] = useState(false);
 
   // Fetch quest details from database
   useEffect(() => {
@@ -46,30 +51,45 @@ const SingleQuest = ({ selectedQuest }) => {
             <p>
               <Label>Description:</Label> {quest.description}
             </p>
-            {quest.participants !== 0 &&
-            <p><Label>Slots available:</Label> {quest.participants}</p>
-            }
-            {quest?.participantIds &&
-            <p><Label>Heroes on this quest</Label>
-            {quest.participantIds && quest.participantIds.map((id) => {
-              const userInfo = users.filter(otherUser => {
-                return otherUser._id === id && otherUser;
-              })
-              return ( <p key={id}>{userInfo[0].handler}</p>)
-            })}
-            </p>
-            }
+            {/* TO DO: Add address details */}
+            {quest.participants !== 0 && (
+              <p>
+                <Label>Slots available:</Label> {quest.participants}
+              </p>
+            )}
+            {quest?.participantIds && (
+              <Heroes>
+                <Label> Heroes on this quest </Label>
+                {quest.participantIds &&
+                  quest.participantIds.map((id) => {
+                    const userInfo = users.filter((otherUser) => {
+                      return otherUser._id === id && otherUser;
+                    });
+                    return <p key={id}>{userInfo[0].handler}</p>;
+                  })}
+              </Heroes>
+            )}
           </Desc>
+          {/* TO DO: Remove sign up button onces user is added*/}
           <Bottom>
-              <Karma>{quest.karma}</Karma>
-              {quest.participants > 0 && 
-              <Button 
-              onClick={() => {
-                setSuccess(addQuestParticipants(selectedQuest, loggedIn._id, (quest.participants - 1)));
-                }}
-                >Sign Me Up!
+            <Karma>{quest.karma}</Karma>
+            {quest.participants > 0 &&
+              loggedIn._id !== quest.ownerId &&
+              success === false && (
+                <Button
+                  onClick={() => {
+                    setSuccess(
+                      addQuestParticipants(
+                        selectedQuest,
+                        loggedIn._id,
+                        quest.participants - 1
+                      )
+                    );
+                  }}
+                >
+                  Sign Me Up!
                 </Button>
-              }
+              )}
           </Bottom>
         </QuestWrapper>
       )}
@@ -105,6 +125,7 @@ const Pokemon = styled(AdvancedImage)`
 `;
 const Desc = styled.div`
   align-self: center;
+  text-align: center;
 
   p {
     margin-bottom: 15px;
@@ -118,6 +139,20 @@ const Title = styled.p`
 `;
 const Label = styled.span`
   font-weight: 500;
+  margin-bottom: 20px;
+`;
+const Heroes = styled.div`
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  p {
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--color-purple);
+  }
 `;
 const Karma = styled.div`
   align-self: flex-end;

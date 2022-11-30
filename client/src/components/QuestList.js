@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// TO DO: 
 const QuestList = ({ quests, setSelectedQuest}) => {
   return (
     <>

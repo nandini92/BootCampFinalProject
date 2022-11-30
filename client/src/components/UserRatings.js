@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
 
@@ -40,6 +40,11 @@ const Characteristic = styled.div`
     margin: 10px 0px;
     display: flex;
     justify-content: space-between;
+
+    span {
+        margin: 10px;
+        line-height: 9px;
+    }
 `
 
 export default UserRatings;

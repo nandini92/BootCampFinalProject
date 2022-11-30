@@ -13,6 +13,7 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
   const coordinates = useRef();
 
   // Form for creating new Quest
+  // TO DO: Redirect to confirmation page when complete && Error page when error
   const formSubmit = (e) => {
     e.preventDefault();
     
@@ -116,13 +117,16 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
           type="number"
           placeholder="How many people do you need on this quest?"
           id="participants"
+          min="1"
+          max="3"
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
-        {/* TO DO: place limit from 1 to 5  */}
         <Input
           type="number"
           placeholder="Difficulty"
           id="difficulty"
+          min="1"
+          max="5"
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         <Button>Create Your Quest!</Button>

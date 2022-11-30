@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoadScript } from "@react-google-maps/api";
-import { useAuth0 } from "@auth0/auth0-react";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 import { AuthContext } from "../contexts/AuthContext";
+
+import Welcome from "./Welcome";
 import QuestMap from "./QuestMap";
 import QuestList from "./QuestList";
 import NewQuest from "./NewQuest";
@@ -33,6 +34,7 @@ const Home = () => {
   });
 
   // Redirect to Avatar setup page in case new user
+  // TO DO : Create loading page to allow time for newUser to be set to true
   useEffect(() => {
     if (newUser === true) {
       navigate("/avatar");
@@ -52,11 +54,12 @@ const Home = () => {
         { 
         newQuest === true
           ?<Back onClick={() => {setNewQuest(false); setSelectedQuest(); setNewMarker()}}/>
-          :<Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>
+          : <>{ loggedIn && <Add onClick={() => {setNewQuest(true); setSelectedQuest()}}/>}</>
         }
         </Options>
             <Wrapper>
               <Pages>
+              {!loggedIn && <Welcome />}
               {newQuest === true  && !selectedQuest && loggedIn
               && <NewQuest setQuests={setQuests} quests={quests}  newMarker={newMarker}/>}
               {selectedQuest  && <SingleQuest selectedQuest={selectedQuest} />}
@@ -64,6 +67,7 @@ const Home = () => {
               </Pages>
             </Wrapper>
             <QuestMap
+            loggedIn={loggedIn}
             quests={quests}
             setSelectedQuest={setSelectedQuest}
             setNewQuest={setNewQuest}
@@ -119,7 +123,7 @@ const Wrapper = styled.div`
   top: 70px;
   left: 20px;
   min-width: 30%;
-  max-height: 80%;
+  max-height: 90%;
   padding: 20px;
   border-radius: 15px;
   background-color: var(--color-grey);
