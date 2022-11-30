@@ -8,13 +8,14 @@ import { AdvancedImage } from "@cloudinary/react";
 import LoginButton from "../assets/LoginButton";
 import LogoutButton from "../assets/LogoutButton";
 import pokeball from "../assets/images/pokeball.svg";
+import logo from "../assets/images/Quest.png";
 
 const Header = () => {
   const { userAvatar } = useContext(UserContext);
 
   return (
     <Wrapper>
-      <Home to={"/"}>Quest</Home>
+      <NavLink to={"/"}><Logo src={logo} /></NavLink>
       {userAvatar
       ? <AvatarWrapper to={"/my-profile"}>
         <Pokemon cldImg={userAvatar} />
@@ -43,22 +44,19 @@ const Wrapper = styled.div`
   z-index: 10;
 `;
 const Logo = styled.img`
-  height: 150px;
-  width: 250px;
-`;
-const Home = styled(NavLink)`
-  font-size: 48px;
-  font-weight: 300;
-  text-decoration: none;
-  color: var(--color-grey);
-  align-self: center;
-  padding-left: 20px;
+  position: relative;
+  bottom: 15px;
+  right: 35px;
+  height: 170px;
 `;
 const SignInOut = styled.div`
   align-self: center;
   padding-right: 20px;
 `;
 const AvatarWrapper = styled(NavLink)`
+  position: relative;
+  right: 100px;
+  height: 170px;
   margin-top: 24px;
   border-radius: 50%;
   background-color: var(--color-grey);

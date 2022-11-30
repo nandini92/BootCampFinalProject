@@ -23,7 +23,8 @@ export const UserProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    if (isAuthenticated) { 
+    console.log(isAuthenticated);
+    if (isAuthenticated === true) { 
       fetch("/user", {
         method: "POST",
         headers: {
@@ -36,6 +37,7 @@ export const UserProvider = ({ children }) => {
       .then((data) => {
           if (data.status === 200) {
             setLoggedIn(data.data);
+            setNewUser(false);
           } else if (data.status === 404) {
             setNewUser(true);
           } else {

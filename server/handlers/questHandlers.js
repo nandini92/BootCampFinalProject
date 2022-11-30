@@ -217,20 +217,14 @@ const getUsersQuests = async(req,res) => {
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const questsOwned = await db.collection("quests").find({ownerId: user}).toArray();
+        const questsOwned = await db.collection("quests").find({ ownerId: user }).toArray();
         
-        const questsOn = await db.collection("quests").find({ participantIds: [user]}).toArray();
+        const questsOn = await db.collection("quests").find({ participantIds: user }).toArray();
 
-        switch(true){
-            case (questsOwned !== null && questsOn !== null):
-                return res.status(201).json({status:201, data: {questsOwned, questsOn}, message: "SUCCESS: All users quests returned."})
-            case (questsOwned !== null):
-                return res.status(201).json({status:201, data: {questsOwned}, message: "SUCCESS: User's owned Quests returned."})
-            case (questsOn !== null):
-                return res.status(201).json({status:201, data: {questsOn}, message: "SUCCESS: User's owned Quests returned."})
-            default:
-                return res.status(404).json({status:404, data: null, message: "ERROR: Data not found."})
-        }   
+        (questsOwned !== null && questsOn !== null)
+            ? res.status(201).json({status:201, data: {questsOwned, questsOn}, message: "SUCCESS: All users quests returned."})
+            : res.status(404).json({status:404, data: null, message: "ERROR: Data not found."})
+         
     } finally {
         client.close();
         console.log("database disconnected!")

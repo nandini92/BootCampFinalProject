@@ -34,7 +34,7 @@ const Home = () => {
 
   // Redirect to Avatar setup page in case new user
   useEffect(() => {
-    if (newUser) {
+    if (newUser === true) {
       navigate("/avatar");
     }
   }, [newUser]);
