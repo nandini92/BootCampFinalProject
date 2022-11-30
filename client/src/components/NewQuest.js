@@ -1,13 +1,8 @@
 import { useState, useContext, useRef } from "react";
-import { UserContext } from "../contexts/UserContext";
-import { AuthContext } from "../contexts/AuthContext";
+import { Autocomplete } from "@react-google-maps/api";
 import styled from "styled-components";
 
-import { Autocomplete } from "@react-google-maps/api";
-
-const NewQuest = ({ setQuests, quests, newMarker }) => {
-  const { cred } = useContext(AuthContext);
-  const { loggedIn, userUpdate, actions: {setUserUpdate} } = useContext(UserContext);
+const NewQuest = ({ cred, loggedIn, setQuests, quests, newMarker, setUserUpdate }) => {
   const [formData, setFormData] = useState();
   const location = useRef();
   const coordinates = useRef();
@@ -41,7 +36,7 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...formData, location: coordinates.current, type: loggedIn.avatarType }),
+            body: JSON.stringify({ ...formData, location: coordinates.current, address: location.current.value, type: loggedIn.avatarType }),
           })
             .then((res) => res.json())
             .then((data) => {
@@ -94,12 +89,14 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
           type="text"
           placeholder="Title"
           id="title"
+          required
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         <Input
           type="text"
           placeholder="Tell us a little about your quest!"
           id="description"
+          required
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         {!newMarker &&
@@ -108,6 +105,7 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
             type="text"
             placeholder="Address"
             id="location"
+            required
             ref={location}
           />
         </Autocomplete> 
@@ -116,13 +114,18 @@ const NewQuest = ({ setQuests, quests, newMarker }) => {
           type="number"
           placeholder="How many people do you need on this quest?"
           id="participants"
+          min="1"
+          max="3"
+          required
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
-        {/* TO DO: place limit from 1 to 5  */}
         <Input
           type="number"
           placeholder="Difficulty"
           id="difficulty"
+          min="1"
+          max="5"
+          required
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         <Button>Create Your Quest!</Button>

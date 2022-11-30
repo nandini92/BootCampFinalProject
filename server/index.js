@@ -12,6 +12,7 @@ const domain = process.env.REACT_APP_AUTH0_DOM;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 const googleMaps = process.env.REACT_APP_GOOGLE_MAPS_API;
 const cloudinary = process.env.CLOUDINARY_URL;
+const cloudName = process.env.CLOUD_NAME;
 
 express()
   .use(helmet())
@@ -20,7 +21,7 @@ express()
 
   // Endpoint to send API credentials required by front end
   .get("/cred", function (req, res) {
-    res.status(200).json({ domain, clientId, googleMaps, cloudinary });
+    res.status(200).json({ domain, clientId, googleMaps, cloudinary, cloudName });
   })
 
   // Endpoint to create new User

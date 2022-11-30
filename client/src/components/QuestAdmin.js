@@ -6,7 +6,6 @@ import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 
-// TO DO: REFRESH QUEST LIST ON DELETE
 const QuestAdmin = ({ quests }) => {
   const { loggedIn } = useContext(UserContext);
   const { users } = useContext(UsersContext);
@@ -35,15 +34,16 @@ const QuestAdmin = ({ quests }) => {
                     </p>
                   )}
                   {quest?.participantIds && (
-                    <>
+                    <Heroes>
+                      <Label> Heroes on this quest </Label>
                       {quest.participantIds &&
                         quest.participantIds.map((id) => {
                           const userInfo = users.filter((otherUser) => {
                             return otherUser._id === id && otherUser;
                           });
-                          return <Hero key={id}>{userInfo[0].handler}</Hero>;
+                          return <p key={id}>{userInfo[0].handler}</p>;
                         })}
-                    </>
+                    </Heroes>
                   )}
                 </div>
                 <End>
@@ -73,8 +73,9 @@ const QuestWrapper = styled.div`
   margin: 20px;
   background-color: var(--color-yellow);
   box-shadow: 0px 0px 10px var(--color-purple);
-  padding: 15px;
+  padding: 10px;
   border-radius: 15px;
+  font-size: 14px;
   display: flex;
   justify-content: space-between;
   transition: transform 0.3s ease-in-out;
@@ -96,9 +97,19 @@ const Title = styled.p`
 const Label = styled.span`
   font-weight: 500;
 `;
-const Hero = styled.button`
-  font-size: 18px;
-`
+const Heroes = styled.div`
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  p {
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--color-purple);
+  }
+`;
 const End = styled.div`
   display: flex;
 `

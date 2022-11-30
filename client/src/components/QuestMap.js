@@ -28,9 +28,11 @@ const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarke
       mapContainerStyle={containerStyle}
       options={options}
       onClick={(e) => {
-        setNewMarker({lat:e.latLng.lat(), lng:e.latLng.lng()});
-        setSelectedQuest();
-        setNewQuest(true);
+        if(loggedIn){
+          setNewMarker({lat:e.latLng.lat(), lng:e.latLng.lng()});
+          setSelectedQuest();
+          setNewQuest(true);
+        }
       }}
     >
       {quests &&

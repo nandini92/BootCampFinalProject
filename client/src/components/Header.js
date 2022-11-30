@@ -8,13 +8,14 @@ import { AdvancedImage } from "@cloudinary/react";
 import LoginButton from "../assets/LoginButton";
 import LogoutButton from "../assets/LogoutButton";
 import pokeball from "../assets/images/pokeball.svg";
+import logo from "../assets/images/Quest.png";
 
 const Header = () => {
   const { userAvatar } = useContext(UserContext);
 
   return (
     <Wrapper>
-      <Home to={"/"}>Quest</Home>
+      <NavLink to={"/"}><Logo src={logo} /></NavLink>
       {userAvatar
       ? <AvatarWrapper to={"/my-profile"}>
         <Pokemon cldImg={userAvatar} />
@@ -37,29 +38,22 @@ const Wrapper = styled.div`
   box-shadow: 0px 0px 5px 2px var(--color-dark-grey);
   height: 100px;
   width: 100vw;
-  display: flex;
-  justify-content: space-between;
   position: absolute;
   z-index: 10;
 `;
 const Logo = styled.img`
-  height: 150px;
-  width: 250px;
-`;
-const Home = styled(NavLink)`
-  font-size: 48px;
-  font-weight: 300;
-  text-decoration: none;
-  color: var(--color-grey);
-  align-self: center;
-  padding-left: 20px;
+  position: absolute;
+  height: 170px;
 `;
 const SignInOut = styled.div`
-  align-self: center;
-  padding-right: 20px;
+  position: absolute;
+  top: 30px;
+  right: 50px;
 `;
 const AvatarWrapper = styled(NavLink)`
-  margin-top: 24px;
+  position: absolute;
+  top: 24px;
+left: calc(50vw - (150px/2));
   border-radius: 50%;
   background-color: var(--color-grey);
   box-shadow: 2px 5px 10px var(--color-dark-grey);
@@ -79,19 +73,14 @@ const Pokemon = styled(AdvancedImage)`
   width: 90px;
 `;
 const Pokeball = styled.div`
-  position: relative;
-  right: 25px;
-  margin-top: 24px;
+  position: absolute;
+  top: 24px;
+  left: calc(50vw - (150px/2));
   border-radius: 50%;
   background-color: white;
   box-shadow: 2px 5px 10px var(--color-purple);
   height: 150px;
   width: 150px;
-  transition: transform 0.3s ease-in-out;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 const Image = styled.img`

@@ -7,24 +7,31 @@ import Home from "./components/Home";
 import MyProfile from "./components/MyProfile";
 import Profile from "./components/Profile";
 import AvatarSetup from "./components/AvatarSetup";
+import Error from "./components/Error";
+import Loading from "./components/Loading";
 
 const App = () => {
-  const { isLoading, error } = useAuth0();
+  const { isLoading, error, isAuthenticated } = useAuth0();
   return (
     <BrowserRouter>
       <GlobalStyles />
       <div>
-        {error && <p>Authentication Error</p>}
-        {!error && isLoading && <p>Loading...</p>}
+        {error && <Error />}
+        {!error && isLoading && <Loading />}
         {!error && !isLoading && (
           <>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/my-profile" element={<MyProfile />} />
-            <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/avatar" element={<AvatarSetup />} />
-          </Routes>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {isAuthenticated && (
+                <>
+                  <Route path="/my-profile" element={<MyProfile />} />
+                  <Route path="/profile/:id" element={<Profile />} />
+                  <Route path="/avatar" element={<AvatarSetup />} />
+                </>
+              )}
+              <Route path="*" element={<Error />} />
+            </Routes>
           </>
         )}
       </div>
