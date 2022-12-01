@@ -272,7 +272,7 @@ const getAllQuests = async(req,res) => {
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const quests = await db.collection("quests").find().toArray();
+        const quests = await db.collection("quests").find({completed: false}).toArray();
 
         quests
         ? res.status(201).json({status:201, data:quests, message: "SUCCESS: Quests returned."})

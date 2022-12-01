@@ -10,7 +10,7 @@ const LogoutButton = () =>{
     return (
         isAuthenticated &&
         <Button onClick={() => {
-            setLoggedIn();
+            setLoggedIn(false);
             logout();
             }}>
             Sign Out

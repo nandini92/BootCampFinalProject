@@ -140,8 +140,6 @@ const NewQuest = ({
 const QuestForm = styled.form`
   display: flex;
   flex-direction: column;
-  border-radius: 15px;
-  padding: 0px 20px 20px 20px;
   font-family: var(--font);
   width: 90%;
   margin: 20px;

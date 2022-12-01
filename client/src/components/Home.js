@@ -88,7 +88,7 @@ const Home = () => {
           </Options>
           <Wrapper>
             <Pages>
-              {!loggedIn && <Welcome />}
+              {!loggedIn && <Welcome loggedIn={loggedIn}/>}
               {newQuest === true && !selectedQuest && loggedIn  && confirmation === false && (
                 <NewQuest
                   cred={cred}
@@ -101,11 +101,14 @@ const Home = () => {
                 />
               )}
               {selectedQuest  && confirmation === false && <SingleQuest selectedQuest={selectedQuest} />}
-              {newQuest === false && !selectedQuest && confirmation === false && (
-                <QuestList
-                  quests={quests}
-                  setSelectedQuest={setSelectedQuest}
-                />
+              {loggedIn && newQuest === false && !selectedQuest && confirmation === false && (
+                <>{ quests.length > 0
+                  ?<QuestList
+                    quests={quests}
+                    setSelectedQuest={setSelectedQuest}
+                  />
+                  : <Welcome loggedIn={loggedIn}/>
+                }</>
               )}
               {
                 confirmation === true && 
@@ -177,12 +180,41 @@ const Wrapper = styled.div`
   border-radius: 15px;
   background-color: var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-purple);
+
+  animation: slideOut ease-in 0.3s;
+  @keyframes slideOut {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 `;
+
 const Pages = styled.div`
   position: relative;
-  max-height: 65vh;
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
+
+  * {
+    animation: slideIn ease-in-out 1s;
+    @keyframes slideIn {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0;
+        height: 0px;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+        max-height: 65vh;
+        height: 100%;
+      }
+    }
+  }
 `;
 export default Home;
