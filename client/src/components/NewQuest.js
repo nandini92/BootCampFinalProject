@@ -1,6 +1,7 @@
 import { useState, useContext, useRef } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import styled from "styled-components";
+import { User } from "@auth0/auth0-react";
 
 const NewQuest = ({
   loggedIn,
@@ -18,6 +19,7 @@ const NewQuest = ({
     e.preventDefault();
 
     // CASE 1: User selected create new quest from side bar
+    // TO DO : Show error if quest failed to create or not enough karma
     if (!newMarker) {
       fetch(`/new-quest/${loggedIn._id}`, {
         method: "POST",
@@ -27,6 +29,7 @@ const NewQuest = ({
         },
         body: JSON.stringify({
           ...formData,
+          pinType: loggedIn.avatarType,
           location: encodeURI(location.current.value),
           address: location.current.value,
           type: loggedIn.avatarType,
@@ -54,6 +57,7 @@ const NewQuest = ({
         },
         body: JSON.stringify({
           ...formData,
+          pinType: loggedIn.avatarType,
           location: newMarker,
           newMarker: true,
         }),

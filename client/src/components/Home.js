@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLoadScript } from "@react-google-maps/api";
+import { useJsApiLoader  } from "@react-google-maps/api";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
 
 import { UserContext } from "../contexts/UserContext";
@@ -37,7 +37,7 @@ const Home = () => {
 
   // Create google enabled search box for address selection
   const [libraries] = useState(["places"]);
-  const { isLoaded } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: cred.googleMaps,
     libraries,
   });
@@ -116,6 +116,7 @@ const Home = () => {
           <QuestMap
             loggedIn={loggedIn}
             quests={quests}
+            selectedQuest={selectedQuest}
             setSelectedQuest={setSelectedQuest}
             setNewQuest={setNewQuest}
             setNewMarker={setNewMarker}
