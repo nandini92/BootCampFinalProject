@@ -35,9 +35,11 @@ const MyProfile = () => {
               {userAvatar && (
                 <AvatarWrapper>
                   <Pokemon cldImg={userAvatar} />
+                  {loggedIn.taskPoints &&
                   <ThemeProvider theme={theme}>
                     <LevelProgress variant="determinate" value={loggedIn.taskPoints} size="180px" color="primary" />
                   </ThemeProvider>
+                  }
                 </AvatarWrapper>
               )}
               <p>{userAvatar.publicID
@@ -47,11 +49,11 @@ const MyProfile = () => {
               <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
               </Info>
               <Info>
-                <UserRatings category="charisma" ratings={null} currentRatings={loggedIn.ratings.charisma}/>
-                <UserRatings category="intelligence" ratings={null} currentRatings={loggedIn.ratings.intelligence}/>
-                <UserRatings category="wisdom" ratings={null} currentRatings={loggedIn.ratings.wisdom}/>
-                <UserRatings category="dexterity" ratings={null} currentRatings={loggedIn.ratings.dexterity}/>
-                <UserRatings category="strength" ratings={null} currentRatings={loggedIn.ratings.strength}/>
+                <UserRatings category="charisma" ratings={null} currentRatings={loggedIn.ratings?.charisma}/>
+                <UserRatings category="intelligence" ratings={null} currentRatings={loggedIn.ratings?.intelligence}/>
+                <UserRatings category="wisdom" ratings={null} currentRatings={loggedIn.ratings?.wisdom}/>
+                <UserRatings category="dexterity" ratings={null} currentRatings={loggedIn.ratings?.dexterity}/>
+                <UserRatings category="strength" ratings={null} currentRatings={loggedIn.ratings?.strength}/>
               </Info>
               </UserDetails>
             <Panels>

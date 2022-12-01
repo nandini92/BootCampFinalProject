@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState();
   const [userQuests, setUserQuests] = useState();
   const [userAvatar, setUserAvatar] = useState();
-  const [userUpdate, setUserUpdate] = useState();
+  const [userUpdate, setUserUpdate] = useState(1);
 
   // Authenticate user 
   const { user, isAuthenticated } = useAuth0();

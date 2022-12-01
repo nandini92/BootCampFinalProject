@@ -57,7 +57,7 @@ export const QuestsProvider = ({ children }) => {
       .then((data) => {
         if (data.status === 200) {
           setQuestUpdate(id);
-          setUserUpdate(id)
+          setUserUpdate(userUpdate => userUpdate + 1);
         } else {
           throw new Error(data.message);
         }
@@ -78,7 +78,7 @@ export const QuestsProvider = ({ children }) => {
         .then((data) => {
           if (data.status === 200) {
             setQuestUpdate(id);
-            setUserUpdate(id)
+            setUserUpdate(userUpdate => userUpdate + 1);
           } else {
             throw new Error(data.message);
           }
@@ -87,7 +87,7 @@ export const QuestsProvider = ({ children }) => {
     }
 
   return (
-    <QuestsContext.Provider value={{quests, actions:{setQuests, addQuestParticipants, completeQuest, deleteQuest}}}>
+    <QuestsContext.Provider value={{quests, questUpdate, actions:{setQuests, addQuestParticipants, completeQuest, deleteQuest}}}>
         {children}
     </QuestsContext.Provider>
   );

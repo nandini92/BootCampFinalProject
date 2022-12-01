@@ -21,7 +21,6 @@ const Home = () => {
   const {
     newUser,
     loggedIn,
-    userUpdate,
     actions: { setUserUpdate },
   } = useContext(UserContext);
   const {
@@ -32,7 +31,7 @@ const Home = () => {
   const [selectedQuest, setSelectedQuest] = useState();
   const [newQuest, setNewQuest] = useState(false);
   const [newMarker, setNewMarker] = useState();
-  const [confirmation, showConfirmation] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
 
   const navigate = useNavigate();
 
@@ -49,12 +48,6 @@ const Home = () => {
       navigate("/avatar");
     }
   }, [newUser]);
-
-  // Show confirmation page when new quest is created
-  useEffect(() => {
-    userUpdate &&
-    showConfirmation(true);
-  }, [userUpdate])
 
   return (
     <>
@@ -77,7 +70,7 @@ const Home = () => {
                   setNewQuest(false);
                   setSelectedQuest();
                   setNewMarker();
-                  showConfirmation(false);
+                  setConfirmation(false);
                 }}
               />
             ) : (
@@ -104,6 +97,7 @@ const Home = () => {
                   quests={quests}
                   newMarker={newMarker}
                   setUserUpdate={setUserUpdate}
+                  setConfirmation={setConfirmation}
                 />
               )}
               {selectedQuest  && confirmation === false && <SingleQuest selectedQuest={selectedQuest} />}
@@ -126,6 +120,7 @@ const Home = () => {
             setNewQuest={setNewQuest}
             setNewMarker={setNewMarker}
             newMarker={newMarker}
+            setConfirmation={setConfirmation}
           />
         </Map>
       )}

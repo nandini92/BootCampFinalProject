@@ -51,7 +51,9 @@ const SingleQuest = ({ selectedQuest }) => {
             <p>
               <Label>Description:</Label> {quest.description}
             </p>
-            {/* TO DO: Add address details */}
+            <p>
+              <Label>Address:</Label> {quest.address}
+            </p>
             {quest.participants !== 0 && (
               <p>
                 <Label>Slots available:</Label> {quest.participants}

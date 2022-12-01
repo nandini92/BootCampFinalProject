@@ -1,6 +1,7 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
+const request = require('request-promise');
 const { MONGO_URI } = process.env;
 
 const options = {
@@ -11,12 +12,41 @@ const options = {
 const date = Date.now();
 
 // Handler to create new Quest
-// TO DO: Data  validation prior to inserting
 const createQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
-        const quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
+        let quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
         await client.connect();
+
+        // Geocode address
+        if(quest.newMarker === false){
+            const location = await request(
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${quest.location}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
+            )
+            .then((response) => JSON.parse(response))
+            .then((parsedResponse) =>{ 
+                return parsedResponse.results[0].geometry.location;
+            })
+            .catch((err) => res.status(400).json({status:400, data:quest, message: err}))
+
+            quest = {...quest, location}; 
+        // Reverse geocode coordinates
+        } else if (quest.newMarker === true){
+            const latlng = `${quest.location.lat},${quest.location.lng}`
+            const address = await request(
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
+            )
+            .then((response) => JSON.parse(response))
+            .then((parsedResponse) =>{ 
+                return parsedResponse.results[1].formatted_address;
+            })
+            .catch((err) => res.status(400).json({status:400, data:quest, message: err}))
+
+            quest = {...quest, address}
+        } else {
+            return res.status(400).json({status:400, data:quest, message: "Address was not found."})
+        }
+
 
         // 100 points of karma per difficulty level to be paid by owner
         const karma = quest.difficulty * 100;
