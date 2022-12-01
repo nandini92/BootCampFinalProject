@@ -12,7 +12,8 @@ export const UserProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState();
   const [userQuests, setUserQuests] = useState();
   const [userAvatar, setUserAvatar] = useState();
-  const [userUpdate, setUserUpdate] = useState();
+  const [userUpdate, setUserUpdate] = useState(1);
+  const [levelUp, setLevelUp] = useState(false);
 
   // Authenticate user 
   const { user, isAuthenticated } = useAuth0();
@@ -24,6 +25,7 @@ export const UserProvider = ({ children }) => {
     },
   });
 
+  //Get logged in user details
   useEffect(() => {
     if (isAuthenticated === true) { 
       fetch("/user", {
@@ -39,6 +41,7 @@ export const UserProvider = ({ children }) => {
           if (data.status === 200) {
             setLoggedIn(data.data);
             setNewUser(false);
+            setLevelUp(false);
           } else if (data.status === 404) {
             setNewUser(true);
           } else {
@@ -47,9 +50,9 @@ export const UserProvider = ({ children }) => {
         })
       .catch((error) => console.log(error));
     }
-  }, [isAuthenticated, newUser, userUpdate])
+  }, [isAuthenticated, newUser, userUpdate, levelUp])
 
-  // Use Effect to set quest and avatar attributes
+  // Use Effect to set quest, level and avatar attributes
   useEffect(() => {
     if (loggedIn) {
       // Get all cloudinary public Ids for avatars
@@ -66,6 +69,28 @@ export const UserProvider = ({ children }) => {
           throw new Error(data.message);
         }})
       .catch((error) => console.log(error));
+    
+    // Trigger level up
+    if(loggedIn.taskPoints >= 100 ){
+      fetch(`/user-level/${loggedIn._id}`, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({level: loggedIn.level + 1, taskPoints: loggedIn.taskPoints - 100}),
+      })
+        .then((data) => {
+          if (data.status === 200) {
+            setLevelUp(true);
+          } else {
+            throw new Error(data.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } 
     } 
   }, [loggedIn, userUpdate]);
 

@@ -21,7 +21,6 @@ const createUser = async(req,res) => {
         console.log("database connected!");
 
         const newUser = await db.collection("users").insertOne({...req.body, _id: uuidv4(), createdAt: date});
-        console.log(newUser);
 
         newUser
         ? res.status(200).json({status:200, data: newUser, message: "SUCCESS: User was created."})
@@ -45,7 +44,6 @@ const addUserRatings = async(req,res) => {
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
-        console.log(req.params.id, req.body.ratings);
 
         const ratings = await db.collection("users").updateOne({_id: req.params.id}, {$set: {ratings: {...req.body.ratings},  updatedAt: date}});
         console.log(ratings);
@@ -61,6 +59,33 @@ const addUserRatings = async(req,res) => {
         console.log("database disconnected!")
     }
 }
+
+// Handler to level users based on taskPoints accumulated
+const updateUserLevel = async(req,res) => {
+    const client = new MongoClient(MONGO_URI, options);
+
+    try{
+        await client.connect();
+        
+        const db = await client.db("BootCamp_Final_Project");
+        console.log("database connected!");
+        console.log(req.params.id, req.body);
+
+        const levelUpdate = await db.collection("users").updateOne({_id: req.params.id}, {$set: {level: req.body.level,  taskPoints: req.body.taskPoints, updatedAt: date}});
+        console.log(levelUpdate);
+
+        levelUpdate
+        ? res.status(200).json({status:200, data: levelUpdate, message: "SUCCESS: Ratings have been added."})
+        : res.status(400).json({status:400, data: levelUpdate, message: "ERROR: Failed to add ratings."});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({status:500, data: null, message: `ERROR: Internal server error.`});
+    }finally{
+        client.close();
+        console.log("database disconnected!")
+    }
+}
+
 
 // Handler to return user details
 const getUser = async(req,res) => {
@@ -134,4 +159,4 @@ const getAllUsers = async(req,res) => {
     }
 }
 
-module.exports = { createUser, addUserRatings, getUser, getUserById, getAllUsers };
+module.exports = { createUser, addUserRatings, updateUserLevel, getUser, getUserById, getAllUsers };

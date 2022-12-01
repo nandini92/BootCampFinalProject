@@ -1,64 +1,40 @@
 import { useState, useContext, useRef } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import styled from "styled-components";
+import { User } from "@auth0/auth0-react";
 
-const NewQuest = ({ cred, loggedIn, setQuests, quests, newMarker, setUserUpdate }) => {
+const NewQuest = ({
+  loggedIn,
+  setQuests,
+  quests,
+  newMarker,
+  setUserUpdate,
+  setConfirmation
+}) => {
   const [formData, setFormData] = useState();
   const location = useRef();
-  const coordinates = useRef();
 
   // Form for creating new Quest
   const formSubmit = (e) => {
     e.preventDefault();
-    
-    // CASE 1: User selected create new quest from side bar
-    if(!newMarker){
-    const encodedAddress = encodeURI(location.current.value);
 
-    fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${cred.googleMaps}`
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        coordinates.current = res.results[0].geometry.location;
-        console.log(coordinates.current);
-      })
-      .then((res) => {
-        // Run fetch only ones coordinates are set
-        if (!loggedIn._id) {
-          throw new Error(
-            "ERROR: User ID is not set. Unable to retrieve account details."
-          );
-        } else {
-          fetch(`/new-quest/${loggedIn._id}`, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ...formData, location: coordinates.current, address: location.current.value, type: loggedIn.avatarType }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.status === 500) {
-                throw new Error(data.message);
-              } else {
-                setQuests([...quests, data.data]);
-                setUserUpdate(data.data._id);
-              }
-            })
-            .catch((error) => window.alert(error));
-        }
-      });
-    // CASE 2: User dropped a pin on map to create Quest
-    } else {
+    // CASE 1: User selected create new quest from side bar
+    // TO DO : Show error if quest failed to create or not enough karma
+    if (!newMarker) {
       fetch(`/new-quest/${loggedIn._id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, location: newMarker }),
+        body: JSON.stringify({
+          ...formData,
+          pinType: loggedIn.avatarType,
+          location: encodeURI(location.current.value),
+          address: location.current.value,
+          type: loggedIn.avatarType,
+          newMarker: false,
+        }),
       })
         .then((res) => res.json())
         .then((data) => {
@@ -67,6 +43,33 @@ const NewQuest = ({ cred, loggedIn, setQuests, quests, newMarker, setUserUpdate 
           } else {
             setQuests([...quests, data.data]);
             setUserUpdate(data.data._id);
+            setConfirmation(true);
+          }
+        })
+        .catch((error) => window.alert(error));
+      // CASE 2: User dropped a pin on map to create Quest
+    } else {
+      fetch(`/new-quest/${loggedIn._id}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          pinType: loggedIn.avatarType,
+          location: newMarker,
+          newMarker: true,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 500) {
+            throw new Error(data.message);
+          } else {
+            setQuests([...quests, data.data]);
+            setUserUpdate(data.data._id);
+            setConfirmation(true);
           }
         })
         .catch((error) => window.alert(error));
@@ -99,17 +102,17 @@ const NewQuest = ({ cred, loggedIn, setQuests, quests, newMarker, setUserUpdate 
           required
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
-        {!newMarker &&
-        <Autocomplete >
-          <Input
-            type="text"
-            placeholder="Address"
-            id="location"
-            required
-            ref={location}
-          />
-        </Autocomplete> 
-        }
+        {!newMarker && (
+          <Autocomplete>
+            <Input
+              type="text"
+              placeholder="Address"
+              id="location"
+              required
+              ref={location}
+            />
+          </Autocomplete>
+        )}
         <Input
           type="number"
           placeholder="How many people do you need on this quest?"

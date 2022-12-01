@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLoadScript } from "@react-google-maps/api";
+import { useJsApiLoader  } from "@react-google-maps/api";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
 
 import { UserContext } from "../contexts/UserContext";
@@ -21,7 +21,6 @@ const Home = () => {
   const {
     newUser,
     loggedIn,
-    userUpdate,
     actions: { setUserUpdate },
   } = useContext(UserContext);
   const {
@@ -32,13 +31,13 @@ const Home = () => {
   const [selectedQuest, setSelectedQuest] = useState();
   const [newQuest, setNewQuest] = useState(false);
   const [newMarker, setNewMarker] = useState();
-  const [confirmation, showConfirmation] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
 
   const navigate = useNavigate();
 
   // Create google enabled search box for address selection
   const [libraries] = useState(["places"]);
-  const { isLoaded } = useLoadScript({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: cred.googleMaps,
     libraries,
   });
@@ -49,12 +48,6 @@ const Home = () => {
       navigate("/avatar");
     }
   }, [newUser]);
-
-  // Show confirmation page when new quest is created
-  useEffect(() => {
-    userUpdate &&
-    showConfirmation(true);
-  }, [userUpdate])
 
   return (
     <>
@@ -77,7 +70,7 @@ const Home = () => {
                   setNewQuest(false);
                   setSelectedQuest();
                   setNewMarker();
-                  showConfirmation(false);
+                  setConfirmation(false);
                 }}
               />
             ) : (
@@ -104,6 +97,7 @@ const Home = () => {
                   quests={quests}
                   newMarker={newMarker}
                   setUserUpdate={setUserUpdate}
+                  setConfirmation={setConfirmation}
                 />
               )}
               {selectedQuest  && confirmation === false && <SingleQuest selectedQuest={selectedQuest} />}
@@ -122,10 +116,12 @@ const Home = () => {
           <QuestMap
             loggedIn={loggedIn}
             quests={quests}
+            selectedQuest={selectedQuest}
             setSelectedQuest={setSelectedQuest}
             setNewQuest={setNewQuest}
             setNewMarker={setNewMarker}
             newMarker={newMarker}
+            setConfirmation={setConfirmation}
           />
         </Map>
       )}
