@@ -69,7 +69,7 @@ const createQuest = async(req,res) => {
         }
 
         // Create new quest
-        const questInserted = await db.collection("quests").insertOne({...quest, karma});
+        const questInserted = await db.collection("quests").insertOne({...quest, karma, completed: false});
 
         questInserted
         ? res.status(201).json({status:201, data:{...quest, karma}, message: "SUCCESS: New Quest created."})
@@ -247,9 +247,9 @@ const getUsersQuests = async(req,res) => {
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const questsOwned = await db.collection("quests").find({ ownerId: user }).toArray();
+        const questsOwned = await db.collection("quests").find({ ownerId: user, completed: false}).toArray();
         
-        const questsOn = await db.collection("quests").find({ participantIds: user }).toArray();
+        const questsOn = await db.collection("quests").find({ participantIds: user, completed: false}).toArray();
 
         (questsOwned !== null && questsOn !== null)
             ? res.status(201).json({status:201, data: {questsOwned, questsOn}, message: "SUCCESS: All users quests returned."})

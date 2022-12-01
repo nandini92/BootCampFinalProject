@@ -3,7 +3,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 require("dotenv").config();
 
-const { createUser, addUserRatings, getUser, getUserById, getAllUsers } = require("./handlers/userHandlers");
+const { createUser, addUserRatings, updateUserLevel, getUser, getUserById, getAllUsers } = require("./handlers/userHandlers");
 const { createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
 const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers")
 
@@ -29,6 +29,9 @@ express()
 
   // Endpoint to add ratings
   .patch("/user/:id", addUserRatings)
+  
+  // Endpoint to add ratings
+  .patch("/user-level/:id", updateUserLevel)
 
   // Endpoint to get logged in user details on log in
   .post("/user", getUser)

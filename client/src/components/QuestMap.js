@@ -5,7 +5,7 @@ import MapsStyles from "../assets/MapStyles"
 
 const QuestMap = ({quests, selectedQuest, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
   const { loggedIn } = useContext(UserContext);
-  const [userPosition, setUserPosition] = useState();
+  const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
   const [directions, setDirections] = useState();
 
   // Google maps display settins

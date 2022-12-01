@@ -37,7 +37,7 @@ const MyProfile = () => {
                   <Pokemon cldImg={userAvatar} />
                   {loggedIn.taskPoints &&
                   <ThemeProvider theme={theme}>
-                    <LevelProgress variant="determinate" value={loggedIn.taskPoints} size="180px" color="primary" />
+                    <LevelProgress variant="determinate" value={loggedIn.taskPoints % 100} size="180px" color="primary" />
                   </ThemeProvider>
                   }
                 </AvatarWrapper>
@@ -198,7 +198,7 @@ const Pokemon = styled(AdvancedImage)`
 // MISC
 const LevelProgress = styled(CircularProgress)`
   position: relative;
-  bottom: 129px;
+  bottom: 128px;
   right: 5px;
 `
 const Button = styled.button`
