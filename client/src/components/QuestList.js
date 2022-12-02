@@ -30,7 +30,7 @@ const QuestWrapper = styled.div`
   width: 94%;
   margin: 20px;
   background-color: var(--color-yellow);
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-dark-grey);
   padding: 15px;
   border-radius: 15px;
   display: flex;
@@ -61,7 +61,6 @@ const Label = styled.span`
 const Karma = styled.div`
   border-radius: 15px;
   background-color: var(--color-blue);
-  box-shadow: 2px 5px 10px var(--color-purple);
   height: 80px;
   width: 80px;
   font-size: 14px;

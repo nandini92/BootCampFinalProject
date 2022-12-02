@@ -40,7 +40,6 @@ const createUser = async(req,res) => {
 }
 
 // Store ratings from other users
-// TO DO: Calculate average score between previous score and new score
 const addUserRatings = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
@@ -50,10 +49,29 @@ const addUserRatings = async(req,res) => {
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        const ratings = await db.collection("users").updateOne({_id: req.params.id}, {$set: {ratings: {...req.body.ratings},  updatedAt: date}});
-        console.log(ratings);
+        // Get existing ratings (array) from users collection
+        const currentRatings = await db.collection("users").findOne({_id: req.params.id});
+        const { ratings } = req.body;
+        let newRatings = {};
 
-        ratings
+        // If first rating, push rating object as is
+        if (currentRatings.ratings === undefined) {
+            newRatings = ratings;
+        // Calculate average between existing and new submission
+        } else {
+            newRatings = {
+                "charisma": Math.floor((currentRatings.ratings.charisma + ratings.charisma)/2),
+                "intelligence": Math.floor((currentRatings.ratings.intelligence + ratings.intelligence)/2),
+                "wisdom": Math.floor((currentRatings.ratings.wisdom + ratings.wisdom )/2),
+                "dexterity": Math.floor((currentRatings.ratings.dexterity + ratings.dexterity)/2),
+                "strength":Math.floor((currentRatings.ratings.strength + ratings.strength)/2)
+            }          
+        }
+
+        const update = await db.collection("users").updateOne({_id: req.params.id}, {$set: {updatedAt: date, ratings: newRatings}, $inc: {ratingsCount: 1}});
+        console.log(update);
+
+        update
         ? res.status(200).json({status:200, data: ratings, message: "SUCCESS: Ratings have been added."})
         : res.status(400).json({status:400, data: ratings, message: "ERROR: Failed to add ratings."});
     }catch(err){

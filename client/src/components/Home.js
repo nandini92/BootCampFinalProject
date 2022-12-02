@@ -115,10 +115,13 @@ const Home = () => {
               {selectedQuest  && confirmation === false && <SingleQuest selectedQuest={selectedQuest} />}
               {loggedIn && newQuest === false && !selectedQuest && confirmation === false && (
                 <>{ quests.length > 0
-                  ?<QuestList
+                  ?<>
+                    <p>Hello {loggedIn.handler}. Choose a quest to begin!</p>
+                    <QuestList
                     quests={quests}
                     setSelectedQuest={setSelectedQuest}
-                  />
+                    />
+                  </>
                   : <Welcome loggedIn={loggedIn}/>
                 }</>
               )}
@@ -168,6 +171,7 @@ const Add = styled(FiPlus)`
   padding: 5px;
   margin: 20px;
   background-color: var(--color-yellow);
+  box-shadow: 0px 0px 5px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
 
   &:hover {
@@ -181,6 +185,7 @@ const Back = styled(FiArrowLeft)`
   padding: 5px;
   margin: 20px;
   background-color: var(--color-red);
+  box-shadow: 0px 0px 5px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
 
   &:hover {

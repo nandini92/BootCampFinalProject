@@ -40,7 +40,7 @@ const SingleQuest = ({ selectedQuest }) => {
 
   return (
     <QuestWrapper>
-      {!quest ? (
+      {(!quest && !owner) ? (
         <Loading color="#3d7dca" />
       ) : (
         <>
@@ -48,7 +48,7 @@ const SingleQuest = ({ selectedQuest }) => {
             {ownerAvatar && <Pokemon cldImg={ownerAvatar} />}
           </AvatarWrapper>
           <Desc>
-            <Title>{quest.title}</Title>
+            <Title>{owner?.handler} invites you on {quest.title}</Title>
             <p>
               <Label>Description:</Label> {quest.description}
             </p>

@@ -72,7 +72,7 @@ const QuestWrapper = styled.div`
   min-width: 90%;
   margin: 20px;
   background-color: var(--color-yellow);
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-dark-grey);
   padding: 10px;
   border-radius: 15px;
   font-size: 14px;
@@ -116,7 +116,6 @@ const End = styled.div`
 const Karma = styled.div`
   border-radius: 15px;
   background-color: var(--color-blue);
-  box-shadow: 2px 5px 10px var(--color-purple);
   height: 80px;
   width: 80px;
   text-align: center;
@@ -129,6 +128,7 @@ const Delete = styled(FiXCircle)`
   padding: 5px;
   margin-left: 15px;
   background-color: var(--color-red);
+  box-shadow: 0px 0px 3px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
 
   &:hover {

@@ -75,9 +75,11 @@ const QuestMap = ({quests, selectedQuest, setSelectedQuest, setNewQuest, setNewM
               key={quest._id}
               position={quest.location}
               onClick={() => {
+                if(loggedIn){
                 setNewQuest(false);
                 setSelectedQuest(quest._id);
                 showDirections(quest.location);
+                }
               }}
               icon={{
                 url: `/assets/${quest.pinType}.png`,
@@ -97,7 +99,7 @@ const QuestMap = ({quests, selectedQuest, setSelectedQuest, setNewQuest, setNewM
           }}
         />
       )}
-      {directions && <DirectionsRenderer directions={directions} />}
+      {loggedIn && directions && <DirectionsRenderer directions={directions} />}
     </GoogleMap>
   );
 };

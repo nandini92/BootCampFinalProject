@@ -17,6 +17,7 @@ const Profile = () => {
   const [avatar, setAvatar] = useState();
   const [quests, setQuests] = useState();
   const [ratings, setRatings] = useState();
+  const [ratingsSent, setRatingsSent] = useState(false);
   const { actions: {getOtherUser, getUsersAvatar, getUsersQuests}} = useContext(UsersContext);
 
   // Get User info based on user id.
@@ -47,7 +48,9 @@ const Profile = () => {
       .then((data) => {
         if (data.status !== 200) {
           throw new Error(data.message);
-        } 
+        } else {
+          setRatingsSent(true);
+        }
       })
       .catch((error) => window.alert(error));
   }
@@ -78,8 +81,10 @@ const Profile = () => {
                 <UserRatings category="wisdom" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings?.wisdom}/>
                 <UserRatings category="dexterity" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings?.dexterity}/>
                 <UserRatings category="strength" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings?.strength}/>
-                {/* TO DO: Show alert that rating was provided and remove button*/}
+                <Ratings>
+                {ratingsSent && <p>You've successfully rated this user!</p>}
                 <SubmitDiv><Button type="submit">Submit</Button></SubmitDiv>
+                </Ratings>
               </Feedback>
             </UserDetails>
             <Panels>
@@ -145,7 +150,7 @@ const UserDetails = styled.div`
   justify-content: space-evenly;
   border-radius: 15px;
   background: linear-gradient(120deg, white, var(--color-blue));
-  box-shadow: 2px 5px 10px var(--color-purple);
+  box-shadow: 0px 0px 8px var(--color-blue);
 `;
 const Info = styled.p`
   display: flex;
@@ -166,7 +171,7 @@ const AvatarWrapper = styled.div`
   border-radius: 50%;
   background-color: var(--color-grey);
   border: 5px solid var(--color-grey);
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 8px var(--color-blue);
   height: 180px;
   width: 180px;
 `;
@@ -206,7 +211,7 @@ flex-direction: column;
 justify-content: space-between;
 border-radius: 15px;
 margin: 20px;
-box-shadow: 0px 0px 10px var(--color-purple);
+box-shadow: 0px 0px 8px var(--color-blue);
 overflow: hidden;
 overflow-y: scroll;
 scroll-behavior: smooth;
@@ -216,9 +221,20 @@ const MissingQuest = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 15px;
-  box-shadow: 0px 0px 10px var(--color-purple);
+   box-shadow: 0px 0px 5px var(--color-dark-grey);
   margin: 20px;
 `;
+const Ratings = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  p{
+    font-size: 16px;
+    align-self: center;
+    color: var(--color-purple);
+  }
+`
+
 
 // IMAGES
 const Pokemon = styled(AdvancedImage)`
