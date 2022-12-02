@@ -64,6 +64,7 @@ const MyProfile = () => {
               <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
               </Info>
               <Info>
+                <p>Report Card</p>
                 <UserRatings category="charisma" ratings={null} currentRatings={loggedIn.ratings?.charisma}/>
                 <UserRatings category="intelligence" ratings={null} currentRatings={loggedIn.ratings?.intelligence}/>
                 <UserRatings category="wisdom" ratings={null} currentRatings={loggedIn.ratings?.wisdom}/>
@@ -152,7 +153,7 @@ const UserDetails = styled.div`
   justify-content: space-evenly;
   border-radius: 15px;
   background: linear-gradient(120deg, white, var(--color-blue));
-  box-shadow: 2px 5px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-blue);
 `;
 const Info = styled.div`
   display: flex;
@@ -173,7 +174,7 @@ const AvatarWrapper = styled.div`
   border-radius: 50%;
   background-color: var(--color-grey);
   border: 5px solid var(--color-grey);
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-blue);
   height: 180px;
   width: 180px;
 `;
@@ -195,7 +196,7 @@ const MyQuests = styled.div`
   justify-content: space-between;
   border-radius: 15px;
   margin: 20px;
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 8px var(--color-blue);
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
@@ -205,7 +206,7 @@ const MissingQuest = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 15px;
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 8px var(--color-blue);
   margin: 20px;
 `;
 

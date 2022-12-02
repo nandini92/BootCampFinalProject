@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useJsApiLoader  } from "@react-google-maps/api";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
+import Tippy from '@tippyjs/react';
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
@@ -69,14 +70,17 @@ const Home = () => {
         <Map>
           <Options>
             {selectedQuest && (
+              <Tippy content={<p>Back to Quest List</p>}>
               <Back
                 onClick={() => {
                   setNewQuest(false);
                   setSelectedQuest();
                 }}
               />
+              </Tippy>
             )}
             {newQuest === true ? (
+              <Tippy content={<p>Back to Quest List</p>}>
               <Back
                 onClick={() => {
                   setNewQuest(false);
@@ -85,15 +89,18 @@ const Home = () => {
                   setConfirmation(false);
                 }}
               />
+              </Tippy>
             ) : (
               <>
                 {loggedIn && (
+                  <Tippy content={<p>Create New Quest</p>}>
                   <Add
                     onClick={() => {
                       setNewQuest(true);
                       setSelectedQuest();
                     }}
                   />
+                  </Tippy>
                 )}
               </>
             )}
@@ -115,10 +122,13 @@ const Home = () => {
               {selectedQuest  && confirmation === false && <SingleQuest selectedQuest={selectedQuest} />}
               {loggedIn && newQuest === false && !selectedQuest && confirmation === false && (
                 <>{ quests.length > 0
-                  ?<QuestList
+                  ?<>
+                    <p>Hello {loggedIn.handler}. Choose a quest to begin!</p>
+                    <QuestList
                     quests={quests}
                     setSelectedQuest={setSelectedQuest}
-                  />
+                    />
+                  </>
                   : <Welcome loggedIn={loggedIn}/>
                 }</>
               )}
@@ -168,6 +178,7 @@ const Add = styled(FiPlus)`
   padding: 5px;
   margin: 20px;
   background-color: var(--color-yellow);
+  box-shadow: 0px 0px 5px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
 
   &:hover {
@@ -181,6 +192,7 @@ const Back = styled(FiArrowLeft)`
   padding: 5px;
   margin: 20px;
   background-color: var(--color-red);
+  box-shadow: 0px 0px 5px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
 
   &:hover {
