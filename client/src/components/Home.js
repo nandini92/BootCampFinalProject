@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useJsApiLoader  } from "@react-google-maps/api";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
+import Tippy from '@tippyjs/react';
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
@@ -69,14 +70,17 @@ const Home = () => {
         <Map>
           <Options>
             {selectedQuest && (
+              <Tippy content={<p>Back to Quest List</p>}>
               <Back
                 onClick={() => {
                   setNewQuest(false);
                   setSelectedQuest();
                 }}
               />
+              </Tippy>
             )}
             {newQuest === true ? (
+              <Tippy content={<p>Back to Quest List</p>}>
               <Back
                 onClick={() => {
                   setNewQuest(false);
@@ -85,15 +89,18 @@ const Home = () => {
                   setConfirmation(false);
                 }}
               />
+              </Tippy>
             ) : (
               <>
                 {loggedIn && (
+                  <Tippy content={<p>Create New Quest</p>}>
                   <Add
                     onClick={() => {
                       setNewQuest(true);
                       setSelectedQuest();
                     }}
                   />
+                  </Tippy>
                 )}
               </>
             )}

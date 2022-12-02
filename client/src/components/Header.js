@@ -78,7 +78,7 @@ const Pokeball = styled.div`
   left: calc(50vw - (150px/2));
   border-radius: 50%;
   background-color: white;
-  box-shadow: 2px 5px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-dark-grey);
   height: 150px;
   width: 150px;
 `;
