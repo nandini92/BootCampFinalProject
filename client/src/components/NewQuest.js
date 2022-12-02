@@ -1,7 +1,6 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useRef } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import styled from "styled-components";
-import { User } from "@auth0/auth0-react";
 
 const NewQuest = ({
   loggedIn,
@@ -12,14 +11,14 @@ const NewQuest = ({
   setConfirmation
 }) => {
   const [formData, setFormData] = useState();
+  const [error, setError] = useState(false);
   const location = useRef();
-
+  
   // Form for creating new Quest
   const formSubmit = (e) => {
     e.preventDefault();
-
+    
     // CASE 1: User selected create new quest from side bar
-    // TO DO : Show error if quest failed to create or not enough karma
     if (!newMarker) {
       fetch(`/new-quest/${loggedIn._id}`, {
         method: "POST",
@@ -38,15 +37,20 @@ const NewQuest = ({
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.status === 500) {
-            throw new Error(data.message);
-          } else {
+          if (data.status === 201) {
             setQuests([...quests, data.data]);
             setUserUpdate(data.data._id);
             setConfirmation(true);
+            setError(false);
+          } else if (data.status === 404){
+            throw new RangeError(data.message);
+          } else if (data.status === 400){
+            throw new SyntaxError(data.message);
+          } else {
+            throw Error("Oops something went wrong. Please try again later.");
           }
         })
-        .catch((error) => window.alert(error));
+        .catch((error) => setError(error));
       // CASE 2: User dropped a pin on map to create Quest
     } else {
       fetch(`/new-quest/${loggedIn._id}`, {
@@ -64,15 +68,20 @@ const NewQuest = ({
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.status === 500) {
-            throw new Error(data.message);
-          } else {
+          if (data.status === 201) {
             setQuests([...quests, data.data]);
             setUserUpdate(data.data._id);
             setConfirmation(true);
+            setError(false);
+          } else if (data.status === 404){
+            throw new RangeError(data.message);
+          } else if (data.status === 400){
+            throw new SyntaxError(data.message);
+          } else {
+            throw Error("Oops something went wrong. Please try again later.");
           }
         })
-        .catch((error) => window.alert(error));
+        .catch((error) => setError(error));
     }
   };
 
@@ -132,6 +141,7 @@ const NewQuest = ({
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         <Button>Create Your Quest!</Button>
+        {error !== false && <Error>{error.message}</Error>}
       </QuestForm>
     </>
   );
@@ -140,8 +150,6 @@ const NewQuest = ({
 const QuestForm = styled.form`
   display: flex;
   flex-direction: column;
-  border-radius: 15px;
-  padding: 0px 20px 20px 20px;
   font-family: var(--font);
   width: 90%;
   margin: 20px;
@@ -175,4 +183,11 @@ const Button = styled.button`
     cursor: pointer;
   }
 `;
+const Error = styled.p`
+text-align: center;
+  font-family: var(--font);
+  color: var(--color-red);
+  font-size: 16px;
+  padding: 20px;
+`
 export default NewQuest;

@@ -10,6 +10,11 @@ const options = {
 
 const date = Date.now();
 
+
+// TO DO: Set up evolution
+const evolution = require("../assets/evolutions.json");
+
+
 // Handler to create a new user upon Auth0 signup
 const createUser = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
@@ -71,8 +76,7 @@ const updateUserLevel = async(req,res) => {
         console.log("database connected!");
         console.log(req.params.id, req.body);
 
-        const levelUpdate = await db.collection("users").updateOne({_id: req.params.id}, {$set: {level: req.body.level,  taskPoints: req.body.taskPoints, updatedAt: date}});
-        console.log(levelUpdate);
+        const levelUpdate = await db.collection("users").updateOne({_id: req.params.id}, {$set: {level: req.body.level, updatedAt: date}});
 
         levelUpdate
         ? res.status(200).json({status:200, data: levelUpdate, message: "SUCCESS: Ratings have been added."})

@@ -1,11 +1,14 @@
 import styled from "styled-components";
 
-const Welcome = () => {
+const Welcome = ({loggedIn}) => {
     return (
     <Wrapper>
         <h2>Welcome to Quest!</h2>
         <p>Explore your neighborhood to make new friends and build new experiences together all while training your little pal in various activities.</p>
-        <p>Sign In to embark on a quest with your Pokémon companion. </p>
+        {loggedIn !== undefined
+        ? <p>Seems a little quiet... Create a new quest to get the party started!</p>
+        : <p>Sign In to embark on a quest with your Pokémon companion. </p>
+      }
     </Wrapper>)
 }
 

@@ -78,6 +78,7 @@ const Profile = () => {
                 <UserRatings category="wisdom" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings?.wisdom}/>
                 <UserRatings category="dexterity" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings?.dexterity}/>
                 <UserRatings category="strength" ratings={ratings} setRatings={setRatings} currentRatings={user.ratings?.strength}/>
+                {/* TO DO: Show alert that rating was provided and remove button*/}
                 <SubmitDiv><Button type="submit">Submit</Button></SubmitDiv>
               </Feedback>
             </UserDetails>

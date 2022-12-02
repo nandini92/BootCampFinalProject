@@ -11,8 +11,9 @@ export default createGlobalStyle`
     --color-grey: #F8F9FA;
     --color-dark-grey: #595F65;
     --font: "Poppins",sans-serif;
+    --nav-load-time: 300ms;
   }
-  
+
   /* http://meyerweb.com/eric/tools/css/reset/
       v2.0 | 20110126
       License: none (public domain)
@@ -70,13 +71,14 @@ label {
 button {
   color: #fff;
   font-family: var(--font);
-  font-size: 22px;
+  font-size: 20px;
   padding: 5px 10px;
   text-align: center;
   border: none;
   border-radius: 5px;
   background-color: var(--color-purple);
   color: var(--color-grey);
+  cursor: pointer;
 }
 p,
 a,

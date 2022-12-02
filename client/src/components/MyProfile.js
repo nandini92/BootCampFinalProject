@@ -1,18 +1,22 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
 import { CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Tippy from '@tippyjs/react';
 
 import { UserContext } from "../contexts/UserContext";
 
 import QuestAdmin from "./QuestAdmin";
 import QuestList from "./QuestList";
 import UserRatings from "./UserRatings";
+import Celebration from "../assets/Celebration";
 
 const MyProfile = () => {
-  const { loggedIn, userQuests, userAvatar } = useContext(UserContext);
+  const { loggedIn, userQuests, userAvatar, levelUpAnimation, actions: {setLevelUpAnimation} } = useContext(UserContext);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   // Set theme for ThemeProvider. This will be used for circular progress color palette
@@ -23,6 +27,15 @@ const MyProfile = () => {
       }
     },
   });
+
+  // Display level up animation 
+  useEffect(() => {
+    if(levelUpAnimation === true){
+      setOpen(true);
+    }
+  }, [levelUpAnimation])
+
+  
 
   if (loggedIn && userAvatar) {
     return (
@@ -37,7 +50,9 @@ const MyProfile = () => {
                   <Pokemon cldImg={userAvatar} />
                   {loggedIn.taskPoints &&
                   <ThemeProvider theme={theme}>
+                    <Tippy content={<TaskPoints>{loggedIn.taskPoints} task points</TaskPoints>}>
                     <LevelProgress variant="determinate" value={loggedIn.taskPoints % 100} size="180px" color="primary" />
+                    </Tippy>
                   </ThemeProvider>
                   }
                 </AvatarWrapper>
@@ -84,6 +99,7 @@ const MyProfile = () => {
             </>
             }
             </Panels>
+            <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
           </Body>
         </Wrapper>
       </>
@@ -102,6 +118,13 @@ const SubTitle = styled.p`
   text-align: center;
   font-size: 24px;
   color: var(--color-dark-grey);
+`;
+const TaskPoints = styled.span`
+  font-family: var(--font);
+  color: var(--color-dark-grey);
+  background-color: var(--color-grey);
+  border-radius: 5px;
+  padding: 3px;
 `;
 
 // DIVS

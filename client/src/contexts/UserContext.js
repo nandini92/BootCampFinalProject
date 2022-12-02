@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
   const [userAvatar, setUserAvatar] = useState();
   const [userUpdate, setUserUpdate] = useState(1);
   const [levelUp, setLevelUp] = useState(false);
+  const [levelUpAnimation, setLevelUpAnimation] = useState(false);
 
   // Authenticate user 
   const { user, isAuthenticated } = useAuth0();
@@ -71,18 +72,19 @@ export const UserProvider = ({ children }) => {
       .catch((error) => console.log(error));
     
     // Trigger level up
-    if(loggedIn.taskPoints >= 100 ){
+    if(Math.floor((loggedIn.taskPoints / 100)) >= loggedIn.level ){
       fetch(`/user-level/${loggedIn._id}`, {
         method: "PATCH",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({level: loggedIn.level + 1, taskPoints: loggedIn.taskPoints - 100}),
+        body: JSON.stringify({level: loggedIn.level + 1}),
       })
         .then((data) => {
           if (data.status === 200) {
             setLevelUp(true);
+            setLevelUpAnimation(true);
           } else {
             throw new Error(data.message);
           }
@@ -120,7 +122,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ newUser, loggedIn, userQuests, userAvatar, cld, userUpdate, actions: { createUser, setNewUser, setUserUpdate, setLoggedIn } }}>
+    <UserContext.Provider value={{ newUser, loggedIn, userQuests, userAvatar, cld, userUpdate, levelUpAnimation, actions: { createUser, setNewUser, setUserUpdate, setLoggedIn, setLevelUpAnimation } }}>
       {children}
     </UserContext.Provider>
   );

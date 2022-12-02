@@ -1,0 +1,6 @@
+[
+    {"pokemon":"bulbasaur", "firstEvolutionLevel": 16, "firstEvolution":"ivysaur", "secondEvolutionLevel": 36, "secondEvolution":"venusaur"},
+    {"pokemon":"squirtle", "firstEvolutionLevel": 16, "firstEvolution":"wartotle", "secondEvolutionLevel": 36, "secondEvolution":"blastoise"},
+    {"pokemon":"charmander", "firstEvolutionLevel": 16, "firstEvolution":"charmeleon", "secondEvolutionLevel": 36, "secondEvolution":"charizard"},
+    {"pokemon":"pikachu", "firstEvolutionLevel": 16, "firstEvolution":"raichu"}
+]
