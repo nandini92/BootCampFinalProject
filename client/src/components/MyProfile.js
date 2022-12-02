@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
 import { CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Tippy from '@tippyjs/react';
 
 import { UserContext } from "../contexts/UserContext";
 
@@ -48,7 +50,9 @@ const MyProfile = () => {
                   <Pokemon cldImg={userAvatar} />
                   {loggedIn.taskPoints &&
                   <ThemeProvider theme={theme}>
+                    <Tippy content={<TaskPoints>{loggedIn.taskPoints} task points</TaskPoints>}>
                     <LevelProgress variant="determinate" value={loggedIn.taskPoints % 100} size="180px" color="primary" />
+                    </Tippy>
                   </ThemeProvider>
                   }
                 </AvatarWrapper>
@@ -114,6 +118,13 @@ const SubTitle = styled.p`
   text-align: center;
   font-size: 24px;
   color: var(--color-dark-grey);
+`;
+const TaskPoints = styled.span`
+  font-family: var(--font);
+  color: var(--color-dark-grey);
+  background-color: var(--color-grey);
+  border-radius: 5px;
+  padding: 3px;
 `;
 
 // DIVS

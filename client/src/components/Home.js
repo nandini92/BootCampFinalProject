@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useJsApiLoader  } from "@react-google-maps/api";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
+import { BeatLoader } from "react-spinners";
 
 import { UserContext } from "../contexts/UserContext";
 import { QuestsContext } from "../contexts/QuestsContext";
@@ -63,7 +64,7 @@ const Home = () => {
   return (
     <>
       {!isLoaded ? (
-        <p>Loading</p>
+        <Loading color="#3d7dca" />
       ) : (
         <Map>
           <Options>
@@ -144,6 +145,10 @@ const Home = () => {
   );
 };
 
+
+const Loading = styled(BeatLoader)`
+  align-self: center;
+`;
 const Map = styled.div`
   position: absolute;
   top: 100px;
@@ -166,6 +171,7 @@ const Add = styled(FiPlus)`
   transition: transform 0.3s ease-in-out;
 
   &:hover {
+    cursor: pointer;
     transform: scale(1.2);
   }
 `;
@@ -178,6 +184,7 @@ const Back = styled(FiArrowLeft)`
   transition: transform 0.3s ease-in-out;
 
   &:hover {
+    cursor: pointer;
     transform: scale(1.2);
   }
 `;
@@ -205,28 +212,10 @@ const Wrapper = styled.div`
     }
   }
 `;
-
 const Pages = styled.div`
   position: relative;
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
-
-  * {
-    animation: slideIn ease-in-out 1s;
-    @keyframes slideIn {
-      0% {
-        transform: translateY(-100%);
-        opacity: 0;
-        height: 0px;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-        max-height: 65vh;
-        height: 100%;
-      }
-    }
-  }
 `;
 export default Home;

@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
+import { BeatLoader } from "react-spinners";
 
 import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
@@ -38,11 +39,11 @@ const SingleQuest = ({ selectedQuest }) => {
   }, [owner]);
 
   return (
-    <>
+    <QuestWrapper>
       {!quest ? (
-        <h1>Loading</h1>
+        <Loading color="#3d7dca" />
       ) : (
-        <QuestWrapper key={quest._id}>
+        <>
           <AvatarWrapper to={`/profile/${quest.ownerId}`}>
             {ownerAvatar && <Pokemon cldImg={ownerAvatar} />}
           </AvatarWrapper>
@@ -92,9 +93,9 @@ const SingleQuest = ({ selectedQuest }) => {
                 </Button>
               )}
           </Bottom>
-        </QuestWrapper>
+        </>
       )}
-    </>
+    </QuestWrapper>
   );
 };
 
@@ -108,6 +109,9 @@ const QuestWrapper = styled.div`
   border-radius: 15px;
   display: flex;
   flex-direction: column;
+`;
+const Loading = styled(BeatLoader)`
+  align-self: center;
 `;
 const AvatarWrapper = styled(NavLink)`
   align-self: center;

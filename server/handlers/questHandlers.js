@@ -14,39 +14,52 @@ const date = Date.now();
 // Handler to create new Quest
 const createQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
+    let quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
     try{
-        let quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
         await client.connect();
 
         // Geocode address
-        if(quest.newMarker === false){
+        try {
+          if (quest.newMarker === false) {
             const location = await request(
-                `https://maps.googleapis.com/maps/api/geocode/json?address=${quest.location}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
+              `https://maps.googleapis.com/maps/api/geocode/json?address=${quest.location}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
             )
-            .then((response) => JSON.parse(response))
-            .then((parsedResponse) =>{ 
+              .then((response) => JSON.parse(response))
+              .then((parsedResponse) => {
                 return parsedResponse.results[0].geometry.location;
-            })
-            .catch((err) => res.status(400).json({status:400, data:quest, message: err}))
+              })
+              .catch((err) => {
+                throw new Error("Unable to locate address. Please provide a valid address.");
+              });
 
-            quest = {...quest, location}; 
-        // Reverse geocode coordinates
-        } else if (quest.newMarker === true){
-            const latlng = `${quest.location.lat},${quest.location.lng}`
+            quest = { ...quest, location };
+            // Reverse geocode coordinates
+          } else if (quest.newMarker === true) {
+            const latlng = `${quest.location.lat},${quest.location.lng}`;
             const address = await request(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
             )
-            .then((response) => JSON.parse(response))
-            .then((parsedResponse) =>{ 
+              .then((response) => JSON.parse(response))
+              .then((parsedResponse) => {
                 return parsedResponse.results[1].formatted_address;
-            })
-            .catch((err) => res.status(400).json({status:400, data:quest, message: err}))
+              })
+              .catch((err) => {
+                throw new Error("Unable to reverse geocode address.");
+              });
 
-            quest = {...quest, address}
-        } else {
-            return res.status(400).json({status:400, data:quest, message: "Address was not found."})
+            quest = { ...quest, address };
+          } else {
+            return res
+              .status(404)
+              .json({
+                status: 404,
+                data: quest,
+                message: "Address provided was not found.",
+              });
+          }
+        } catch (error) {
+          throw new Error(error);
         }
-
 
         // 100 points of karma per difficulty level to be paid by owner
         const karma = quest.difficulty * 100;
@@ -58,14 +71,14 @@ const createQuest = async(req,res) => {
         
         // If owner has insufficient karma points to create a quest with this difficulty level - reject the request.
         if(user.karma < karma){        
-            return res.status(400).json({status:400, data:quest, message: "ERROR: Insufficient karma points to create this quest."});   
+            return res.status(404).json({status:404, data:quest, message: "Insufficient karma points to create this quest."});   
         }
 
         // If owner has sufficient karma points - deduct points from user.
         const ownerUpdated = await db.collection("users").updateOne({_id: quest.ownerId}, {$inc: {karma: -karma}, $set: {updatedAt: date}});
 
         if(ownerUpdated  === null){
-            return res.status(400).json({status:400, message: "ERROR: Owner could not be updated."}); 
+            return res.status(400).json({status:400, message: "Owner details could not be updated. Please try again later."}); 
         }
 
         // Create new quest
@@ -73,11 +86,10 @@ const createQuest = async(req,res) => {
 
         questInserted
         ? res.status(201).json({status:201, data:{...quest, karma}, message: "SUCCESS: New Quest created."})
-        : res.status(400).json({status:400, message: "ERROR: Unable to create quest."}); 
+        : res.status(400).json({status:400, message: "Unable to create quest. Please try again later."}); 
 
-    }catch(err){
-        console.log(err);
-        res.status(500).json({status:500, data:null, message: `ERROR: Internal server error.`});
+    } catch(err){
+        res.status(400).json({status:400, data:quest, message: err.message});
     } finally {
         client.close();
         console.log("database disconnected!")
@@ -262,7 +274,6 @@ const getUsersQuests = async(req,res) => {
 }
 
 // Handler to get all quest details from database
-// TO DO: Rework to limit response size
 const getAllQuests = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 

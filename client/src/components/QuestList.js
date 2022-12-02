@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import { BeatLoader } from "react-spinners";
 
 const QuestList = ({ quests, setSelectedQuest}) => {
   return (
     <>
       {!quests ? (
-        <h1>Loading</h1>
+        <Loading color="#3d7dca" />
       ) : (
         quests.filter((item) => !item.completed)
         .map((quest) => {
@@ -38,7 +39,11 @@ const QuestWrapper = styled.div`
 
   &:hover {
     transform: scale(1.03);
+    cursor: pointer;
   }
+`;
+const Loading = styled(BeatLoader)`
+  align-self: center;
 `;
 const Desc = styled.div`
   align-self: center;

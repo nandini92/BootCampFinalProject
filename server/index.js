@@ -20,6 +20,7 @@ express()
   .use(express.json())
 
   // Endpoint to send API credentials required by front end
+  // TO DO: encrypt credentials
   .get("/cred", function (req, res) {
     res.status(200).json({ domain, clientId, googleMaps, cloudinary, cloudName });
   })

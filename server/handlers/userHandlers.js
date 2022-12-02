@@ -10,6 +10,11 @@ const options = {
 
 const date = Date.now();
 
+
+// TO DO: Set up evolution
+const evolution = require("../assets/evolutions.json");
+
+
 // Handler to create a new user upon Auth0 signup
 const createUser = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
