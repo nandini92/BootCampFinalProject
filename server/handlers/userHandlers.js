@@ -71,8 +71,7 @@ const updateUserLevel = async(req,res) => {
         console.log("database connected!");
         console.log(req.params.id, req.body);
 
-        const levelUpdate = await db.collection("users").updateOne({_id: req.params.id}, {$set: {level: req.body.level,  taskPoints: req.body.taskPoints, updatedAt: date}});
-        console.log(levelUpdate);
+        const levelUpdate = await db.collection("users").updateOne({_id: req.params.id}, {$set: {level: req.body.level, updatedAt: date}});
 
         levelUpdate
         ? res.status(200).json({status:200, data: levelUpdate, message: "SUCCESS: Ratings have been added."})

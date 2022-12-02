@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
@@ -10,9 +10,11 @@ import { UserContext } from "../contexts/UserContext";
 import QuestAdmin from "./QuestAdmin";
 import QuestList from "./QuestList";
 import UserRatings from "./UserRatings";
+import Celebration from "../assets/Celebration";
 
 const MyProfile = () => {
-  const { loggedIn, userQuests, userAvatar } = useContext(UserContext);
+  const { loggedIn, userQuests, userAvatar, levelUpAnimation, actions: {setLevelUpAnimation} } = useContext(UserContext);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   // Set theme for ThemeProvider. This will be used for circular progress color palette
@@ -23,6 +25,15 @@ const MyProfile = () => {
       }
     },
   });
+
+  // Display level up animation 
+  useEffect(() => {
+    if(levelUpAnimation === true){
+      setOpen(true);
+    }
+  }, [levelUpAnimation])
+
+  
 
   if (loggedIn && userAvatar) {
     return (
@@ -84,6 +95,7 @@ const MyProfile = () => {
             </>
             }
             </Panels>
+            <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
           </Body>
         </Wrapper>
       </>

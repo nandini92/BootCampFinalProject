@@ -13,6 +13,7 @@ import QuestList from "./QuestList";
 import NewQuest from "./NewQuest";
 import SingleQuest from "./SingleQuest";
 import Confirmation from "./Confirmation";
+import Celebration from "../assets/Celebration";
 
 import styled from "styled-components";
 
@@ -21,7 +22,9 @@ const Home = () => {
   const {
     newUser,
     loggedIn,
-    actions: { setUserUpdate },
+    levelUpAnimation,
+    userAvatar,
+    actions: { setUserUpdate, setLevelUpAnimation },
   } = useContext(UserContext);
   const {
     quests,
@@ -32,6 +35,7 @@ const Home = () => {
   const [newQuest, setNewQuest] = useState(false);
   const [newMarker, setNewMarker] = useState();
   const [confirmation, setConfirmation] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -48,6 +52,13 @@ const Home = () => {
       navigate("/avatar");
     }
   }, [newUser]);
+
+  // Display level up animation 
+  useEffect(() => {
+    if(levelUpAnimation === true){
+      setOpen(true);
+    }
+  }, [levelUpAnimation])
 
   return (
     <>
@@ -126,6 +137,7 @@ const Home = () => {
             newMarker={newMarker}
             setConfirmation={setConfirmation}
           />
+          <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
         </Map>
       )}
     </>
