@@ -5,7 +5,8 @@ require("dotenv").config();
 
 const { createUser, addUserRatings, updateUserLevel, getUser, getUserById, getAllUsers } = require("./handlers/userHandlers");
 const { createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
-const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers")
+const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers");
+const { createReport, getAllReports, markReport } = require("./handlers/reportHandlers");
 
 const PORT = 8000;
 const domain = process.env.REACT_APP_AUTH0_DOM;
@@ -42,6 +43,15 @@ express()
 
   // Endpoint to send all users
   .get("/users", getAllUsers)
+
+  // Endpoint to report a user to Admin
+  .post("/report/:id", createReport)
+
+  // Endpoint to get all user reports
+  .get("/reports", getAllReports)
+
+  // Endpoint to get all user reports
+  .patch("/reports", markReport)
   
   // Endpoint to create new quest
   .post("/new-quest/:ownerId", createQuest)
