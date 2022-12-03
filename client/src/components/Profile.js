@@ -35,6 +35,7 @@ const Profile = () => {
 
   // Submit user ratings to  database
   const handleSubmit = (e) => {
+    // TO DO: VAlidate that all categories are filled
     e.preventDefault();
     fetch(`/user/${user._id}`, {
       method: "PATCH",
