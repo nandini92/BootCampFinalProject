@@ -229,5 +229,6 @@ const Pages = styled.div`
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
+  max-height: 65vh;
 `;
 export default Home;

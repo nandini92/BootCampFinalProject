@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
-const { MONGO_URI } = process.env;
+const {MONGO_URI} = process.env;
 
 const users = require("./users.json");
 
@@ -12,9 +12,9 @@ const options = {
 
 const batchImport = async() => {
     const client = new MongoClient(MONGO_URI, options);
+    const date = Date.now();
 
-    const usersWithId = users.map(user => {return {...user, _id: uuidv4()}});
-    console.log(usersWithId);
+    const usersWithId = users.map(user => {return {...user, _id: uuidv4(), createdAt: date}});
 
     try{
         await client.connect();
