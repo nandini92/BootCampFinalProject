@@ -24,7 +24,7 @@ const Header = () => {
         <Image src={pokeball} alt="pokeball"/>
         </Pokeball>
       }
-      {loggedIn.admin === true && <Admin to={"/admin"}>Admin</Admin>}
+      {loggedIn && (loggedIn.admin === true && <Admin to={"/admin"}>Admin</Admin>)}
       {loggedIn && <Leaderboard to={"/leaderboard"}>Leaderboard</Leaderboard>}
       <SignInOut>
         <LoginButton />
