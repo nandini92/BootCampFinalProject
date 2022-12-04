@@ -1,17 +1,16 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
 import { FiFrown } from "react-icons/fi";
 import Tippy from "@tippyjs/react";
 
-import { UsersContext } from "../contexts/UsersContext";
-import { UserContext } from "../contexts/UserContext";
+import { UsersContext } from "../../contexts/UsersContext";
+import { UserContext } from "../../contexts/UserContext";
 
-import QuestAdmin from "./QuestAdmin";
-import QuestList from "./QuestList";
-import UserRatings from "./UserRatings";
+import QuestAdmin from "../../components/QuestAdmin";
+import QuestList from "../../components/QuestList";
+import UserRatings from "../../components/UserRatings";
 import ReportUser from "./ReportUser";
 
 const Profile = () => {
@@ -28,27 +27,27 @@ const Profile = () => {
   } = useContext(UsersContext);
   const navigate = useNavigate();
 
-  // Logged in user should be redirected to MyProfile
+  // Logged in user should be redirected to MyProfile if they try to access this component
   useEffect(() => {
     if(loggedIn){
       loggedIn._id === userId && navigate('/my-profile');
     }
   }, [loggedIn, userId])
 
-  // Get User info based on user id.
+  // Get user info based on user id
   useEffect(() => {
     getOtherUser(userId).then((data) => {
       setUser(data);
       setAvatar(getUsersAvatar(data));
     });
 
-    // Get User quests based on user id.
+    // Get user quests based on user id
     getUsersQuests(userId).then((data) => setQuests(data));
   }, [userId]);
 
-  // Submit user ratings to  database
+  // Submit user ratings to database
   const handleSubmit = (e) => {
-    // TO DO: VAlidate that all categories are filled
+    // TO DO: VAlidate that all categories are filled. Incomplete review should not be accepted.
     e.preventDefault();
     fetch(`/user/${user._id}`, {
       method: "PATCH",
@@ -88,6 +87,7 @@ const Profile = () => {
                 <p>LEVEL {user.level}</p>
               </Info>
               <Outer>
+                {/* Form to provide ratings on user based on various characteristics. These are DnD based; should find a set more suitable to Pokemon */}
                 <Feedback onSubmit={(e) => handleSubmit(e)}>
                   <UserRatings
                     category="charisma"
@@ -127,6 +127,7 @@ const Profile = () => {
                   </Ratings>
                 </Feedback>
                 <Tippy content={<p>Report User</p>}>
+                  {/* Module for a form to report user if they breach community guidelines */}
                   <IconWrap onClick={() => setOpen(true)}>
                     <Report />
                   </IconWrap>
@@ -135,6 +136,7 @@ const Profile = () => {
             </UserDetails>
             <Panels>
               <Panel>
+                {/* Display all quests user has created. Logged In user is only able to view these*/}
                 {quests?.questsOwned?.length > 0 ? (
                   <>
                     <SubTitle>Quests {user.handler} owns</SubTitle>
@@ -151,6 +153,7 @@ const Profile = () => {
                 )}
               </Panel>
               <Panel>
+                {/* Display all quests user is on. Logged In user is only able to view these*/}
                 {quests?.questsOn?.length > 0 ? (
                   <>
                     <SubTitle>Quests {user.handler} is on</SubTitle>

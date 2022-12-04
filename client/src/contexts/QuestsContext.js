@@ -8,8 +8,7 @@ export const QuestsProvider = ({ children }) => {
   const [quests, setQuests] = useState();
   const [questUpdate, setQuestUpdate] = useState();
 
-  // TODO: How to pull data set based on location. Not scalable if user zooms out.
-  // ALT: restrict zoom out on map.
+  // Get all quests in database
   useEffect(() => {
     fetch("/quests")
       .then((res) => res.json())
@@ -45,7 +44,7 @@ export const QuestsProvider = ({ children }) => {
   }
 
   
-  // Function to delete quest 
+  // Function to delete quest. Deleted quests will be removed from database as well. Users are only allowed to delete quests if no other participant has joined the quest.
   const deleteQuest = (id) => {
     fetch(`/quest/${id}`, {
       method: "DELETE",
@@ -66,7 +65,7 @@ export const QuestsProvider = ({ children }) => {
     .catch((error) => window.alert(error));
   }
 
-    // Function to complete quest 
+    // Function to mark quest  as complete. Completed quests will not appear anywhere but are stored in database for tracking.
     const completeQuest = (id) => {
       fetch(`/completed-quest/${id}`, {
         method: "PATCH",

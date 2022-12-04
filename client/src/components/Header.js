@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
+
 import { UserContext } from "../contexts/UserContext";
 
-import { AdvancedImage } from "@cloudinary/react";
-
-import LoginButton from "../assets/LoginButton";
-import LogoutButton from "../assets/LogoutButton";
-import pokeball from "../assets/images/pokeball.svg";
-import logo from "../assets/images/Quest.png";
+import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
+import pokeball from "../images/pokeball.svg";
+import logo from "../images/Quest.png";
 
 const Header = () => {
   const { userAvatar, loggedIn } = useContext(UserContext);
@@ -47,29 +47,6 @@ const Logo = styled.img`
   position: absolute;
   height: 170px;
 `;
-const Admin = styled(NavLink)`
-  position: absolute;
-  top: 40px;
-  right: 350px;
-  font-family: var(--font);
-  text-decoration: none;
-  color: white;
-  font-size: 20px;
-`;
-const Leaderboard = styled(NavLink)`
-  position: absolute;
-  top: 40px;
-  right: 180px;
-  font-family: var(--font);
-  text-decoration: none;
-  color: white;
-  font-size: 20px;
-`
-const SignInOut = styled.div`
-  position: absolute;
-  top: 30px;
-  right: 50px;
-`;
 const AvatarWrapper = styled(NavLink)`
   position: absolute;
   top: 24px;
@@ -102,7 +79,6 @@ const Pokeball = styled.div`
   height: 150px;
   width: 150px;
 `;
-
 const Image = styled.img`
   height: 157px;
   width: 157px;
@@ -110,5 +86,28 @@ const Image = styled.img`
   top: -2px;
   left: -4px;
   z-index: 100;
+`;
+const Admin = styled(NavLink)`
+  position: absolute;
+  top: 40px;
+  right: 350px;
+  font-family: var(--font);
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+`;
+const Leaderboard = styled(NavLink)`
+  position: absolute;
+  top: 40px;
+  right: 180px;
+  font-family: var(--font);
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+`
+const SignInOut = styled.div`
+  position: absolute;
+  top: 30px;
+  right: 50px;
 `;
 export default Header;

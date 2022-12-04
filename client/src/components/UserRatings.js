@@ -3,8 +3,12 @@ import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
 
 const UserRatings = ({ category, ratings, setRatings, currentRatings }) => {
+  // State to track user clicked value on Stars array
   const [currentValue, setCurrentValue] = useState(currentRatings);
+  // State to track star index during mouseover
   const [hoverValue, setHoverValue] = useState(undefined);
+
+  // Create a temporary array with 5 elements to be filled with stars later
   const stars = Array(5).fill(0);
   const colors = {
     yellow: "#FDD85D",

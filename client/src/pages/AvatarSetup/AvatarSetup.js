@@ -9,8 +9,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
-import { UserContext } from "../contexts/UserContext";
-import { AuthContext } from "../contexts/AuthContext";
+import { UserContext } from "../../contexts/UserContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const AvatarSetup = () => {
   const { cred } = useContext(AuthContext);

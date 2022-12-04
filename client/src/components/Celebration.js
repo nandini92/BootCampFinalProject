@@ -1,6 +1,6 @@
 import { Dialog } from "@material-ui/core";
 import styled from "styled-components";
-import celebration from "../assets/images/Celebration.gif";
+import celebration from "../images/Celebration.gif";
 import { AdvancedImage } from "@cloudinary/react";
 
 const Celebration = ({ userAvatar, open, setOpen, setLevelUpAnimation }) => {

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import mew from "../assets/images/mew.gif";
+import mew from "./mew.gif";
 
 const Error = () => {
     return (

@@ -1,25 +1,26 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useJsApiLoader  } from "@react-google-maps/api";
+import styled from "styled-components";
 import { FiPlus, FiArrowLeft } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
 import Tippy from '@tippyjs/react';
 
-import { UserContext } from "../contexts/UserContext";
-import { QuestsContext } from "../contexts/QuestsContext";
-import { AuthContext } from "../contexts/AuthContext";
+import { UserContext } from "../../contexts/UserContext";
+import { QuestsContext } from "../../contexts/QuestsContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 import Welcome from "./Welcome";
 import QuestMap from "./QuestMap";
-import QuestList from "./QuestList";
+import QuestList from "../../components/QuestList";
 import NewQuest from "./NewQuest";
 import SingleQuest from "./SingleQuest";
 import Confirmation from "./Confirmation";
-import Celebration from "../assets/Celebration";
+import Celebration from "../../components/Celebration";
 
-import styled from "styled-components";
 
 const Home = () => {
+  // cred : stores API keys for googleMaps and Cloudinary.
   const { cred } = useContext(AuthContext);
   const {
     newUser,
@@ -48,20 +49,21 @@ const Home = () => {
     libraries,
   });
 
-  // Redirect to Avatar setup page in case new user
+  // newUser is set in UserContext upon first log in. Effect will redirect to AvatarSetup page for user to select their avatar.
   useEffect(() => {
     if (newUser === true) {
       navigate("/avatar");
     }
   }, [newUser]);
 
-  // Display level up animation 
+  // When level up is triggered, open Celebration dialog to display level up notification.
   useEffect(() => {
     if(levelUpAnimation === true){
       setOpen(true);
     }
   }, [levelUpAnimation])
 
+  // handleNavigation : func to set module component on home page depending on nav buttons clicked. User can either view QuestList, NewQuest or SingleQuest based on these state combinations.
   const handleNavigation = (nav) => {
     if(nav === "add"){
       setNewQuest(true);
@@ -111,6 +113,7 @@ const Home = () => {
           </Options>
           <Wrapper>
             <div>
+              {/* Display brief user welcome text only above the Quest List module. */}
               {loggedIn &&
                 newQuest === false &&
                 !selectedQuest &&
@@ -118,7 +121,9 @@ const Home = () => {
                   <p>Hello {loggedIn.handler}. Choose a quest to begin!</p>
                 )}
               <Pages>
+                {/* Display verbose user welcome text to unsigned In user in module */}
                 {!loggedIn && <Welcome loggedIn={loggedIn} />}
+                {/* Display new quest creation form in module*/}
                 {newQuest === true &&
                   !selectedQuest &&
                   loggedIn &&
@@ -133,9 +138,11 @@ const Home = () => {
                       setConfirmation={setConfirmation}
                     />
                   )}
+                {/* Display single quest in module based on quest selected in Quest List component*/}
                 {selectedQuest && confirmation === false && (
                   <SingleQuest selectedQuest={selectedQuest} />
                 )}
+                {/* Display all quests in module */}
                 {loggedIn &&
                   newQuest === false &&
                   !selectedQuest &&
@@ -151,10 +158,12 @@ const Home = () => {
                       )}
                     </>
                   )}
+                {/* Display confirmation in module only after new quest is created */}
                 {confirmation === true && <Confirmation />}
               </Pages>
             </div>
           </Wrapper>
+          {/* Google Maps display in background */}
           <QuestMap
             loggedIn={loggedIn}
             quests={quests}
@@ -165,6 +174,7 @@ const Home = () => {
             newMarker={newMarker}
             setConfirmation={setConfirmation}
           />
+          {/* Pop up to notify user when level up has occurred */}
           <Celebration
             open={open}
             setOpen={setOpen}
@@ -186,6 +196,50 @@ const Map = styled.div`
   top: 100px;
   height: 89vh;
   width: 100vw;
+`;
+const Wrapper = styled.div`
+  position: absolute;
+  z-index: 5;
+  top: 95px;
+  left: 20px;
+  width: 550px;
+  max-height: 90%;
+  padding: 20px 40px;
+  border-radius: 15px;
+  background-color: var(--color-grey);
+  box-shadow: 0px 0px 10px var(--color-purple);
+
+  animation: slideOut ease-in 0.3s;
+  @keyframes slideOut {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+`;
+const Pages = styled.div`
+  position: relative;
+  overflow: hidden;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  max-height: 65vh;
+  padding: 10px;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px var(--color-grey); 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: var(--color-blue); 
+}
 `;
 const Options = styled.div`
   position: absolute;
@@ -232,48 +286,5 @@ const Back = styled(FiArrowLeft)`
     transform: scale(1.2);
   }
 `;
-const Wrapper = styled.div`
-  position: absolute;
-  z-index: 5;
-  top: 95px;
-  left: 20px;
-  width: 550px;
-  max-height: 90%;
-  padding: 20px 40px;
-  border-radius: 15px;
-  background-color: var(--color-grey);
-  box-shadow: 0px 0px 10px var(--color-purple);
 
-  animation: slideOut ease-in 0.3s;
-  @keyframes slideOut {
-    0% {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-`;
-const Pages = styled.div`
-  position: relative;
-  overflow: hidden;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  max-height: 65vh;
-  padding: 10px;
-
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 10px var(--color-grey); 
-}
- 
-::-webkit-scrollbar-thumb {
-  background: var(--color-blue); 
-}
-`;
 export default Home;

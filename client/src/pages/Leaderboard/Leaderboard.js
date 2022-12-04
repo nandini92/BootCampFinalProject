@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import {UsersContext} from "../contexts/UsersContext";
+import {UsersContext} from "../../contexts/UsersContext";
 
 const Leaderboard = () => {
   const { users } = useContext(UsersContext);
@@ -25,7 +25,7 @@ const Leaderboard = () => {
           {sortedUsers && 
           sortedUsers.map((user, i) => {
            return i < 14 && (
-              <Line>
+              <Line key={user._id}>
                 <Link to={`/profile/${user._id}`}>{user.handler}</Link>
                 <Link to={`/profile/${user._id}`}>{user.karma}</Link>
               </Line>

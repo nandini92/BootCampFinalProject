@@ -1,22 +1,23 @@
 import { GoogleMap, MarkerF, DirectionsRenderer } from "@react-google-maps/api";
 import {  useMemo, useContext, useState, useEffect } from "react";
-import { UserContext } from "../contexts/UserContext";
-import MapsStyles from "../assets/MapStyles"
+import { UserContext } from "../../contexts/UserContext";
+import MapsStyles from "./MapStyles"
 
-const QuestMap = ({quests, selectedQuest, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
+const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
   const { loggedIn } = useContext(UserContext);
   const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
   const [directions, setDirections] = useState();
 
-  // Google maps display settins
-  // NOTE: To ensure that map does not recenter each time map clicked
+  // Google maps display settings
   const containerStyle = {
     width: "100%",
     height: "100%",
   };
+  // useMemo: To ensure that map does not recenter each time map clicked
   const center = useMemo(() => userPosition, []);
   const zoom = 14;
   const options = {
+    minZoom: 13,
     zoomControl: false,
     streetViewControl: false,
     mapTypeControl: false,
@@ -34,7 +35,7 @@ const QuestMap = ({quests, selectedQuest, setSelectedQuest, setNewQuest, setNewM
     });
   }, []);
 
-  // User DirectionsService to get walking directions
+  // Use DirectionsService to get walking directions
   const showDirections = async (coords) => {
     if (coords !== undefined && userPosition !== undefined) {
       const directionsService = new window.google.maps.DirectionsService();
@@ -47,7 +48,7 @@ const QuestMap = ({quests, selectedQuest, setSelectedQuest, setNewQuest, setNewM
     }
   };
 
-  // Clear states when map is randomly clicked
+  // Clear states when map is randomly clicked and sets new quest coordinates to clicked location
   const clearMap = () => {
     setDirections();
     setSelectedQuest();

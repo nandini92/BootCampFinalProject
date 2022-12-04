@@ -4,9 +4,12 @@ import { useState } from "react";
 
 const ReportUser = ({ open, setOpen, id }) => {
   const [formData, setFormData] = useState();
+
+  // States to control display on error / confirmation banner once report is sent
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
+  // Send form details containing brief text on issue
   const handleSubmit = (e) => {
     e.preventDefault();
 

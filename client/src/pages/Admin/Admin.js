@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import {UserContext} from "../contexts/UserContext";
-import {UsersContext} from "../contexts/UsersContext";
+import {UserContext} from "../../contexts/UserContext";
+import {UsersContext} from "../../contexts/UsersContext";
 
 const Admin = () => {
   const { loggedIn } = useContext(UserContext);

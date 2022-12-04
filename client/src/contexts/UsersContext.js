@@ -7,8 +7,7 @@ export const UsersProvider = ({ children }) => {
   const { cld } = useContext(UserContext);
   const [users, setUsers] = useState();
 
-  // TODO: How to pull data set based on location. Not scalable if user zooms out.
-  // ALT: restrict zoom out on map.
+  // Fetch all users from database
   useEffect(() => {
     fetch("/users")
       .then((res) => res.json())
@@ -31,12 +30,10 @@ export const UsersProvider = ({ children }) => {
         .catch((error) => console.log(error));
   }
 
-  
   // Get all cloudinary public Ids for avatars
   const getUsersAvatar = (user) => {
       return cld.image(user.avatar);
   }
-
 
   // Get all users active quests
   const getUsersQuests = (id) => {

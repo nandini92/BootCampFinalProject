@@ -3,13 +3,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import GlobalStyles from "./GlobalStyles";
 import Header from "./components/Header";
-import Home from "./components/Home";
-import MyProfile from "./components/MyProfile";
-import Profile from "./components/Profile";
-import AvatarSetup from "./components/AvatarSetup";
-import Leaderboard from "./components/Leaderboard";
-import Admin from "./components/Admin";
-import Error from "./components/Error";
+import Home from "./pages/Home/Home";
+import MyProfile from "./pages/MyProfile/MyProfile";
+import Profile from "./pages/Profile/Profile";
+import AvatarSetup from "./pages/AvatarSetup/AvatarSetup";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
+import Admin from "./pages/Admin/Admin";
+import Error from "./pages/Error/Error";
 import Loading from "./components/Loading";
 
 const App = () => {

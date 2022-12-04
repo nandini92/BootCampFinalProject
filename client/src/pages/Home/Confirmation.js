@@ -11,8 +11,8 @@ const Confirmation = () => {
 };
 
 const Wrapper = styled.div`
-  height: 45vh;
-  width: 35vw;
+  height: 37vh;
+  width: 100%;
   font-family: var(--font);
   color: var(--color-dark-grey);
   padding: 10px;

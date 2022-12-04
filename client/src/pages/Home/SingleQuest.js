@@ -4,9 +4,9 @@ import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 import { BeatLoader } from "react-spinners";
 
-import { UserContext } from "../contexts/UserContext";
-import { UsersContext } from "../contexts/UsersContext";
-import { QuestsContext } from "../contexts/QuestsContext";
+import { UserContext } from "../../contexts/UserContext";
+import { UsersContext } from "../../contexts/UsersContext";
+import { QuestsContext } from "../../contexts/QuestsContext";
 
 const SingleQuest = ({ selectedQuest }) => {
   const { cld, loggedIn } = useContext(UserContext);
@@ -23,7 +23,7 @@ const SingleQuest = ({ selectedQuest }) => {
   const [ownerAvatar, setOwnerAvatar] = useState();
   const [success, setSuccess] = useState(false);
 
-  // Fetch quest details from database
+  // Fetch selected quest details from database
   useEffect(() => {
     fetch(`/quest/${selectedQuest}`)
       .then((res) => res.json())
@@ -81,7 +81,9 @@ const SingleQuest = ({ selectedQuest }) => {
               && (
                 <Button
                   onClick={() => {
+                    // Trigger fetch to pull quest updates from database
                     setSuccess(
+                      // Trigger post to add user to participant list on quest 
                       addQuestParticipants(
                         selectedQuest,
                         loggedIn._id,

@@ -12,13 +12,15 @@ const NewQuest = ({
 }) => {
   const [formData, setFormData] = useState();
   const [error, setError] = useState(false);
+
+  // Store Autocomplete address
   const location = useRef();
   
   // Form for creating new Quest
   const formSubmit = (e) => {
     e.preventDefault();
     
-    // CASE 1: User selected create new quest from side bar
+    // CASE 1: User selected create new quest from module. Google react autocomplete library sets the address which  needs to be geocoded(server) for marker to be placed on google map.
     if (!newMarker) {
       fetch(`/new-quest/${loggedIn._id}`, {
         method: "POST",
@@ -51,7 +53,7 @@ const NewQuest = ({
           }
         })
         .catch((error) => setError(error));
-      // CASE 2: User dropped a pin on map to create Quest
+    // CASE 2: User dropped a pin on map to create Quest. Googlemaps provides the coordinates of pin but this will be reverse geocoded(server) for address to be displayed in Single Quest module.
     } else {
       fetch(`/new-quest/${loggedIn._id}`, {
         method: "POST",
@@ -111,6 +113,7 @@ const NewQuest = ({
           required
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
+        {/*User will have option of inputting address manually if pin was not dropped on map. Autocomplete library provides drop down for user to select properly formatted address. */}
         {!newMarker && (
           <Autocomplete>
             <Input
@@ -141,6 +144,7 @@ const NewQuest = ({
           onChange={(e) => handleChange(e.target.id, e.target.value)}
         />
         <Button>Create Your Quest!</Button>
+        {/* Display error message in case failed to create new quest */}
         {error !== false && <Error>{error.message}</Error>}
       </QuestForm>
     </>

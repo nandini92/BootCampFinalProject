@@ -198,6 +198,7 @@ const completeQuest = async(req,res) => {
         const updatePromise = [];
         const karma = questDetails.karma/questDetails.participantIds.length;
 
+        // Update each participant in quest with additional karma and task points towards next level
         questDetails.participantIds.forEach((participant) => {
             updatePromise.push(db.collection("users").updateOne(
                 {_id: participant} , {$inc: {karma: karma}, $inc: {taskPoints: questDetails.difficulty * 10}, $set: {updatedAt: date}}));

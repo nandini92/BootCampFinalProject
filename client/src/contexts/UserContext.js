@@ -19,14 +19,14 @@ export const UserProvider = ({ children }) => {
   // Authenticate user 
   const { user, isAuthenticated } = useAuth0();
 
-  // Create a Cloudinary instance for avatar setup
+  // Create a Cloudinary instance for avatar setup. 
   const cld = new Cloudinary({
     cloud: {
       cloudName: cred.cloudName,
     },
   });
 
-  //Get logged in user details
+  //Get logged in user details. This will retrigger every time there is a quest creation/deletion, user has been added to a quest, level up has occurred.
   useEffect(() => {
     if (isAuthenticated === true) { 
       fetch("/user", {

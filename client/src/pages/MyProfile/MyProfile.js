@@ -1,25 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
 import { CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tippy from '@tippyjs/react';
 
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
-import QuestAdmin from "./QuestAdmin";
-import QuestList from "./QuestList";
-import UserRatings from "./UserRatings";
-import Celebration from "../assets/Celebration";
+import QuestAdmin from "../../components/QuestAdmin";
+import QuestList from "../../components/QuestList";
+import UserRatings from "../../components/UserRatings";
+import Celebration from "../../components/Celebration";
 
 const MyProfile = () => {
   const { loggedIn, userQuests, userAvatar, levelUpAnimation, actions: {setLevelUpAnimation} } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Set theme for ThemeProvider. This will be used for circular progress color palette
+  // Set theme for ThemeProvider. This will be used to set color for Circular Progress
   const theme = createTheme({
     palette: {
       primary: {
@@ -28,14 +27,12 @@ const MyProfile = () => {
     },
   });
 
-  // Display level up animation 
+  // When level up is triggered, open Celebration dialog to display level up notification.
   useEffect(() => {
     if(levelUpAnimation === true){
       setOpen(true);
     }
   }, [levelUpAnimation])
-
-  
 
   if (loggedIn && userAvatar) {
     return (
@@ -51,6 +48,7 @@ const MyProfile = () => {
                   {loggedIn.taskPoints &&
                   <ThemeProvider theme={theme}>
                     <Tippy content={<TaskPoints>{loggedIn.taskPoints} task points</TaskPoints>}>
+                      {/* Points are accumulated from completed quests. The remainder when divided by 100 determines the progress to the next level */}
                     <LevelProgress variant="determinate" value={loggedIn.taskPoints % 100} size="180px" color="primary" />
                     </Tippy>
                   </ThemeProvider>
@@ -65,6 +63,7 @@ const MyProfile = () => {
               </Info>
               <Info>
                 <p>Report Card</p>
+                {/* ratings are used to store updated ratings value. Since user should not be able to rate themselves. Setting this to null as placeholder */}
                 <UserRatings category="charisma" ratings={null} currentRatings={loggedIn.ratings?.charisma}/>
                 <UserRatings category="intelligence" ratings={null} currentRatings={loggedIn.ratings?.intelligence}/>
                 <UserRatings category="wisdom" ratings={null} currentRatings={loggedIn.ratings?.wisdom}/>
@@ -76,6 +75,7 @@ const MyProfile = () => {
             {userQuests && 
             <>
               <Panel>
+                {/* Display all quests user has created. User has option to delete or complete quests from here */}
               <SubTitle>My Quests</SubTitle>
               {userQuests.questsOwned.length === 0
               ?<MissingQuest>
@@ -89,6 +89,7 @@ const MyProfile = () => {
               }
               </Panel>
               <Panel>
+                {/* Display all quests user is currently on. TO DO: User should be able to leave quest from here */}
               <SubTitle>Quests I'm on</SubTitle>
               {userQuests.questsOn.length === 0
               ?<MissingQuest>
@@ -96,7 +97,7 @@ const MyProfile = () => {
               </MissingQuest>
               :<MyQuests>
                 <Scroll>
-                <QuestList quests={userQuests.questsOn} setSelectedQuest={null} />
+                <QuestList quests={userQuests.questsOn} />
                 </Scroll>
               </MyQuests>
               }
@@ -104,6 +105,7 @@ const MyProfile = () => {
             </>
             }
             </Panels>
+            {/* Pop up to notify user when level up has occurred */}
             <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
           </Body>
         </Wrapper>
@@ -231,6 +233,7 @@ const MissingQuest = styled.div`
   justify-content: center;
   border-radius: 15px;
   box-shadow: 0px 0px 8px var(--color-blue);
+  background-color: var(--color-grey);
   margin: 20px;
 `;
 
