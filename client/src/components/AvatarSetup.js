@@ -70,7 +70,7 @@ const AvatarSetup = () => {
               <Nav key={avatar.publicID} onClick={() => {
                   const type= avatar.publicID.split("/")[2].split("_")[1]; 
                   
-                  createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 500})
+                  createUser({firstName: user.given_name, lastName: user.family_name, handler: user.nickname, email: user.email, avatar: avatar.publicID, avatarType: type, profileImg: user.picture, level: 1, karma: 500, admin: false})
                   .then(res => setSuccess(res))
                   .catch(err => setError(true));
               }} >

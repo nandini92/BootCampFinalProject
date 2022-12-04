@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import pikachu from "../assets/images/Pikachu.PNG";
+import mew from "../assets/images/mew.gif";
 
 const Error = () => {
     return (
     <Wrapper>
         <Body>
-        <Image src={pikachu} />
+        <Image src={mew} />
         <Text>404</Text>
         <Text>OOPS... WE COULDN'T FIND THE PAGE YOU WERE LOOKING FOR.</Text>
         </Body>
@@ -15,7 +15,7 @@ const Error = () => {
 const Wrapper = styled.div`
     height: 100vh;
     width: 100vw;
-    background-color: var(--color-yellow);
+    background: linear-gradient(120deg, white, var(--color-blue));
     display: flex;
     justify-content: center;
 `;

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FiXCircle, FiCheckCircle } from "react-icons/fi";
 
@@ -41,7 +42,7 @@ const QuestAdmin = ({ quests }) => {
                           const userInfo = users.filter((otherUser) => {
                             return otherUser._id === id && otherUser;
                           });
-                          return <p key={id}>{userInfo[0].handler}</p>;
+                          return <Hero key={id} to={`/profile/${id}`}>{userInfo[0].handler}</Hero>;
                         })}
                     </Heroes>
                   )}
@@ -102,13 +103,15 @@ const Heroes = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+`;
 
-  p {
+const Hero = styled(Link)`
     color: white;
     padding: 10px;
+    margin: 5px;
     border-radius: 5px;
     background-color: var(--color-purple);
-  }
+    text-decoration: none;
 `;
 const End = styled.div`
   display: flex;

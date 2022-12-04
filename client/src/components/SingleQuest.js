@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 import { BeatLoader } from "react-spinners";
@@ -48,7 +48,7 @@ const SingleQuest = ({ selectedQuest }) => {
             {ownerAvatar && <Pokemon cldImg={ownerAvatar} />}
           </AvatarWrapper>
           <Desc>
-            <Title>{owner?.handler} invites you on {quest.title}</Title>
+            <Title>{owner?.handler} invites you to {quest.title}</Title>
             <p>
               <Label>Description:</Label> {quest.description}
             </p>
@@ -68,7 +68,7 @@ const SingleQuest = ({ selectedQuest }) => {
                     const userInfo = users.filter((otherUser) => {
                       return otherUser._id === id && otherUser;
                     });
-                    return <p key={id}>{userInfo[0].handler}</p>;
+                    return <Hero key={id} to={`/profile/${id}`}>{userInfo[0].handler}</Hero>;
                   })}
               </Heroes>
             )}
@@ -77,7 +77,8 @@ const SingleQuest = ({ selectedQuest }) => {
             <Karma>{quest.karma}</Karma>
             {quest.participants > 0 &&
               loggedIn._id !== quest.ownerId &&
-              success === false && (
+              !quest?.participantIds?.includes(loggedIn._id)
+              && (
                 <Button
                   onClick={() => {
                     setSuccess(
@@ -100,9 +101,9 @@ const SingleQuest = ({ selectedQuest }) => {
 };
 
 const QuestWrapper = styled.div`
-  width: 90%;
+  width: 95%;
   height: 100%;
-  margin: 20px;
+  margin: 15px;
   font-family: var(--font);
   color: var(--color-dark-grey);
   padding: 10px;
@@ -113,11 +114,10 @@ const QuestWrapper = styled.div`
 const Loading = styled(BeatLoader)`
   align-self: center;
 `;
-const AvatarWrapper = styled(NavLink)`
+const AvatarWrapper = styled(Link)`
   align-self: center;
-  margin: 20px 0px;
   border-radius: 50%;
-  box-shadow: 0px 0px 10px var(--color-purple);
+  box-shadow: 0px 0px 10px var(--color-dark-grey);
   height: 150px;
   width: 150px;
 `;
@@ -151,20 +151,20 @@ const Heroes = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-
-  p {
+`;
+const Hero = styled(Link)`
     color: white;
     padding: 10px;
+    margin: 5px;
     border-radius: 5px;
     background-color: var(--color-purple);
-  }
+    text-decoration: none;
 `;
 const Karma = styled.div`
   align-self: flex-end;
   margin: 15px;
   border-radius: 15px;
   background-color: var(--color-blue);
-  box-shadow: 2px 5px 10px var(--color-dark-grey);
   height: 80px;
   width: 80px;
   text-align: center;

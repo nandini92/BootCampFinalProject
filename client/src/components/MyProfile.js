@@ -82,7 +82,9 @@ const MyProfile = () => {
                 <Button onClick={() => navigate("/")}>CLICK TO CREATE A QUEST!</Button>
               </MissingQuest>
               :<MyQuests>
+                <Scroll>
                   <QuestAdmin quests={userQuests.questsOwned} />
+                  </Scroll>
                 </MyQuests>
               }
               </Panel>
@@ -93,7 +95,9 @@ const MyProfile = () => {
                 <Button onClick={() => navigate("/")}>CLICK TO JOIN A QUEST!</Button>
               </MissingQuest>
               :<MyQuests>
+                <Scroll>
                 <QuestList quests={userQuests.questsOn} setSelectedQuest={null} />
+                </Scroll>
               </MyQuests>
               }
               </Panel>
@@ -130,15 +134,18 @@ const TaskPoints = styled.span`
 
 // DIVS
 const Wrapper = styled.div`
-  position: absolute;
-  top: 200px;
+  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: var(--font);
+  background: linear-gradient(120deg, white, var(--color-blue));
 `;
 const Body = styled.div`
+  position: absolute;
+  min-width: 1137px;
+  top: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -152,8 +159,8 @@ const UserDetails = styled.div`
   height: 50%;
   justify-content: space-evenly;
   border-radius: 15px;
-  background: linear-gradient(120deg, white, var(--color-blue));
   box-shadow: 0px 0px 10px var(--color-blue);
+  background-color: var(--color-grey);
 `;
 const Info = styled.div`
   display: flex;
@@ -190,17 +197,34 @@ const Panel = styled.div`
 `
 const MyQuests = styled.div`
   width: 100%;
-  max-height: 25vh;
+  max-height: 20vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 15px;
   margin: 20px;
   box-shadow: 0px 0px 8px var(--color-blue);
+  background-color: var(--color-grey);
+`;
+const Scroll = styled.div`
+  padding: 10px;
+  margin: 10px;
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
-`;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px var(--color-grey); 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: var(--color-blue); 
+}
+`
 const MissingQuest = styled.div`
   display: flex;
   flex-direction: column;

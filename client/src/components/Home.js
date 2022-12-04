@@ -62,6 +62,21 @@ const Home = () => {
     }
   }, [levelUpAnimation])
 
+  const handleNavigation = (nav) => {
+    if(nav === "add"){
+      setNewQuest(true);
+      setSelectedQuest();
+    } else if (nav === "back"){
+      setNewQuest(false);
+      setSelectedQuest();
+    } else if (nav === "clear"){
+      setNewQuest(false);
+      setSelectedQuest();
+      setNewMarker();
+      setConfirmation(false);
+    }
+  }
+
   return (
     <>
       {!isLoaded ? (
@@ -70,73 +85,75 @@ const Home = () => {
         <Map>
           <Options>
             {selectedQuest && (
-              <Tippy content={<p>Back to Quest List</p>}>
-              <Back
-                onClick={() => {
-                  setNewQuest(false);
-                  setSelectedQuest();
-                }}
-              />
+              <Tippy content={<Instructions>Back to Quest List</Instructions>}>
+                <Button onClick={() => handleNavigation("back")} >
+                  <Back />
+                </Button>
               </Tippy>
             )}
             {newQuest === true ? (
-              <Tippy content={<p>Back to Quest List</p>}>
-              <Back
-                onClick={() => {
-                  setNewQuest(false);
-                  setSelectedQuest();
-                  setNewMarker();
-                  setConfirmation(false);
-                }}
-              />
+              <Tippy content={<Instructions>Back to Quest List</Instructions>}>
+                <Button onClick={() => handleNavigation("clear")}>
+                  <Back />
+                </Button>
               </Tippy>
             ) : (
               <>
                 {loggedIn && (
-                  <Tippy content={<p>Create New Quest</p>}>
-                  <Add
-                    onClick={() => {
-                      setNewQuest(true);
-                      setSelectedQuest();
-                    }}
-                  />
+                  <Tippy content={<Instructions>Create New Quest</Instructions>}>
+                    <Button onClick={() => handleNavigation("add")}>
+                      <Add />
+                    </Button>
                   </Tippy>
                 )}
               </>
             )}
           </Options>
           <Wrapper>
-            <Pages>
-              {!loggedIn && <Welcome loggedIn={loggedIn}/>}
-              {newQuest === true && !selectedQuest && loggedIn  && confirmation === false && (
-                <NewQuest
-                  cred={cred}
-                  loggedIn={loggedIn}
-                  setQuests={setQuests}
-                  quests={quests}
-                  newMarker={newMarker}
-                  setUserUpdate={setUserUpdate}
-                  setConfirmation={setConfirmation}
-                />
-              )}
-              {selectedQuest  && confirmation === false && <SingleQuest selectedQuest={selectedQuest} />}
-              {loggedIn && newQuest === false && !selectedQuest && confirmation === false && (
-                <>{ quests.length > 0
-                  ?<>
-                    <p>Hello {loggedIn.handler}. Choose a quest to begin!</p>
-                    <QuestList
-                    quests={quests}
-                    setSelectedQuest={setSelectedQuest}
+            <div>
+              {loggedIn &&
+                newQuest === false &&
+                !selectedQuest &&
+                confirmation === false && (
+                  <p>Hello {loggedIn.handler}. Choose a quest to begin!</p>
+                )}
+              <Pages>
+                {!loggedIn && <Welcome loggedIn={loggedIn} />}
+                {newQuest === true &&
+                  !selectedQuest &&
+                  loggedIn &&
+                  confirmation === false && (
+                    <NewQuest
+                      cred={cred}
+                      loggedIn={loggedIn}
+                      setQuests={setQuests}
+                      quests={quests}
+                      newMarker={newMarker}
+                      setUserUpdate={setUserUpdate}
+                      setConfirmation={setConfirmation}
                     />
-                  </>
-                  : <Welcome loggedIn={loggedIn}/>
-                }</>
-              )}
-              {
-                confirmation === true && 
-                <Confirmation />
-              }
-            </Pages>
+                  )}
+                {selectedQuest && confirmation === false && (
+                  <SingleQuest selectedQuest={selectedQuest} />
+                )}
+                {loggedIn &&
+                  newQuest === false &&
+                  !selectedQuest &&
+                  confirmation === false && (
+                    <>
+                      {quests.length > 0 ? (
+                        <QuestList
+                          quests={quests}
+                          setSelectedQuest={setSelectedQuest}
+                        />
+                      ) : (
+                        <Welcome loggedIn={loggedIn} />
+                      )}
+                    </>
+                  )}
+                {confirmation === true && <Confirmation />}
+              </Pages>
+            </div>
           </Wrapper>
           <QuestMap
             loggedIn={loggedIn}
@@ -148,7 +165,12 @@ const Home = () => {
             newMarker={newMarker}
             setConfirmation={setConfirmation}
           />
-          <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
+          <Celebration
+            open={open}
+            setOpen={setOpen}
+            userAvatar={userAvatar}
+            setLevelUpAnimation={setLevelUpAnimation}
+          />
         </Map>
       )}
     </>
@@ -167,16 +189,27 @@ const Map = styled.div`
 `;
 const Options = styled.div`
   position: absolute;
+  top: 25px;
   z-index: 10;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
+const Button = styled.div`
+  margin: 20px;
+`;
+const Instructions = styled.span`
+  font-family: var(--font);
+  font-size: smaller;
+  color: var(--color-dark-grey);
+  background-color: var(--color-grey);
+  border-radius: 5px;
+  padding: 1px;
+`;
 const Add = styled(FiPlus)`
   border-radius: 5px;
   border: 2px solid var(--color-dark-grey);
   padding: 5px;
-  margin: 20px;
   background-color: var(--color-yellow);
   box-shadow: 0px 0px 5px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
@@ -190,7 +223,6 @@ const Back = styled(FiArrowLeft)`
   border-radius: 5px;
   border: 2px solid var(--color-dark-grey);
   padding: 5px;
-  margin: 20px;
   background-color: var(--color-red);
   box-shadow: 0px 0px 5px var(--color-dark-grey);
   transition: transform 0.3s ease-in-out;
@@ -203,11 +235,11 @@ const Back = styled(FiArrowLeft)`
 const Wrapper = styled.div`
   position: absolute;
   z-index: 5;
-  top: 70px;
+  top: 95px;
   left: 20px;
-  min-width: 30%;
+  width: 550px;
   max-height: 90%;
-  padding: 20px;
+  padding: 20px 40px;
   border-radius: 15px;
   background-color: var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-purple);
@@ -230,5 +262,18 @@ const Pages = styled.div`
   overflow-y: scroll;
   scroll-behavior: smooth;
   max-height: 65vh;
+  padding: 10px;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px var(--color-grey); 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: var(--color-blue); 
+}
 `;
 export default Home;

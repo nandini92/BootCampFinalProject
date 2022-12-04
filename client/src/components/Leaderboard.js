@@ -43,6 +43,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: linear-gradient(120deg, white, var(--color-blue));
 `;
 const Board = styled.div`
   position: relative;
@@ -52,6 +53,7 @@ const Board = styled.div`
   width: 40%;
   border-radius: 15px;
   box-shadow: 0px 0px 10px var(--color-dark-grey);
+  background-color: white;
 `;
 const UserList = styled.div`
   padding: 20px;

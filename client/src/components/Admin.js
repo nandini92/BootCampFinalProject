@@ -1,12 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import {UserContext} from "../contexts/UserContext";
 import {UsersContext} from "../contexts/UsersContext";
 
 const Admin = () => {
+  const { loggedIn } = useContext(UserContext);
   const { users } = useContext(UsersContext);
   const [reports, setReports] = useState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loggedIn) {
+      if (loggedIn.admin === false) {
+        navigate("/");
+      }
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     fetch("/reports")

@@ -32,6 +32,7 @@ export const QuestsProvider = ({ children }) => {
       .then((data) => {
         if (data.status === 201) {
           setQuestUpdate(selectedQuest);
+          setUserUpdate(userUpdate => userUpdate + 1);
           return true;
         } else {
           throw new Error(data.message);

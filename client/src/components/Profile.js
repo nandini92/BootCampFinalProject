@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
@@ -7,6 +7,7 @@ import { FiFrown } from "react-icons/fi";
 import Tippy from "@tippyjs/react";
 
 import { UsersContext } from "../contexts/UsersContext";
+import { UserContext } from "../contexts/UserContext";
 
 import QuestAdmin from "./QuestAdmin";
 import QuestList from "./QuestList";
@@ -14,7 +15,6 @@ import UserRatings from "./UserRatings";
 import ReportUser from "./ReportUser";
 
 const Profile = () => {
-  // TO FIX: When navigating directly to profile. User context is undefined. Why?
   const userId = useParams().id;
   const [user, setUser] = useState();
   const [avatar, setAvatar] = useState();
@@ -22,9 +22,18 @@ const Profile = () => {
   const [ratings, setRatings] = useState();
   const [open, setOpen] = useState(false);
   const [ratingsSent, setRatingsSent] = useState(false);
+  const { loggedIn } = useContext(UserContext);
   const {
     actions: { getOtherUser, getUsersAvatar, getUsersQuests },
   } = useContext(UsersContext);
+  const navigate = useNavigate();
+
+  // Logged in user should be redirected to MyProfile
+  useEffect(() => {
+    if(loggedIn){
+      loggedIn._id === userId && navigate('/my-profile');
+    }
+  }, [loggedIn, userId])
 
   // Get User info based on user id.
   useEffect(() => {
@@ -78,70 +87,90 @@ const Profile = () => {
                 </p>
                 <p>LEVEL {user.level}</p>
               </Info>
-              <Feedback onSubmit={(e) => handleSubmit(e)}>
+              <Outer>
+                <Feedback onSubmit={(e) => handleSubmit(e)}>
+                  <UserRatings
+                    category="charisma"
+                    ratings={ratings}
+                    setRatings={setRatings}
+                    currentRatings={user.ratings?.charisma}
+                  />
+                  <UserRatings
+                    category="intelligence"
+                    ratings={ratings}
+                    setRatings={setRatings}
+                    currentRatings={user.ratings?.intelligence}
+                  />
+                  <UserRatings
+                    category="wisdom"
+                    ratings={ratings}
+                    setRatings={setRatings}
+                    currentRatings={user.ratings?.wisdom}
+                  />
+                  <UserRatings
+                    category="dexterity"
+                    ratings={ratings}
+                    setRatings={setRatings}
+                    currentRatings={user.ratings?.dexterity}
+                  />
+                  <UserRatings
+                    category="strength"
+                    ratings={ratings}
+                    setRatings={setRatings}
+                    currentRatings={user.ratings?.strength}
+                  />
+                  <Ratings>
+                    {ratingsSent && <p>You've successfully rated this user!</p>}
+                    <SubmitDiv>
+                      <Button type="submit">Submit</Button>
+                    </SubmitDiv>
+                  </Ratings>
+                </Feedback>
                 <Tippy content={<p>Report User</p>}>
-                  <Report onClick={() => setOpen(true)}/>
+                  <IconWrap onClick={() => setOpen(true)}>
+                    <Report />
+                  </IconWrap>
                 </Tippy>
-                <UserRatings
-                  category="charisma"
-                  ratings={ratings}
-                  setRatings={setRatings}
-                  currentRatings={user.ratings?.charisma}
-                />
-                <UserRatings
-                  category="intelligence"
-                  ratings={ratings}
-                  setRatings={setRatings}
-                  currentRatings={user.ratings?.intelligence}
-                />
-                <UserRatings
-                  category="wisdom"
-                  ratings={ratings}
-                  setRatings={setRatings}
-                  currentRatings={user.ratings?.wisdom}
-                />
-                <UserRatings
-                  category="dexterity"
-                  ratings={ratings}
-                  setRatings={setRatings}
-                  currentRatings={user.ratings?.dexterity}
-                />
-                <UserRatings
-                  category="strength"
-                  ratings={ratings}
-                  setRatings={setRatings}
-                  currentRatings={user.ratings?.strength}
-                />
-                <Ratings>
-                  {ratingsSent && <p>You've successfully rated this user!</p>}
-                  <SubmitDiv>
-                    <Button type="submit">Submit</Button>
-                  </SubmitDiv>
-                </Ratings>
-              </Feedback>
+              </Outer>
             </UserDetails>
             <Panels>
-              {quests.questsOwned && (
-                <Panel>
-                  <SubTitle>Quests {user.handler} owns</SubTitle>
-                  <MyQuests>
-                    <QuestAdmin quests={quests.questsOwned} />
-                  </MyQuests>
-                </Panel>
-              )}
-              {quests.questsOn && (
-                <Panel>
-                  <SubTitle>Quests {user.handler} is on</SubTitle>
-                  <MyQuests>
-                    <QuestList
-                      quests={quests.questsOn}
-                      setSelectedQuest={null}
-                    />
-                  </MyQuests>
-                </Panel>
-              )}
+              <Panel>
+                {quests?.questsOwned?.length > 0 ? (
+                  <>
+                    <SubTitle>Quests {user.handler} owns</SubTitle>
+                    <MyQuests>
+                      <Scroll>
+                        <QuestAdmin quests={quests.questsOwned} />
+                      </Scroll>
+                    </MyQuests>
+                  </>
+                ) : (
+                  <SubTitle>
+                    {user.handler} has not created any quests!
+                  </SubTitle>
+                )}
+              </Panel>
+              <Panel>
+                {quests?.questsOn?.length > 0 ? (
+                  <>
+                    <SubTitle>Quests {user.handler} is on</SubTitle>
+                    <MyQuests>
+                      <Scroll>
+                        <QuestList
+                          quests={quests.questsOn}
+                          setSelectedQuest={null}
+                        />
+                      </Scroll>
+                    </MyQuests>
+                  </>
+                ) : (
+                  <SubTitle>
+                    {user.handler} is not on any quests currently!
+                  </SubTitle>
+                )}
+              </Panel>
             </Panels>
-            <ReportUser open={open} setOpen={setOpen} id={user._id}/>
+            <ReportUser open={open} setOpen={setOpen} id={user._id} />
           </Body>
         </Wrapper>
       </>
@@ -164,15 +193,18 @@ const SubTitle = styled.p`
 
 // DIVS
 const Wrapper = styled.div`
-  position: absolute;
-  top: 200px;
+  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: var(--font);
+  background: linear-gradient(120deg, white, var(--color-blue));
 `;
 const Body = styled.div`
+  position: absolute;
+  min-width: 1137px;
+  top: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -182,14 +214,14 @@ const UserDetails = styled.div`
   align-self: center;
   display: flex;
   width: 50%;
-  min-width: 650px;
+  min-width: 700px;
   height: 50%;
   justify-content: space-evenly;
   border-radius: 15px;
-  background: linear-gradient(120deg, white, var(--color-blue));
+  background-color: var(--color-grey);
   box-shadow: 0px 0px 8px var(--color-blue);
 `;
-const Info = styled.p`
+const Info = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -212,6 +244,10 @@ const AvatarWrapper = styled.div`
   height: 180px;
   width: 180px;
 `;
+const Outer = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 const Feedback = styled.form`
   display: flex;
   flex-direction: column;
@@ -238,20 +274,38 @@ const Panels = styled.div`
 `;
 const Panel = styled.div`
   width: 100%;
+  max-width: 750px;
   margin: 50px;
 `;
 const MyQuests = styled.div`
   width: 100%;
-  max-height: 16vh;
+  max-height: 20vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 15px;
   margin: 20px;
   box-shadow: 0px 0px 8px var(--color-blue);
+  background-color: var(--color-grey);
+`;
+const Scroll = styled.div`
+  padding: 10px;
+  margin: 10px;
   overflow: hidden;
   overflow-y: scroll;
   scroll-behavior: smooth;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px var(--color-grey); 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: var(--color-blue); 
+}
 `;
 const Ratings = styled.div`
   display: flex;
@@ -275,10 +329,12 @@ const Pokemon = styled(AdvancedImage)`
 
 // MISC
 const Button = styled.button`
-  margin: 15px 0px;
+  margin: 5px 0px;
+`;
+const IconWrap = styled.div`
 `;
 const Report = styled(FiFrown)`
-  align-self: flex-end;
+  align-self: flex-start;
   border-radius: 5px;
   padding: 5px;
   margin: 10px;

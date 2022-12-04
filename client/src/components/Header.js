@@ -24,6 +24,7 @@ const Header = () => {
         <Image src={pokeball} alt="pokeball"/>
         </Pokeball>
       }
+      {loggedIn.admin === true && <Admin to={"/admin"}>Admin</Admin>}
       {loggedIn && <Leaderboard to={"/leaderboard"}>Leaderboard</Leaderboard>}
       <SignInOut>
         <LoginButton />
@@ -45,6 +46,15 @@ const Wrapper = styled.div`
 const Logo = styled.img`
   position: absolute;
   height: 170px;
+`;
+const Admin = styled(NavLink)`
+  position: absolute;
+  top: 40px;
+  right: 350px;
+  font-family: var(--font);
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
 `;
 const Leaderboard = styled(NavLink)`
   position: absolute;
