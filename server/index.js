@@ -32,7 +32,7 @@ express()
   // Endpoint to add ratings
   .patch("/user/:id", addUserRatings)
   
-  // Endpoint to add ratings
+  // Endpoint to update user level
   .patch("/user-level/:id", updateUserLevel)
 
   // Endpoint to get logged in user details on log in
@@ -49,29 +49,26 @@ express()
 
   // Endpoint to get all user reports
   .get("/reports", getAllReports)
-
-  // Endpoint to get all user reports
-  .patch("/reports", markReport)
   
   // Endpoint to create new quest
   .post("/new-quest/:ownerId", createQuest)
   
-  // Endpoint to create new quest
+  // Endpoint to add participant to quest
   .patch("/quest/:id", addQuestParticipant)
 
-  // Endpoint to delete quest
+  // Endpoint to mark quest as complete
   .patch("/completed-quest/:id", completeQuest)
 
   // Endpoint to delete quest
   .delete("/quest/:id", deleteQuest)
 
-  // Endpoint to send particular quest
+  // Endpoint to get particular quest
   .get("/quest/:id", getQuest)
 
-  // Endpoint to send all quests
+  // Endpoint to get all logged in user's quests
   .get("/quests/:id", getUsersQuests)
 
-  // Endpoint to send all quests
+  // Endpoint to get all quests
   .get("/quests", getAllQuests)
 
   // Endpoint to get all first gen pokemon sprites
