@@ -11,7 +11,7 @@ import pokeball from "../assets/images/pokeball.svg";
 import logo from "../assets/images/Quest.png";
 
 const Header = () => {
-  const { userAvatar } = useContext(UserContext);
+  const { userAvatar, loggedIn } = useContext(UserContext);
 
   return (
     <Wrapper>
@@ -24,6 +24,8 @@ const Header = () => {
         <Image src={pokeball} alt="pokeball"/>
         </Pokeball>
       }
+      {loggedIn.admin === true && <Admin to={"/admin"}>Admin</Admin>}
+      {loggedIn && <Leaderboard to={"/leaderboard"}>Leaderboard</Leaderboard>}
       <SignInOut>
         <LoginButton />
         <LogoutButton />
@@ -45,6 +47,24 @@ const Logo = styled.img`
   position: absolute;
   height: 170px;
 `;
+const Admin = styled(NavLink)`
+  position: absolute;
+  top: 40px;
+  right: 350px;
+  font-family: var(--font);
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+`;
+const Leaderboard = styled(NavLink)`
+  position: absolute;
+  top: 40px;
+  right: 180px;
+  font-family: var(--font);
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+`
 const SignInOut = styled.div`
   position: absolute;
   top: 30px;
@@ -53,7 +73,7 @@ const SignInOut = styled.div`
 const AvatarWrapper = styled(NavLink)`
   position: absolute;
   top: 24px;
-left: calc(50vw - (150px/2));
+  left: calc(50vw - (150px/2));
   border-radius: 50%;
   background-color: var(--color-grey);
   box-shadow: 0px 0px 10px var(--color-dark-grey);
