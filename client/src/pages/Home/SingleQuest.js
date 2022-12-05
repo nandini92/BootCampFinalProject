@@ -68,7 +68,7 @@ const SingleQuest = ({ selectedQuest }) => {
                     const userInfo = users.filter((otherUser) => {
                       return otherUser._id === id && otherUser;
                     });
-                    return <Hero key={id} to={`/profile/${id}`}>{userInfo[0].handler}</Hero>;
+                    return (userInfo && <Hero key={id} to={`/profile/${id}`}>{userInfo[0]?.handler}</Hero>);
                   })}
               </Heroes>
             )}
