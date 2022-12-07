@@ -3,6 +3,8 @@
 ## Description
 Quest is a social media application which aims to encourage interactions outside of social media through gamification. Users are encouraged to level up their pokemons by meeting and socializing with other users in their neighbourhood through quests. Quests can be anything from a request to perform a task together to an invitation to explore a place to simply completing chores together.
 
+Watch a demo of this app here: https://www.linkedin.com/posts/nandini-asokan_concordia-bootcamp-finalproject-activity-7005643718493908993-ZxDV?utm_source=share&utm_medium=member_desktop
+
 ## Pages
 - **Avatar Setup**
 Users will be able to choose from a set of un-evolved pokemon sprites. Once chosen, they will be redirected to the home page with their new profile all setup.
