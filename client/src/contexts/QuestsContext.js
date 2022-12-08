@@ -6,7 +6,7 @@ export const QuestsContext = createContext();
 export const QuestsProvider = ({ children }) => {
   const {actions:{setUserUpdate}} = useContext(UserContext);
   const [quests, setQuests] = useState();
-  const [questUpdate, setQuestUpdate] = useState();
+  const [questUpdate, setQuestUpdate] = useState(1);
 
   // Get all quests in database
   useEffect(() => {
@@ -18,19 +18,19 @@ export const QuestsProvider = ({ children }) => {
   }, [questUpdate]);
 
   // Add user to quest 
-  const addQuestParticipants = (selectedQuest, user, participants) => {
+  const updateQuestParticipants = (selectedQuest, user, action) => {
     return fetch(`/quest/${selectedQuest}`, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ participant: user, participants: participants}),
+      body: JSON.stringify({ participant: user, action: action}),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {
-          setQuestUpdate(selectedQuest);
+          setQuestUpdate(questUpdate => questUpdate + 1);
           setUserUpdate(userUpdate => userUpdate + 1);
           return true;
         } else {
@@ -56,7 +56,7 @@ export const QuestsProvider = ({ children }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
-          setQuestUpdate(id);
+          setQuestUpdate(questUpdate => questUpdate + 1);
           setUserUpdate(userUpdate => userUpdate + 1);
         } else {
           throw new Error(data.message);
@@ -77,7 +77,7 @@ export const QuestsProvider = ({ children }) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
-            setQuestUpdate(id);
+            setQuestUpdate(questUpdate => questUpdate + 1);
             setUserUpdate(userUpdate => userUpdate + 1);
           } else {
             throw new Error(data.message);
@@ -87,7 +87,7 @@ export const QuestsProvider = ({ children }) => {
     }
 
   return (
-    <QuestsContext.Provider value={{quests, questUpdate, actions:{setQuests, addQuestParticipants, completeQuest, deleteQuest}}}>
+    <QuestsContext.Provider value={{quests, questUpdate, actions:{setQuests, updateQuestParticipants, completeQuest, deleteQuest}}}>
         {children}
     </QuestsContext.Provider>
   );

@@ -4,7 +4,7 @@ import { UserContext } from "./UserContext";
 export const UsersContext = createContext();
 
 export const UsersProvider = ({ children }) => {
-  const { cld } = useContext(UserContext);
+  const { cld, newUser } = useContext(UserContext);
   const [users, setUsers] = useState();
 
   // Fetch all users from database
@@ -14,7 +14,7 @@ export const UsersProvider = ({ children }) => {
       .then((data) => {
         setUsers(data.data);
       });
-  }, []);
+  }, [newUser]);
 
   // Get otherUser details
   const getOtherUser = (id) => {

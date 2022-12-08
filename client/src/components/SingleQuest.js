@@ -4,9 +4,9 @@ import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 import { BeatLoader } from "react-spinners";
 
-import { UserContext } from "../../contexts/UserContext";
-import { UsersContext } from "../../contexts/UsersContext";
-import { QuestsContext } from "../../contexts/QuestsContext";
+import { UserContext } from "../contexts/UserContext";
+import { UsersContext } from "../contexts/UsersContext";
+import { QuestsContext } from "../contexts/QuestsContext";
 
 const SingleQuest = ({ selectedQuest }) => {
   const { cld, loggedIn } = useContext(UserContext);
@@ -15,7 +15,7 @@ const SingleQuest = ({ selectedQuest }) => {
     actions: { getOtherUser },
   } = useContext(UsersContext);
   const {
-    actions: { addQuestParticipants },
+    actions: { updateQuestParticipants },
   } = useContext(QuestsContext);
 
   const [quest, setQuest] = useState();
@@ -84,10 +84,10 @@ const SingleQuest = ({ selectedQuest }) => {
                     // Trigger fetch to pull quest updates from database
                     setSuccess(
                       // Trigger post to add user to participant list on quest 
-                      addQuestParticipants(
+                      updateQuestParticipants(
                         selectedQuest,
                         loggedIn._id,
-                        quest.participants - 1
+                        "add"
                       )
                     );
                   }}
@@ -95,6 +95,24 @@ const SingleQuest = ({ selectedQuest }) => {
                   Sign Me Up!
                 </Button>
               )}
+              { quest?.participantIds?.includes(loggedIn._id)
+                && (
+                  <Button
+                    onClick={() => {
+                      // Trigger fetch to pull quest updates from database
+                      setSuccess(
+                        // Trigger post to remove user from participant list on quest 
+                        updateQuestParticipants(
+                          selectedQuest,
+                          loggedIn._id,
+                          "remove"
+                        )
+                      );
+                    }}
+                  >
+                    Exit Quest
+                  </Button>
+                )}
           </Bottom>
         </>
       )}

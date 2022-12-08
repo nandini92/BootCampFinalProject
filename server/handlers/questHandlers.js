@@ -97,26 +97,33 @@ const createQuest = async(req,res) => {
 }
 
 // Handler to add participant to quest
-const addQuestParticipant = async(req,res) => {
+const updateQuestParticipant = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
         const participant = req.body.participant;
-        const participants = req.body.participants;
+        const action = req.body.action;
         await client.connect();
         
         const db = await client.db("BootCamp_Final_Project");
         console.log("database connected!");
 
-        // Backend validation to verify if slot are available 
-        const quest = await db.collection("quests").findOne({_id: req.params.id});
+        let questUpdated = undefined;
 
-        // Throw error if no slots are available
-        if(quest.participants === 0 ){
-            return res.status(400).json({status:400, data:null, message: "ERROR: Quest is full. Unable to add user to quest."});   
+        if ( action === "remove" ){
+            // Remove user id from quest
+            questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {updatedAt: date}, $inc: {participants: 1}, $pull: {participantIds:  participant }});
+
+        } else if (action === "add" ) {
+            // Backend validation to verify if slot are available 
+            const quest = await db.collection("quests").findOne({_id: req.params.id});
+
+            // Throw error if no slots are available
+            if(quest.participants === 0 ){
+                return res.status(400).json({status:400, data:null, message: "ERROR: Quest is full. Unable to add user to quest."});   
         }
-
-        // Add user id to the quest
-        const questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {participants: participants,  updatedAt: date}, $push: {participantIds:  participant }});
+            // Add user id to the quest
+            questUpdated = await db.collection("quests").updateOne({_id: req.params.id}, { $set: {updatedAt: date}, $inc: {participants: -1}, $push: {participantIds:  participant }});
+        }
 
         questUpdated
         ? res.status(201).json({status:201, data:questUpdated, message: "SUCCESS: Quest has been updated."})
@@ -129,7 +136,7 @@ const addQuestParticipant = async(req,res) => {
         console.log("database disconnected!")
     }
 }
- 
+
 // Handler to create delete Quest (only if no participants)
 const deleteQuest = async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
@@ -295,4 +302,4 @@ const getAllQuests = async(req,res) => {
     }
 }
 
-module.exports = {createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests};
+module.exports = {createQuest, updateQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests};
