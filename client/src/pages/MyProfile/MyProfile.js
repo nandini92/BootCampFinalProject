@@ -111,7 +111,7 @@ const MyProfile = () => {
             </Panels>
             {/* Pop up to display details of quest user is on */}
             <Dialog open={openQuest} onClose={() => setOpenQuest(false)} maxWidth="xl">
-              <SingleQuest selectedQuest={selectedQuest}/>
+              <SingleQuest selectedQuest={selectedQuest} showDirections={null} showMapsIcon={false}/>
             </Dialog>
             {/* Pop up to notify user when level up has occurred */}
             <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
