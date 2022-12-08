@@ -4,16 +4,13 @@ import { Auth0Provider } from "@auth0/auth0-react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [cred, setCred] = useState();
-
-  // Retrieves all API credentials from server
-  useEffect(() => {
-    fetch("/cred")
-      .then((res) => res.json())
-      .then((data) => {
-        setCred(data);
-      });
-  }, []);
+  const cred = {
+    domain: process.env.REACT_APP_AUTH0_DOM,
+    clientId: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    googleMaps: process.env.REACT_APP_GOOGLE_MAPS_API,
+    cloudinary: process.env.REACT_APP_CLOUDINARY_URL,
+    cloudName: process.env.REACT_APP_CLOUD_NAME,
+  };
 
   return (
     <AuthContext.Provider value={{ cred }}>
