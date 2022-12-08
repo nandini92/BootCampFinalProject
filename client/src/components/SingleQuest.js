@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 import { BeatLoader } from "react-spinners";
+import { FiMap } from "react-icons/fi";
 
 import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
 import { QuestsContext } from "../contexts/QuestsContext";
 
-const SingleQuest = ({ selectedQuest }) => {
+const SingleQuest = ({ selectedQuest, showDirections, showMapsIcon }) => {
   const { cld, loggedIn } = useContext(UserContext);
   const {
     users,
@@ -44,6 +45,11 @@ const SingleQuest = ({ selectedQuest }) => {
         <Loading color="#3d7dca" />
       ) : (
         <>
+        {showMapsIcon === true && 
+        <Directions onClick={() => showDirections(quest.location)}>
+          <Icon />
+        </Directions>
+        }
           <AvatarWrapper to={`/profile/${quest.ownerId}`}>
             {ownerAvatar && <Pokemon cldImg={ownerAvatar} />}
           </AvatarWrapper>
@@ -123,7 +129,7 @@ const SingleQuest = ({ selectedQuest }) => {
 const QuestWrapper = styled.div`
   width: 95%;
   height: 100%;
-  margin: 15px;
+  margin: 10px;
   font-family: var(--font);
   color: var(--color-dark-grey);
   padding: 10px;
@@ -134,6 +140,22 @@ const QuestWrapper = styled.div`
 const Loading = styled(BeatLoader)`
   align-self: center;
 `;
+const Directions = styled.div`
+  align-self: flex-end;
+`;
+const Icon = styled(FiMap)`
+  border-radius: 5px;
+  border: 2px solid var(--color-dark-grey);
+  padding: 5px;
+  background-color: var(--color-green);
+  box-shadow: 0px 0px 5px var(--color-dark-grey);
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+`
 const AvatarWrapper = styled(Link)`
   align-self: center;
   border-radius: 50%;

@@ -3,10 +3,8 @@ import {  useMemo, useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import MapsStyles from "./MapStyles"
 
-const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarker}) => {
+const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarker, directions, setDirections, userPosition, setUserPosition}) => {
   const { loggedIn } = useContext(UserContext);
-  const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
-  const [directions, setDirections] = useState();
 
   // Google maps display settings
   const containerStyle = {
@@ -35,22 +33,9 @@ const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarke
     });
   }, []);
 
-  // Use DirectionsService to get walking directions
-  const showDirections = async (coords) => {
-    if (coords !== undefined && userPosition !== undefined) {
-      const directionsService = new window.google.maps.DirectionsService();
-      const results = await directionsService.route({
-        origin: userPosition,
-        destination: coords,
-        travelMode: window.google.maps.TravelMode.WALKING,
-      });
-      setDirections(results);
-    }
-  };
-
   // Clear states when map is randomly clicked and sets new quest coordinates to clicked location
   const clearMap = () => {
-    setDirections();
+    setDirections("");
     setSelectedQuest();
     setNewQuest(true);
   };
@@ -79,7 +64,6 @@ const QuestMap = ({quests, setSelectedQuest, setNewQuest, setNewMarker, newMarke
                 if(loggedIn){
                 setNewQuest(false);
                 setSelectedQuest(quest._id);
-                showDirections(quest.location);
                 }
               }}
               icon={{

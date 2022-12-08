@@ -20,7 +20,6 @@ import Celebration from "../../components/Celebration";
 
 
 const Home = () => {
-  // cred : stores API keys for googleMaps and Cloudinary.
   const { cred } = useContext(AuthContext);
   const {
     newUser,
@@ -39,6 +38,8 @@ const Home = () => {
   const [newMarker, setNewMarker] = useState();
   const [confirmation, setConfirmation] = useState(false);
   const [open, setOpen] = useState(false);
+  const [directions, setDirections] = useState();
+  const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
 
   const navigate = useNavigate();
 
@@ -78,6 +79,19 @@ const Home = () => {
       setConfirmation(false);
     }
   }
+
+  // Use DirectionsService to get walking directions
+  const showDirections = async (coords) => {
+    if (coords !== undefined && userPosition !== undefined) {
+      const directionsService = new window.google.maps.DirectionsService();
+      const results = await directionsService.route({
+        origin: userPosition,
+        destination: coords,
+        travelMode: window.google.maps.TravelMode.WALKING,
+      });
+      setDirections(results);
+    }
+  };
 
   return (
     <>
@@ -140,7 +154,7 @@ const Home = () => {
                   )}
                 {/* Display single quest in module based on quest selected in Quest List component*/}
                 {selectedQuest && confirmation === false && (
-                  <SingleQuest selectedQuest={selectedQuest} />
+                  <SingleQuest selectedQuest={selectedQuest} showDirections={showDirections} showMapsIcon={true}/>
                 )}
                 {/* Display all quests in module */}
                 {loggedIn &&
@@ -173,6 +187,10 @@ const Home = () => {
             setNewMarker={setNewMarker}
             newMarker={newMarker}
             setConfirmation={setConfirmation}
+            directions={directions}
+            setDirections={setDirections}
+            userPosition={userPosition}
+            setUserPosition={setUserPosition}
           />
           {/* Pop up to notify user when level up has occurred */}
           <Celebration
