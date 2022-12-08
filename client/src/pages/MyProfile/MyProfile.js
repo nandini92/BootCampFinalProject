@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AdvancedImage } from "@cloudinary/react";
 import { CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Dialog } from "@material-ui/core";
 import Tippy from '@tippyjs/react';
 
 import { UserContext } from "../../contexts/UserContext";
@@ -12,10 +13,13 @@ import QuestAdmin from "../../components/QuestAdmin";
 import QuestList from "../../components/QuestList";
 import UserRatings from "../../components/UserRatings";
 import Celebration from "../../components/Celebration";
+import SingleQuest from "../../components/SingleQuest";
 
 const MyProfile = () => {
   const { loggedIn, userQuests, userAvatar, levelUpAnimation, actions: {setLevelUpAnimation} } = useContext(UserContext);
   const [open, setOpen] = useState(false);
+  const [openQuest, setOpenQuest] = useState(false);
+  const [selectedQuest, setSelectedQuest] = useState();
   const navigate = useNavigate();
 
   // Set theme for ThemeProvider. This will be used to set color for Circular Progress
@@ -97,7 +101,7 @@ const MyProfile = () => {
               </MissingQuest>
               :<MyQuests>
                 <Scroll>
-                <QuestList quests={userQuests.questsOn} />
+                <QuestList quests={userQuests.questsOn} setSelectedQuest={setSelectedQuest} setOpenQuest={setOpenQuest}/>
                 </Scroll>
               </MyQuests>
               }
@@ -105,6 +109,10 @@ const MyProfile = () => {
             </>
             }
             </Panels>
+            {/* Pop up to display details of quest user is on */}
+            <Dialog open={openQuest} onClose={() => setOpenQuest(false)} maxWidth="xl">
+              <SingleQuest selectedQuest={selectedQuest}/>
+            </Dialog>
             {/* Pop up to notify user when level up has occurred */}
             <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
           </Body>

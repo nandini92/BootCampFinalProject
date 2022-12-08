@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { BeatLoader } from "react-spinners";
 
-const QuestList = ({ quests, setSelectedQuest}) => {
+const QuestList = ({ quests, setSelectedQuest, setOpenQuest}) => {
   return (
     <>
       {!quests ? (
@@ -10,7 +10,7 @@ const QuestList = ({ quests, setSelectedQuest}) => {
         quests.filter((item) => !item.completed)
         .map((quest) => {
           return (
-            <QuestWrapper key={quest._id} onClick={() => setSelectedQuest(quest._id)}>
+            <QuestWrapper key={quest._id} onClick={() => {setSelectedQuest(quest._id); setOpenQuest(true)}}>
               <Desc>
                 <Title>{quest.title}</Title>
                 <p>

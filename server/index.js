@@ -4,7 +4,7 @@ const morgan = require("morgan");
 require("dotenv").config();
 
 const { createUser, addUserRatings, updateUserLevel, getUser, getUserById, getAllUsers } = require("./handlers/userHandlers");
-const { createQuest, addQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
+const { createQuest, updateQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
 const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers");
 const { createReport, getAllReports, markReport } = require("./handlers/reportHandlers");
 
@@ -42,8 +42,8 @@ express()
   // Endpoint to create new quest
   .post("/new-quest/:ownerId", createQuest)
   
-  // Endpoint to add participant to quest
-  .patch("/quest/:id", addQuestParticipant)
+  // Endpoint to update quest participants
+  .patch("/quest/:id", updateQuestParticipant)
 
   // Endpoint to mark quest as complete
   .patch("/completed-quest/:id", completeQuest)

@@ -14,7 +14,7 @@ import Welcome from "./Welcome";
 import QuestMap from "./QuestMap";
 import QuestList from "../../components/QuestList";
 import NewQuest from "./NewQuest";
-import SingleQuest from "./SingleQuest";
+import SingleQuest from "../../components/SingleQuest";
 import Confirmation from "./Confirmation";
 import Celebration from "../../components/Celebration";
 
