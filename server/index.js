@@ -1,5 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
+const cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
 
@@ -8,12 +9,16 @@ const { createQuest, updateQuestParticipant, completeQuest, deleteQuest, getQues
 const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers");
 const { createReport, getAllReports, markReport } = require("./handlers/reportHandlers");
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 express()
   .use(helmet())
   .use(morgan("tiny"))
   .use(express.json())
+  
+  .use(cors({
+    origin: ['http://localhost:3000', 'https://poke-quest.onrender.com']
+  }))
 
   // Endpoint to create new User
   .post("/new-user", createUser)

@@ -162,7 +162,7 @@ const Home = () => {
                   !selectedQuest &&
                   confirmation === false && (
                     <>
-                      {quests.length > 0 ? (
+                      {quests?.length > 0 ? (
                         <QuestList
                           quests={quests}
                           setSelectedQuest={setSelectedQuest}
