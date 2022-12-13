@@ -22,7 +22,7 @@ const NewQuest = ({
     
     // CASE 1: User selected create new quest from module. Google react autocomplete library sets the address which  needs to be geocoded(server) for marker to be placed on google map.
     if (!newMarker) {
-      fetch(`/new-quest/${loggedIn._id}`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/new-quest/${loggedIn._id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -55,7 +55,7 @@ const NewQuest = ({
         .catch((error) => setError(error));
     // CASE 2: User dropped a pin on map to create Quest. Googlemaps provides the coordinates of pin but this will be reverse geocoded(server) for address to be displayed in Single Quest module.
     } else {
-      fetch(`/new-quest/${loggedIn._id}`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/new-quest/${loggedIn._id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",

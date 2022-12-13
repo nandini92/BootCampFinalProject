@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
   //Get logged in user details. This will retrigger every time there is a quest creation/deletion, user has been added to a quest, level up has occurred.
   useEffect(() => {
     if (isAuthenticated === true) { 
-      fetch("/user", {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/user`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -60,7 +60,7 @@ export const UserProvider = ({ children }) => {
       setUserAvatar(cld.image(loggedIn.avatar));
 
       // Get all users active quests
-      fetch(`/quests/${loggedIn._id}`)
+      fetch(`${process.env.REACT_APP_SERVER_URL}/quests/${loggedIn._id}`)
       .then(res => res.json())
       .then((data) => {
         if(data.status === 201){
@@ -73,7 +73,7 @@ export const UserProvider = ({ children }) => {
     
     // Trigger level up
     if(Math.floor((loggedIn.taskPoints / 100)) >= loggedIn.level ){
-      fetch(`/user-level/${loggedIn._id}`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/user-level/${loggedIn._id}`, {
         method: "PATCH",
         headers: {
           Accept: "application/json",
@@ -98,7 +98,7 @@ export const UserProvider = ({ children }) => {
 
   // Create new User
   const createUser = (user) => {
-    return fetch("/new-user", {
+    return fetch(`${process.env.REACT_APP_SERVER_URL}/new-user`, {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -20,7 +20,7 @@ const Admin = () => {
   }, [loggedIn]);
 
   useEffect(() => {
-    fetch("/reports")
+    fetch(`${process.env.REACT_APP_SERVER_URL}/reports`)
     .then(res => res.json())
     .then((data) => {
       if(data.status === 200){

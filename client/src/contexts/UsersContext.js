@@ -9,7 +9,7 @@ export const UsersProvider = ({ children }) => {
 
   // Fetch all users from database
   useEffect(() => {
-    fetch("/users")
+    fetch(`${process.env.REACT_APP_SERVER_URL}/users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.data);
@@ -18,7 +18,7 @@ export const UsersProvider = ({ children }) => {
 
   // Get otherUser details
   const getOtherUser = (id) => {
-      return fetch(`/user/${id}`)
+      return fetch(`${process.env.REACT_APP_SERVER_URL}/user/${id}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
@@ -37,7 +37,7 @@ export const UsersProvider = ({ children }) => {
 
   // Get all users active quests
   const getUsersQuests = (id) => {
-      return fetch(`/quests/${id}`)
+      return fetch(`${process.env.REACT_APP_SERVER_URL}/quests/${id}`)
       .then(res => res.json())
       .then((data) => {
         if(data.status === 201){

@@ -10,7 +10,7 @@ export const QuestsProvider = ({ children }) => {
 
   // Get all quests in database
   useEffect(() => {
-    fetch("/quests")
+    fetch(`${process.env.REACT_APP_SERVER_URL}/quests`)
       .then((res) => res.json())
       .then((data) => {
         setQuests(data.data);
@@ -19,7 +19,7 @@ export const QuestsProvider = ({ children }) => {
 
   // Add user to quest 
   const updateQuestParticipants = (selectedQuest, user, action) => {
-    return fetch(`/quest/${selectedQuest}`, {
+    return fetch(`${process.env.REACT_APP_SERVER_URL}/quest/${selectedQuest}`, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
@@ -46,7 +46,7 @@ export const QuestsProvider = ({ children }) => {
   
   // Function to delete quest. Deleted quests will be removed from database as well. Users are only allowed to delete quests if no other participant has joined the quest.
   const deleteQuest = (id) => {
-    fetch(`/quest/${id}`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/quest/${id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -67,7 +67,7 @@ export const QuestsProvider = ({ children }) => {
 
     // Function to mark quest  as complete. Completed quests will not appear anywhere but are stored in database for tracking.
     const completeQuest = (id) => {
-      fetch(`/completed-quest/${id}`, {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/completed-quest/${id}`, {
         method: "PATCH",
         headers: {
           Accept: "application/json",

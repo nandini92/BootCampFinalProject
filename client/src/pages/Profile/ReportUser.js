@@ -13,7 +13,7 @@ const ReportUser = ({ open, setOpen, id }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`/report/${id}`,{
+    fetch(`${process.env.REACT_APP_SERVER_URL}/report/${id}`,{
         "method": "POST",
         "headers" : {
             Accept: "application/json",

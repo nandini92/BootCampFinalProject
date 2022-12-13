@@ -26,7 +26,7 @@ const SingleQuest = ({ selectedQuest, showDirections, showMapsIcon }) => {
 
   // Fetch selected quest details from database
   useEffect(() => {
-    fetch(`/quest/${selectedQuest}`)
+    fetch(`${process.env.REACT_APP_SERVER_URL}/quest/${selectedQuest}`)
       .then((res) => res.json())
       .then((data) => {
         setQuest(data.data);

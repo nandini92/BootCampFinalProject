@@ -37,7 +37,7 @@ const AvatarSetup = () => {
 
   // Get all cloudinary public Ids for avatars
   useEffect(() => {
-    fetch("/avatars")
+    fetch(`${process.env.REACT_APP_SERVER_URL}/avatars`)
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {

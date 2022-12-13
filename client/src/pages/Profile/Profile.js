@@ -49,7 +49,7 @@ const Profile = () => {
   const handleSubmit = (e) => {
     // TO DO: VAlidate that all categories are filled. Incomplete review should not be accepted.
     e.preventDefault();
-    fetch(`/user/${user._id}`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/user/${user._id}`, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
