@@ -4,8 +4,10 @@ import styled from "styled-components";
 
 import {UserContext} from "../../contexts/UserContext";
 import {UsersContext} from "../../contexts/UsersContext";
+import {AuthContext} from "../../contexts/AuthContext";
 
 const Admin = () => {
+  const { URL } = useContext(AuthContext);
   const { loggedIn } = useContext(UserContext);
   const { users } = useContext(UsersContext);
   const [reports, setReports] = useState();
@@ -20,7 +22,7 @@ const Admin = () => {
   }, [loggedIn]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/reports`)
+    fetch(`${URL}/reports`)
     .then(res => res.json())
     .then((data) => {
       if(data.status === 200){

@@ -1,3 +1,4 @@
+const router = require("express").Router();
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
@@ -12,7 +13,7 @@ const options = {
 const date = Date.now();
 
 // Handler to create new Quest
-const createQuest = async(req,res) => {
+router.post("/new-quest/:ownerId", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     let quest = {ownerId: req.params.ownerId, _id: uuidv4(), ...req.body, createdAt: date};
     try{
@@ -94,10 +95,10 @@ const createQuest = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to add participant to quest
-const updateQuestParticipant = async(req,res) => {
+router.patch("/quest/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
         const participant = req.body.participant;
@@ -135,10 +136,10 @@ const updateQuestParticipant = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to create delete Quest (only if no participants)
-const deleteQuest = async(req,res) => {
+router.patch("/completed-quest/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
         await client.connect();
@@ -169,10 +170,10 @@ const deleteQuest = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to create complete Quest
-const completeQuest = async(req,res) => {
+router.delete("/quest/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
     try{
         await client.connect();
@@ -229,10 +230,10 @@ const completeQuest = async(req,res) => {
         console.log("database disconnected!")
         res.status(500).json({status:500, message: `ERROR: Internal server error.`});
     }
-}
+})
 
 // Handler to get quest details based on quest id provided
-const getQuest = async(req,res) => {
+router.get("/quest/:id",async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -254,10 +255,10 @@ const getQuest = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to get all user's quest details from database
-const getUsersQuests = async(req,res) => {
+router.get("/quests/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -279,10 +280,10 @@ const getUsersQuests = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to get all quest details from database
-const getAllQuests = async(req,res) => {
+router.get("/quests", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -300,6 +301,6 @@ const getAllQuests = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
-module.exports = {createQuest, updateQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests};
+module.exports = router;

@@ -8,8 +8,10 @@ import { FiMap } from "react-icons/fi";
 import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
 import { QuestsContext } from "../contexts/QuestsContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 const SingleQuest = ({ selectedQuest, showDirections, showMapsIcon }) => {
+  const { URL } = useContext(AuthContext);
   const { cld, loggedIn } = useContext(UserContext);
   const {
     users,
@@ -26,7 +28,7 @@ const SingleQuest = ({ selectedQuest, showDirections, showMapsIcon }) => {
 
   // Fetch selected quest details from database
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/quest/${selectedQuest}`)
+    fetch(`${URL}/quest/${selectedQuest}`)
       .then((res) => res.json())
       .then((data) => {
         setQuest(data.data);

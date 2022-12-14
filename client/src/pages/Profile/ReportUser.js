@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { Dialog } from "@material-ui/core";
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { AuthContext } from "../../contexts/AuthContext";
 
 const ReportUser = ({ open, setOpen, id }) => {
+  const { URL } = useContext(AuthContext);
   const [formData, setFormData] = useState();
 
   // States to control display on error / confirmation banner once report is sent
@@ -13,7 +16,7 @@ const ReportUser = ({ open, setOpen, id }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`${process.env.REACT_APP_SERVER_URL}/report/${id}`,{
+    fetch(`${URL}/report/${id}`,{
         "method": "POST",
         "headers" : {
             Accept: "application/json",

@@ -1,16 +1,18 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
+import { AuthContext } from "./AuthContext";
 
 export const QuestsContext = createContext();
 
 export const QuestsProvider = ({ children }) => {
+  const { URL } = useContext(AuthContext);
   const {actions:{setUserUpdate}} = useContext(UserContext);
   const [quests, setQuests] = useState();
   const [questUpdate, setQuestUpdate] = useState(1);
 
   // Get all quests in database
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/quests`)
+    fetch(`${URL}/quests`)
       .then((res) => res.json())
       .then((data) => {
         setQuests(data.data);
@@ -19,7 +21,7 @@ export const QuestsProvider = ({ children }) => {
 
   // Add user to quest 
   const updateQuestParticipants = (selectedQuest, user, action) => {
-    return fetch(`${process.env.REACT_APP_SERVER_URL}/quest/${selectedQuest}`, {
+    return fetch(`${URL}/quest/${selectedQuest}`, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
@@ -46,7 +48,7 @@ export const QuestsProvider = ({ children }) => {
   
   // Function to delete quest. Deleted quests will be removed from database as well. Users are only allowed to delete quests if no other participant has joined the quest.
   const deleteQuest = (id) => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/quest/${id}`, {
+    fetch(`${URL}/quest/${id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -67,7 +69,7 @@ export const QuestsProvider = ({ children }) => {
 
     // Function to mark quest  as complete. Completed quests will not appear anywhere but are stored in database for tracking.
     const completeQuest = (id) => {
-      fetch(`${process.env.REACT_APP_SERVER_URL}/completed-quest/${id}`, {
+      fetch(`${URL}/completed-quest/${id}`, {
         method: "PATCH",
         headers: {
           Accept: "application/json",

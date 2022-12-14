@@ -12,8 +12,10 @@ export const AuthProvider = ({ children }) => {
     cloudName: process.env.REACT_APP_CLOUD_NAME,
   };
 
+  const URL = process.env.NODE_ENV !== 'development' ? process.env.REACT_APP_SERVER_URL : "";
+
   return (
-    <AuthContext.Provider value={{ cred }}>
+    <AuthContext.Provider value={{ cred, URL }}>
       {cred && (
         <Auth0Provider
           domain={cred.domain}

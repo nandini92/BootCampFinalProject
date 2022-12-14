@@ -1,3 +1,4 @@
+const router = require("express").Router();
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
@@ -16,7 +17,7 @@ const evolution = require("../assets/evolutions.json");
 
 
 // Handler to create a new user upon Auth0 signup
-const createUser = async(req,res) => {
+router.post("/new-user", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -37,10 +38,10 @@ const createUser = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Store ratings from other users
-const addUserRatings = async(req,res) => {
+router.patch("/user/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -81,10 +82,10 @@ const addUserRatings = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to level users based on taskPoints accumulated
-const updateUserLevel = async(req,res) => {
+router.patch("/user-level/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -106,11 +107,10 @@ const updateUserLevel = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
-
+})
 
 // Handler to return user details
-const getUser = async(req,res) => {
+router.post("/user",async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -131,10 +131,10 @@ const getUser = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to return user details based on id
-const getUserById = async(req,res) => {
+router.get("/user/:id", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -155,10 +155,10 @@ const getUserById = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 // Handler to return all user details
-const getAllUsers = async(req,res) => {
+router.get("/users", async(req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -179,6 +179,6 @@ const getAllUsers = async(req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
-module.exports = { createUser, addUserRatings, updateUserLevel, getUser, getUserById, getAllUsers };
+module.exports = router;

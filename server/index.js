@@ -4,70 +4,25 @@ const cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
 
-const { createUser, addUserRatings, updateUserLevel, getUser, getUserById, getAllUsers } = require("./handlers/userHandlers");
-const { createQuest, updateQuestParticipant, completeQuest, deleteQuest, getQuest, getUsersQuests, getAllQuests } = require("./handlers/questHandlers");
-const { getAllFirstGenPokemon } = require("./handlers/avatarHandlers");
-const { createReport, getAllReports, markReport } = require("./handlers/reportHandlers");
-
 const PORT = process.env.PORT || 8000;
 
-express()
-  .use(helmet())
-  .use(morgan("tiny"))
-  .use(express.json())
-  
-  .use(cors({
-    origin: ['http://localhost:3000', 'https://poke-quest.onrender.com']
-  }))
+const app = express();
 
-  // Endpoint to create new User
-  .post("/new-user", createUser)
+app.use(helmet());
+app.use(morgan("tiny"));
+app.use(express.json());
 
-  // Endpoint to add ratings
-  .patch("/user/:id", addUserRatings)
-  
-  // Endpoint to update user level
-  .patch("/user-level/:id", updateUserLevel)
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://poke-quest.onrender.com"],
+  })
+);
 
-  // Endpoint to get logged in user details on log in
-  .post("/user", getUser)
+app.use(require("./handlers/avatarHandlers"));
+app.use(require("./handlers/userHandlers"));
+app.use(require("./handlers/questHandlers"));
+app.use(require("./handlers/reportHandlers"));
 
-  // Endpoint to get logged in user details by Id
-  .get("/user/:id", getUserById)
-
-  // Endpoint to send all users
-  .get("/users", getAllUsers)
-
-  // Endpoint to report a user to Admin
-  .post("/report/:id", createReport)
-
-  // Endpoint to get all user reports
-  .get("/reports", getAllReports)
-  
-  // Endpoint to create new quest
-  .post("/new-quest/:ownerId", createQuest)
-  
-  // Endpoint to update quest participants
-  .patch("/quest/:id", updateQuestParticipant)
-
-  // Endpoint to mark quest as complete
-  .patch("/completed-quest/:id", completeQuest)
-
-  // Endpoint to delete quest
-  .delete("/quest/:id", deleteQuest)
-
-  // Endpoint to get particular quest
-  .get("/quest/:id", getQuest)
-
-  // Endpoint to get all logged in user's quests
-  .get("/quests/:id", getUsersQuests)
-
-  // Endpoint to get all quests
-  .get("/quests", getAllQuests)
-
-  // Endpoint to get all first gen pokemon sprites
-  .get("/avatars", getAllFirstGenPokemon)
-
-  .listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
-  });
+const server = app.listen(PORT, () => {
+  console.log("🌍 Listening on port " + server.address().port);
+});

@@ -14,6 +14,9 @@ import Loading from "./components/Loading";
 
 const App = () => {
   const { isLoading, error, isAuthenticated } = useAuth0();
+
+  
+
   return (
     <BrowserRouter>
       <GlobalStyles />

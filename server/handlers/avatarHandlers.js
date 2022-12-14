@@ -1,7 +1,8 @@
 require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
+const router = require("express").Router();
 
-const getAllFirstGenPokemon = (req, res) => {
+router.get("/avatars", (req, res) => {
   try {
     // Gets list of cloudinary objects for First Gen pokemon
     cloudinary.api.resources_by_tag("1st_gen", {max_results: 64})
@@ -21,6 +22,6 @@ const getAllFirstGenPokemon = (req, res) => {
     console.log(err);
     res.status(500).json({ status: 500, message: "ERROR: Internal server error." });
   }
-};
+});
 
-module.exports = { getAllFirstGenPokemon };
+module.exports = router;

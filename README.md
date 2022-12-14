@@ -5,6 +5,8 @@ Quest is a social media application which aims to encourage interactions outside
 
 Watch a demo of this app here: https://www.linkedin.com/posts/nandini-asokan_concordia-bootcamp-finalproject-activity-7005643718493908993-ZxDV?utm_source=share&utm_medium=member_desktop
 
+Try it out here: https://poke-quest.onrender.com/
+
 ## Pages
 - **Avatar Setup**
 Users will be able to choose from a set of un-evolved pokemon sprites. Once chosen, they will be redirected to the home page with their new profile all setup.
