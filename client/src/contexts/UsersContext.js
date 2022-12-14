@@ -1,15 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
+import { AuthContext } from "./AuthContext";
 
 export const UsersContext = createContext();
 
 export const UsersProvider = ({ children }) => {
+  const { URL } = useContext(AuthContext);
   const { cld, newUser } = useContext(UserContext);
   const [users, setUsers] = useState();
 
   // Fetch all users from database
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/users`)
+    fetch(`${URL}/users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data.data);
@@ -18,7 +20,7 @@ export const UsersProvider = ({ children }) => {
 
   // Get otherUser details
   const getOtherUser = (id) => {
-      return fetch(`${process.env.REACT_APP_SERVER_URL}/user/${id}`)
+      return fetch(`${URL}/user/${id}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 200) {
@@ -37,7 +39,7 @@ export const UsersProvider = ({ children }) => {
 
   // Get all users active quests
   const getUsersQuests = (id) => {
-      return fetch(`${process.env.REACT_APP_SERVER_URL}/quests/${id}`)
+      return fetch(`${URL}/quests/${id}`)
       .then(res => res.json())
       .then((data) => {
         if(data.status === 201){

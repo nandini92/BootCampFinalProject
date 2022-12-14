@@ -1,3 +1,4 @@
+const router = require("express").Router();
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
@@ -10,7 +11,7 @@ const options = {
 
 const date = Date.now();
 
-const createReport = async (req,res) => {
+router.post("/report/:id", async (req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -31,9 +32,9 @@ const createReport = async (req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
-const getAllReports = async (req,res) => {
+router.get("/reports", async (req,res) => {
     const client = new MongoClient(MONGO_URI, options);
 
     try{
@@ -54,7 +55,7 @@ const getAllReports = async (req,res) => {
         client.close();
         console.log("database disconnected!")
     }
-}
+})
 
 const markReport = async (req,res) => {
     const client = new MongoClient(MONGO_URI, options);
@@ -79,4 +80,4 @@ const markReport = async (req,res) => {
     }
 }
 
-module.exports = { createReport, getAllReports, markReport }
+module.exports = router;

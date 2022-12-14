@@ -13,7 +13,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const AvatarSetup = () => {
-  const { cred } = useContext(AuthContext);
+  const { URL, cred } = useContext(AuthContext);
   const { actions: {createUser} } = useContext(UserContext);
   const { user } = useAuth0();
   const [startingAvatars, setStartingAvatars] = useState();
@@ -37,7 +37,7 @@ const AvatarSetup = () => {
 
   // Get all cloudinary public Ids for avatars
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/avatars`)
+    fetch(`${URL}/avatars`)
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 201) {

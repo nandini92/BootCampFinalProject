@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { Autocomplete } from "@react-google-maps/api";
 import styled from "styled-components";
+
+import { AuthContext } from "../../contexts/AuthContext";
 
 const NewQuest = ({
   loggedIn,
@@ -10,6 +12,7 @@ const NewQuest = ({
   setUserUpdate,
   setConfirmation
 }) => {
+  const { URL } = useContext(AuthContext);
   const [formData, setFormData] = useState();
   const [error, setError] = useState(false);
 
@@ -22,7 +25,7 @@ const NewQuest = ({
     
     // CASE 1: User selected create new quest from module. Google react autocomplete library sets the address which  needs to be geocoded(server) for marker to be placed on google map.
     if (!newMarker) {
-      fetch(`${process.env.REACT_APP_SERVER_URL}/new-quest/${loggedIn._id}`, {
+      fetch(`${URL}/new-quest/${loggedIn._id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -55,7 +58,7 @@ const NewQuest = ({
         .catch((error) => setError(error));
     // CASE 2: User dropped a pin on map to create Quest. Googlemaps provides the coordinates of pin but this will be reverse geocoded(server) for address to be displayed in Single Quest module.
     } else {
-      fetch(`${process.env.REACT_APP_SERVER_URL}/new-quest/${loggedIn._id}`, {
+      fetch(`${URL}/new-quest/${loggedIn._id}`, {
         method: "POST",
         headers: {
           Accept: "application/json",

@@ -7,6 +7,7 @@ import Tippy from "@tippyjs/react";
 
 import { UsersContext } from "../../contexts/UsersContext";
 import { UserContext } from "../../contexts/UserContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 import QuestAdmin from "../../components/QuestAdmin";
 import QuestList from "../../components/QuestList";
@@ -14,6 +15,7 @@ import UserRatings from "../../components/UserRatings";
 import ReportUser from "./ReportUser";
 
 const Profile = () => {
+  const { URL } = useContext(AuthContext);
   const userId = useParams().id;
   const [user, setUser] = useState();
   const [avatar, setAvatar] = useState();
@@ -49,7 +51,7 @@ const Profile = () => {
   const handleSubmit = (e) => {
     // TO DO: VAlidate that all categories are filled. Incomplete review should not be accepted.
     e.preventDefault();
-    fetch(`${process.env.REACT_APP_SERVER_URL}/user/${user._id}`, {
+    fetch(`${URL}/user/${user._id}`, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
