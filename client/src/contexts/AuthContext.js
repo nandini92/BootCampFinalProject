@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext } from "react";
 import { Auth0Provider } from "@auth0/auth0-react";
 
 export const AuthContext = createContext();
@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
     domain: process.env.REACT_APP_AUTH0_DOM,
     clientId: process.env.REACT_APP_AUTH0_CLIENT_ID,
     googleMaps: process.env.REACT_APP_GOOGLE_MAPS_API,
-    cloudinary: process.env.REACT_APP_CLOUDINARY_URL,
     cloudName: process.env.REACT_APP_CLOUD_NAME,
   };
 
