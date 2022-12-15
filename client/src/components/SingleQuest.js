@@ -4,6 +4,7 @@ import { AdvancedImage } from "@cloudinary/react";
 import styled from "styled-components";
 import { BeatLoader } from "react-spinners";
 import { FiMap } from "react-icons/fi";
+import Tippy from '@tippyjs/react';
 
 import { UserContext } from "../contexts/UserContext";
 import { UsersContext } from "../contexts/UsersContext";
@@ -48,9 +49,11 @@ const SingleQuest = ({ selectedQuest, showDirections, showMapsIcon }) => {
       ) : (
         <>
         {showMapsIcon === true && 
+        <Tippy content={<Instructions>Toggle Directions</Instructions>}>
         <Directions onClick={() => showDirections(quest.location)}>
           <Icon />
         </Directions>
+        </Tippy>
         }
           <AvatarWrapper to={`/profile/${quest.ownerId}`}>
             {ownerAvatar && <Pokemon cldImg={ownerAvatar} />}
@@ -144,6 +147,14 @@ const Loading = styled(BeatLoader)`
 `;
 const Directions = styled.div`
   align-self: flex-end;
+`;
+const Instructions = styled.span`
+  font-family: var(--font);
+  font-size: smaller;
+  color: var(--color-dark-grey);
+  background-color: var(--color-grey);
+  border-radius: 5px;
+  padding: 1px;
 `;
 const Icon = styled(FiMap)`
   border-radius: 5px;
