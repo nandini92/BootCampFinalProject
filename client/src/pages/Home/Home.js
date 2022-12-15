@@ -38,7 +38,7 @@ const Home = () => {
   const [newMarker, setNewMarker] = useState();
   const [confirmation, setConfirmation] = useState(false);
   const [open, setOpen] = useState(false);
-  const [directions, setDirections] = useState();
+  const [directions, setDirections] = useState("");
   const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
 
   const navigate = useNavigate();
@@ -82,7 +82,9 @@ const Home = () => {
 
   // Use DirectionsService to get walking directions
   const showDirections = async (coords) => {
-    if (coords !== undefined && userPosition !== undefined) {
+    if ( directions !== ""){
+      setDirections("");
+    } else if (coords !== undefined && userPosition !== undefined) {
       const directionsService = new window.google.maps.DirectionsService();
       const results = await directionsService.route({
         origin: userPosition,
@@ -166,6 +168,7 @@ const Home = () => {
                         <QuestList
                           quests={quests}
                           setSelectedQuest={setSelectedQuest}
+                          setOpenQuest={null}
                         />
                       ) : (
                         <Welcome loggedIn={loggedIn} />
@@ -237,6 +240,10 @@ const Wrapper = styled.div`
       transform: translateY(0);
       opacity: 1;
     }
+  }
+
+  p {
+    margin: 5px;
   }
 `;
 const Pages = styled.div`

@@ -10,7 +10,7 @@ const QuestList = ({ quests, setSelectedQuest, setOpenQuest}) => {
         quests.filter((item) => !item.completed)
         .map((quest) => {
           return (
-            <QuestWrapper key={quest._id} onClick={() => {setSelectedQuest(quest._id); setOpenQuest(true)}}>
+            <QuestWrapper key={quest._id} onClick={() => {setSelectedQuest(quest._id); setOpenQuest && setOpenQuest(true)}}>
               <Desc>
                 <Title>{quest.title}</Title>
                 <p>
