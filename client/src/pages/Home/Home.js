@@ -38,7 +38,7 @@ const Home = () => {
   const [newMarker, setNewMarker] = useState();
   const [confirmation, setConfirmation] = useState(false);
   const [open, setOpen] = useState(false);
-  const [directions, setDirections] = useState();
+  const [directions, setDirections] = useState("");
   const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
 
   const navigate = useNavigate();
@@ -168,6 +168,7 @@ const Home = () => {
                         <QuestList
                           quests={quests}
                           setSelectedQuest={setSelectedQuest}
+                          setOpenQuest={null}
                         />
                       ) : (
                         <Welcome loggedIn={loggedIn} />
