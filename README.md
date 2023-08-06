@@ -61,6 +61,6 @@ Users will be able to choose from a set of un-evolved pokemon sprites. Once chos
     - Stores all quest details including title, description, karma points, difficulty, participants count and ids, owners id, owner's pokemon type and timestamps on creation/update.
 
 ## Next Steps
-    - Remove cloudinary dependency and connect to Pokemon API.
     - Notifications on users joining/leaving quests. Notifications on quest completion.
+    - Remove cloudinary dependency and connect to Pokemon API.
     - Internal chat app for users to communicate with each other.

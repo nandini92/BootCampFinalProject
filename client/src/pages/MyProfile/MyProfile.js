@@ -43,7 +43,6 @@ const MyProfile = () => {
         <Wrapper>
           <Body>
             <UserDetails>
-              <Info>
               <Title>{loggedIn.handler}</Title>
               {userAvatar && (
                 <AvatarWrapper>
@@ -65,7 +64,6 @@ const MyProfile = () => {
               <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
                 {/* ratings are used to store updated ratings value. Since user should not be able to rate themselves. Setting this to null as placeholder */}
                 <UserRatings ratings={null} currentRatings={loggedIn.ratings}/>
-              </Info>
               </UserDetails>
             <Panels>
             {userQuests && 
@@ -115,10 +113,10 @@ const MyProfile = () => {
 
 // FONTS
 const Title = styled.h2`
-  font-size: 26px;
+  font-size: 1.4em;
   font-weight: 500;
   color: var(--color-dark-grey);
-  margin-bottom: 15px;
+  padding: 15px;
 `;
 const SubTitle = styled.p`
   text-align: center;
@@ -153,19 +151,16 @@ const Body = styled.div`
 const UserDetails = styled.div`
   align-self: center;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 0;
   min-width: 20%;
   justify-content: space-evenly;
   border-radius: 15px;
   box-shadow: 0px 0px 10px var(--color-blue);
   background-color: var(--color-grey);
-`;
-const Info = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   color: var(--color-dark-grey);
-  font-size: 20px;
-  margin: 20px;
+  font-size: 1.2em;
 
   p {
     text-align: center;

@@ -31,10 +31,10 @@ const Profile = () => {
 
   // Logged in user should be redirected to MyProfile if they try to access this component
   useEffect(() => {
-    if(loggedIn){
-      loggedIn._id === userId && navigate('/my-profile');
+    if (loggedIn) {
+      loggedIn._id === userId && navigate("/my-profile");
     }
-  }, [loggedIn, userId])
+  }, [loggedIn, userId]);
 
   // Get user info based on user id
   useEffect(() => {
@@ -49,7 +49,6 @@ const Profile = () => {
 
   // Submit user ratings to database
   const handleSubmit = (e) => {
-    // TO DO: VAlidate that all categories are filled. Incomplete review should not be accepted.
     e.preventDefault();
     fetch(`${URL}/user/${user._id}`, {
       method: "PATCH",
@@ -72,84 +71,78 @@ const Profile = () => {
 
   if (user && avatar && quests) {
     return (
-        <Wrapper>
-          <Body>
-            <UserDetails>
-              <Info>
-                <Tippy content={<p>Report User</p>}>
-                  {/* Module for a form to report user if they breach community guidelines */}
-                  <div onClick={() => setOpen(true)}>
-                    <Report />
-                  </div>
-                </Tippy>
-                <Title>{user.handler}</Title>
-                {avatar && (
-                  <AvatarWrapper>
-                    <Pokemon cldImg={avatar} />
-                  </AvatarWrapper>
-                )}
-                <p>
-                  {avatar.publicID.split("/")[2].split("_")[0].toUpperCase()}{" "}
-                </p>
-                <p>LEVEL {user.level}</p>
-                {/* Form to provide ratings on user based on various characteristics. These are DnD based; should find a set more suitable to Pokemon */}
-                <Feedback onSubmit={(e) => handleSubmit(e)}>
-                  <UserRatings
-                    ratings={ratings}
-                    setRatings={setRatings}
-                    currentRatings={user.ratings}
-                  />
-                  <Ratings>
-                    {ratingsSent && <p>You've successfully rated this user!</p>}
-                    <SubmitDiv>
-                      <Button type="submit">Submit</Button>
-                    </SubmitDiv>
-                  </Ratings>
-                </Feedback>
-              </Info>
-            </UserDetails>
-            <Panels>
-              <Panel>
-                {/* Display all quests user has created. Logged In user is only able to view these*/}
-                {quests?.questsOwned?.length > 0 ? (
-                  <>
-                    <SubTitle>Quests {user.handler} owns</SubTitle>
-                    <MyQuests>
-                      <Scroll>
-                        <QuestAdmin quests={quests.questsOwned} />
-                      </Scroll>
-                    </MyQuests>
-                  </>
-                ) : (
-                  <SubTitle>
-                    {user.handler} has not created any quests!
-                  </SubTitle>
-                )}
-              </Panel>
-              <Panel>
-                {/* Display all quests user is on. Logged In user is only able to view these*/}
-                {quests?.questsOn?.length > 0 ? (
-                  <>
-                    <SubTitle>Quests {user.handler} is on</SubTitle>
-                    <MyQuests>
-                      <Scroll>
-                        <QuestList
-                          quests={quests.questsOn}
-                          setSelectedQuest={null}
-                        />
-                      </Scroll>
-                    </MyQuests>
-                  </>
-                ) : (
-                  <SubTitle>
-                    {user.handler} is not on any quests currently!
-                  </SubTitle>
-                )}
-              </Panel>
-            </Panels>
-            <ReportUser open={open} setOpen={setOpen} id={user._id} />
-          </Body>
-        </Wrapper>
+      <Wrapper>
+        <Body>
+          <UserDetails>
+            <Tippy content={<p>Report User</p>}>
+              {/* Module for a form to report user if they breach community guidelines */}
+              <div onClick={() => setOpen(true)}>
+                <Report />
+              </div>
+            </Tippy>
+            <Title>{user.handler}</Title>
+            {avatar && (
+              <AvatarWrapper>
+                <Pokemon cldImg={avatar} />
+              </AvatarWrapper>
+            )}
+            <p>{avatar.publicID.split("/")[2].split("_")[0].toUpperCase()} </p>
+            <p>LEVEL {user.level}</p>
+            {/* Form to provide ratings on user based on various characteristics. These are DnD based; should find a set more suitable to Pokemon */}
+            <Feedback onSubmit={(e) => handleSubmit(e)}>
+              <UserRatings
+                ratings={ratings}
+                setRatings={setRatings}
+                currentRatings={user.ratings}
+              />
+              <Ratings>
+                {ratingsSent && <p>You've successfully rated this user!</p>}
+                <SubmitDiv>
+                  <Button type="submit">Submit</Button>
+                </SubmitDiv>
+              </Ratings>
+            </Feedback>
+          </UserDetails>
+          <Panels>
+            <Panel>
+              {/* Display all quests user has created. Logged In user is only able to view these*/}
+              {quests?.questsOwned?.length > 0 ? (
+                <>
+                  <SubTitle>Quests {user.handler} owns</SubTitle>
+                  <MyQuests>
+                    <Scroll>
+                      <QuestAdmin quests={quests.questsOwned} />
+                    </Scroll>
+                  </MyQuests>
+                </>
+              ) : (
+                <SubTitle>{user.handler} has not created any quests!</SubTitle>
+              )}
+            </Panel>
+            <Panel>
+              {/* Display all quests user is on. Logged In user is only able to view these*/}
+              {quests?.questsOn?.length > 0 ? (
+                <>
+                  <SubTitle>Quests {user.handler} is on</SubTitle>
+                  <MyQuests>
+                    <Scroll>
+                      <QuestList
+                        quests={quests.questsOn}
+                        setSelectedQuest={null}
+                      />
+                    </Scroll>
+                  </MyQuests>
+                </>
+              ) : (
+                <SubTitle>
+                  {user.handler} is not on any quests currently!
+                </SubTitle>
+              )}
+            </Panel>
+          </Panels>
+          <ReportUser open={open} setOpen={setOpen} id={user._id} />
+        </Body>
+      </Wrapper>
     );
   }
 };
@@ -178,26 +171,21 @@ const Wrapper = styled.div`
   background: linear-gradient(120deg, white, var(--color-blue));
 `;
 const Body = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-width: 90%;
-height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  height: 100%;
 `;
 const UserDetails = styled.div`
-align-self: center;
-display: flex;
-min-width: 20%;
-justify-content: space-evenly;
-border-radius: 15px;
-box-shadow: 0px 0px 10px var(--color-blue);
-background-color: var(--color-grey);
-`;
-const Info = styled.div`
+  align-self: center;
   display: flex;
+  width: 20vw;
   flex-direction: column;
   justify-content: center;
-  color: var(--color-dark-grey);
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px var(--color-blue);
+  background-color: var(--color-grey);
   font-size: 22px;
   margin: 20px;
 
@@ -206,6 +194,7 @@ const Info = styled.div`
     margin: 3px;
   }
 `;
+
 const AvatarWrapper = styled.div`
   align-self: center;
   margin: 20px 0px;
@@ -216,10 +205,6 @@ const AvatarWrapper = styled.div`
   height: 180px;
   width: 180px;
 `;
-const Outer = styled.div`
-  display: flex;
-  flex-direction: row;
-`
 const Feedback = styled.form`
   display: flex;
   flex-direction: column;
@@ -267,17 +252,17 @@ const Scroll = styled.div`
   overflow-y: scroll;
   scroll-behavior: smooth;
 
-::-webkit-scrollbar {
-  width: 5px;
-}
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
 
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 10px var(--color-grey); 
-}
- 
-::-webkit-scrollbar-thumb {
-  background: var(--color-blue); 
-}
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px var(--color-grey);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-blue);
+  }
 `;
 const Ratings = styled.div`
   display: flex;
@@ -305,6 +290,7 @@ const Button = styled.button`
 `;
 const Report = styled(FiFrown)`
   align-self: flex-start;
+  font-size: 1.1em;
   border-radius: 5px;
   padding: 5px;
   margin: 10px;

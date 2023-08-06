@@ -157,6 +157,7 @@ const Instructions = styled.span`
   padding: 1px;
 `;
 const Icon = styled(FiMap)`
+  font-size: 2em;
   border-radius: 5px;
   border: 2px solid var(--color-dark-grey);
   padding: 5px;

@@ -24,7 +24,7 @@ const Leaderboard = () => {
             <Separator></Separator>
           {sortedUsers && 
           sortedUsers.map((user, i) => {
-           return i < 14 && (
+           return i < 13 && (
               <Line key={user._id}>
                 <Link to={`/profile/${user._id}`}>{user.handler}</Link>
                 <Link to={`/profile/${user._id}`}>{user.karma}</Link>

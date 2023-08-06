@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useJsApiLoader  } from "@react-google-maps/api";
 import styled from "styled-components";
-import { FiPlus, FiArrowLeft } from "react-icons/fi";
+import { FiPlus, FiArrowLeft, FiMinimize } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
 import Tippy from '@tippyjs/react';
 
@@ -40,6 +40,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [directions, setDirections] = useState("");
   const [userPosition, setUserPosition] = useState({lat:45.5019, lng: -73.5674});
+  const [minimize, setMinimize] = useState(false);
 
   const navigate = useNavigate();
 
@@ -102,6 +103,11 @@ const Home = () => {
       ) : (
         <Map>
           <Options>
+              <Tippy content={<Instructions>Minimize Panel</Instructions>}>
+                <Button onClick={() => minimize ? setMinimize(false) : setMinimize(true)}>
+                  <Minimize />
+                </Button>
+              </Tippy>
             {selectedQuest && (
               <Tippy content={<Instructions>Back to Quest List</Instructions>}>
                 <Button onClick={() => handleNavigation("back")} >
@@ -127,8 +133,8 @@ const Home = () => {
               </>
             )}
           </Options>
-          <Wrapper>
-            <div>
+          <Wrapper minimize={minimize}>
+              <Pages minimize={minimize}>
               {/* Display brief user welcome text only above the Quest List module. */}
               {loggedIn &&
                 newQuest === false &&
@@ -136,7 +142,6 @@ const Home = () => {
                 confirmation === false && (
                   <p>Hello {loggedIn.handler}. Choose a quest to begin!</p>
                 )}
-              <Pages>
                 {/* Display verbose user welcome text to unsigned In user in module */}
                 {!loggedIn && <Welcome loggedIn={loggedIn} />}
                 {/* Display new quest creation form in module*/}
@@ -178,7 +183,6 @@ const Home = () => {
                 {/* Display confirmation in module only after new quest is created */}
                 {confirmation === true && <Confirmation />}
               </Pages>
-            </div>
           </Wrapper>
           {/* Google Maps display in background */}
           <QuestMap
@@ -224,6 +228,7 @@ const Wrapper = styled.div`
   top: 95px;
   left: 20px;
   width: 550px;
+  height: ${ props => props.minimize ? "0" : "auto"};
   max-height: 90%;
   padding: 20px 40px;
   border-radius: 15px;
@@ -252,6 +257,7 @@ const Pages = styled.div`
   overflow-y: scroll;
   scroll-behavior: smooth;
   max-height: 65vh;
+  display: ${ props => props.minimize ? "none" : "block"};
   padding: 10px;
 
 ::-webkit-scrollbar {
@@ -286,6 +292,7 @@ const Instructions = styled.span`
   padding: 1px;
 `;
 const Add = styled(FiPlus)`
+  font-size: 2em;
   border-radius: 5px;
   border: 2px solid var(--color-dark-grey);
   padding: 5px;
@@ -299,6 +306,7 @@ const Add = styled(FiPlus)`
   }
 `;
 const Back = styled(FiArrowLeft)`
+  font-size: 2em;
   border-radius: 5px;
   border: 2px solid var(--color-dark-grey);
   padding: 5px;
@@ -312,4 +320,18 @@ const Back = styled(FiArrowLeft)`
   }
 `;
 
+const Minimize = styled(FiMinimize)`
+  font-size: 2em;
+  border-radius: 5px;
+  border: 2px solid var(--color-dark-grey);
+  padding: 5px;
+  background-color: var(--color-red);
+  box-shadow: 0px 0px 5px var(--color-dark-grey);
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+`;
 export default Home;
