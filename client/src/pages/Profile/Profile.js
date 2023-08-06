@@ -72,11 +72,16 @@ const Profile = () => {
 
   if (user && avatar && quests) {
     return (
-      <>
         <Wrapper>
           <Body>
             <UserDetails>
               <Info>
+                <Tippy content={<p>Report User</p>}>
+                  {/* Module for a form to report user if they breach community guidelines */}
+                  <div onClick={() => setOpen(true)}>
+                    <Report />
+                  </div>
+                </Tippy>
                 <Title>{user.handler}</Title>
                 {avatar && (
                   <AvatarWrapper>
@@ -87,39 +92,12 @@ const Profile = () => {
                   {avatar.publicID.split("/")[2].split("_")[0].toUpperCase()}{" "}
                 </p>
                 <p>LEVEL {user.level}</p>
-              </Info>
-              <Outer>
                 {/* Form to provide ratings on user based on various characteristics. These are DnD based; should find a set more suitable to Pokemon */}
                 <Feedback onSubmit={(e) => handleSubmit(e)}>
                   <UserRatings
-                    category="charisma"
                     ratings={ratings}
                     setRatings={setRatings}
-                    currentRatings={user.ratings?.charisma}
-                  />
-                  <UserRatings
-                    category="intelligence"
-                    ratings={ratings}
-                    setRatings={setRatings}
-                    currentRatings={user.ratings?.intelligence}
-                  />
-                  <UserRatings
-                    category="wisdom"
-                    ratings={ratings}
-                    setRatings={setRatings}
-                    currentRatings={user.ratings?.wisdom}
-                  />
-                  <UserRatings
-                    category="dexterity"
-                    ratings={ratings}
-                    setRatings={setRatings}
-                    currentRatings={user.ratings?.dexterity}
-                  />
-                  <UserRatings
-                    category="strength"
-                    ratings={ratings}
-                    setRatings={setRatings}
-                    currentRatings={user.ratings?.strength}
+                    currentRatings={user.ratings}
                   />
                   <Ratings>
                     {ratingsSent && <p>You've successfully rated this user!</p>}
@@ -128,13 +106,7 @@ const Profile = () => {
                     </SubmitDiv>
                   </Ratings>
                 </Feedback>
-                <Tippy content={<p>Report User</p>}>
-                  {/* Module for a form to report user if they breach community guidelines */}
-                  <IconWrap onClick={() => setOpen(true)}>
-                    <Report />
-                  </IconWrap>
-                </Tippy>
-              </Outer>
+              </Info>
             </UserDetails>
             <Panels>
               <Panel>
@@ -178,7 +150,6 @@ const Profile = () => {
             <ReportUser open={open} setOpen={setOpen} id={user._id} />
           </Body>
         </Wrapper>
-      </>
     );
   }
 };
@@ -207,24 +178,20 @@ const Wrapper = styled.div`
   background: linear-gradient(120deg, white, var(--color-blue));
 `;
 const Body = styled.div`
-  position: absolute;
-  min-width: 1137px;
-  top: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 90%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 90%;
+height: 100%;
 `;
 const UserDetails = styled.div`
-  align-self: center;
-  display: flex;
-  width: 50%;
-  min-width: 700px;
-  height: 50%;
-  justify-content: space-evenly;
-  border-radius: 15px;
-  background-color: var(--color-grey);
-  box-shadow: 0px 0px 8px var(--color-blue);
+align-self: center;
+display: flex;
+min-width: 20%;
+justify-content: space-evenly;
+border-radius: 15px;
+box-shadow: 0px 0px 10px var(--color-blue);
+background-color: var(--color-grey);
 `;
 const Info = styled.div`
   display: flex;
@@ -284,12 +251,12 @@ const Panel = styled.div`
 `;
 const MyQuests = styled.div`
   width: 100%;
-  max-height: 20vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 15px;
-  margin: 20px;
+  margin-top: 20px;
+  max-height: 100%;
   box-shadow: 0px 0px 8px var(--color-blue);
   background-color: var(--color-grey);
 `;
@@ -335,8 +302,6 @@ const Pokemon = styled(AdvancedImage)`
 // MISC
 const Button = styled.button`
   margin: 5px 0px;
-`;
-const IconWrap = styled.div`
 `;
 const Report = styled(FiFrown)`
   align-self: flex-start;

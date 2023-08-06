@@ -87,4 +87,10 @@ blockquote,
 input {
   font-family: var(--font);
 }
-`;
+
+* {
+	box-sizing: border-box !important;
+	/* border: 1px solid red !important; */
+}
+`
+;

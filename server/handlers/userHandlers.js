@@ -60,13 +60,7 @@ router.patch("/user/:id", async(req,res) => {
             newRatings = ratings;
         // Calculate average between existing and new submission
         } else {
-            newRatings = {
-                "charisma": Math.floor((currentRatings.ratings.charisma + ratings.charisma)/2),
-                "intelligence": Math.floor((currentRatings.ratings.intelligence + ratings.intelligence)/2),
-                "wisdom": Math.floor((currentRatings.ratings.wisdom + ratings.wisdom )/2),
-                "dexterity": Math.floor((currentRatings.ratings.dexterity + ratings.dexterity)/2),
-                "strength":Math.floor((currentRatings.ratings.strength + ratings.strength)/2)
-            }          
+            newRatings = Math.floor((currentRatings.ratings + ratings)/2);
         }
 
         const update = await db.collection("users").updateOne({_id: req.params.id}, {$set: {updatedAt: date, ratings: newRatings}, $inc: {ratingsCount: 1}});

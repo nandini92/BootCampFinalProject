@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { FiStar } from "react-icons/fi";
 
-const UserRatings = ({ category, ratings, setRatings, currentRatings }) => {
+const UserRatings = ({ ratings, setRatings, currentRatings }) => {
   // State to track user clicked value on Stars array
   const [currentValue, setCurrentValue] = useState(currentRatings);
   // State to track star index during mouseover
@@ -16,12 +16,11 @@ const UserRatings = ({ category, ratings, setRatings, currentRatings }) => {
 
   return (
     <Characteristic>
-      <span>{category}: </span>
       <div>
         {stars.map((i, index) => {
           return ratings !== null ? (
             <FiStar
-              key={`${category}-${index}`}
+              key={`rating-${index}`}
               style={{
                 margin: "5px",
                 cursor: "pointer",
@@ -31,14 +30,14 @@ const UserRatings = ({ category, ratings, setRatings, currentRatings }) => {
               }
               onClick={() => {
                 setCurrentValue(index + 1);
-                setRatings({ ...ratings, [category]: index + 1 });
+                setRatings(index + 1);
               }}
               onMouseOver={() => setHoverValue(index + 1)}
               onMouseLeave={() => setHoverValue(currentValue)}
             />
           ) : (
             <FiStar
-              key={`${category}-${index}`}
+              key={`ratings${index}`}
               style={{
                 margin: "5px"
               }}
@@ -58,7 +57,7 @@ const Characteristic = styled.div`
   font-family: var(--font);
   margin: 10px 0px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 
   span {
     margin: 10px;

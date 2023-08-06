@@ -40,7 +40,6 @@ const MyProfile = () => {
 
   if (loggedIn && userAvatar) {
     return (
-      <>
         <Wrapper>
           <Body>
             <UserDetails>
@@ -64,15 +63,8 @@ const MyProfile = () => {
                     .split("_")[0]
                     .toUpperCase()}{" "}</p>
               <p>LEVEL {loggedIn.level} : KARMA {loggedIn.karma}</p>
-              </Info>
-              <Info>
-                <p>Report Card</p>
                 {/* ratings are used to store updated ratings value. Since user should not be able to rate themselves. Setting this to null as placeholder */}
-                <UserRatings category="charisma" ratings={null} currentRatings={loggedIn.ratings?.charisma}/>
-                <UserRatings category="intelligence" ratings={null} currentRatings={loggedIn.ratings?.intelligence}/>
-                <UserRatings category="wisdom" ratings={null} currentRatings={loggedIn.ratings?.wisdom}/>
-                <UserRatings category="dexterity" ratings={null} currentRatings={loggedIn.ratings?.dexterity}/>
-                <UserRatings category="strength" ratings={null} currentRatings={loggedIn.ratings?.strength}/>
+                <UserRatings ratings={null} currentRatings={loggedIn.ratings}/>
               </Info>
               </UserDetails>
             <Panels>
@@ -117,7 +109,6 @@ const MyProfile = () => {
             <Celebration open={open} setOpen={setOpen} userAvatar={userAvatar} setLevelUpAnimation={setLevelUpAnimation}/>
           </Body>
         </Wrapper>
-      </>
     );
   }
 };
@@ -153,20 +144,16 @@ const Wrapper = styled.div`
   background: linear-gradient(120deg, white, var(--color-blue));
 `;
 const Body = styled.div`
-  position: absolute;
-  min-width: 1137px;
-  top: 200px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   width: 90%;
+  height: 100%;
 `;
 const UserDetails = styled.div`
   align-self: center;
   display: flex;
-  width: 50%;
-  min-width: 650px;
-  height: 50%;
+  min-width: 20%;
   justify-content: space-evenly;
   border-radius: 15px;
   box-shadow: 0px 0px 10px var(--color-blue);
@@ -212,7 +199,8 @@ const MyQuests = styled.div`
   flex-direction: column;
   justify-content: space-between;
   border-radius: 15px;
-  margin: 20px;
+  margin-top: 20px;
+  max-height: 100%;
   box-shadow: 0px 0px 8px var(--color-blue);
   background-color: var(--color-grey);
 `;
